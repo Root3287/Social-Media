@@ -1,0 +1,105 @@
+CREATE TABLE `groups` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`group_name` TEXT NOT NULL,
+	`permissions` TEXT NOT NULL,
+	PRIMARY KEY (`id`)
+)
+COLLATE='latin1_swedish_ci'
+ENGINE=InnoDB
+;
+CREATE TABLE `settings` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`name` TEXT NOT NULL,
+	`value` TEXT NULL,
+	PRIMARY KEY (`id`)
+)
+COLLATE='latin1_swedish_ci'
+ENGINE=InnoDB
+;
+CREATE TABLE `users` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`username` VARCHAR(50) NOT NULL,
+	`password` LONGTEXT NOT NULL,
+	`salt` LONGTEXT NOT NULL,
+	`name` VARCHAR(50) NOT NULL,
+	`email` TEXT NOT NULL,
+	`group` INT(11) NOT NULL,
+	`joined` DATETIME NOT NULL,
+	`private` INT(11) NULL DEFAULT '0',
+	PRIMARY KEY (`id`)
+)
+COLLATE='latin1_swedish_ci'
+ENGINE=InnoDB
+;
+CREATE TABLE `user_session` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`user_id` INT(11) NOT NULL,
+	`hash` LONGTEXT NOT NULL,
+	PRIMARY KEY (`id`)
+)
+COLLATE='latin1_swedish_ci'
+ENGINE=InnoDB
+;
+CREATE TABLE `adm_user_session` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`user_id` INT(11) NOT NULL,
+	`hash` LONGTEXT NOT NULL,
+	PRIMARY KEY (`id`)
+)
+COLLATE='latin1_swedish_ci'
+ENGINE=InnoDB
+;
+CREATE TABLE `notification` (
+	`id` BIGINT(255) NOT NULL AUTO_INCREMENT,
+	`user` INT(255) NOT NULL,
+	`message` MEDIUMTEXT NULL,
+	`read` INT(11) NULL DEFAULT '0',
+	PRIMARY KEY (`id`)
+)
+COLLATE='latin1_swedish_ci'
+ENGINE=InnoDB
+;
+CREATE TABLE `posts` (
+	`id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`user_id` INT(10) UNSIGNED NOT NULL,
+	`content` LONGTEXT NOT NULL,
+	`hash` TEXT NULL,
+	`time` DATETIME NULL DEFAULT NULL,
+	PRIMARY KEY (`id`)
+)
+COLLATE='latin1_swedish_ci'
+ENGINE=InnoDB
+;
+CREATE TABLE `following` (
+	`id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`user_id` BIGINT(20) UNSIGNED NOT NULL,
+	`following_id` BIGINT(20) UNSIGNED NOT NULL,
+	`type` TEXT NULL,
+	PRIMARY KEY (`id`)
+)
+ENGINE=InnoDB
+;
+CREATE TABLE `mensions` (
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`user_id` BIGINT(20) UNSIGNED NOT NULL,
+	`post_hash` TEXT NOT NULL,
+	PRIMARY KEY (`id`)
+)
+ENGINE=InnoDB
+;
+CREATE TABLE `likes` (
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`user_id` INT(10) UNSIGNED NOT NULL,
+	`post_hash` INT(10) UNSIGNED NOT NULL,
+	PRIMARY KEY (`id`)
+)
+ENGINE=InnoDB
+;
+INSERT INTO `settings` (`id`, `name`, `value`) VALUES (1, 'install', '1');
+INSERT INTO `settings` (`id`, `name`, `value`) VALUES (2, 'title', 'Socal-Media');
+INSERT INTO `settings` (`id`, `name`, `value`) VALUES (3, 'bootstrap-theme', '3');
+INSERT INTO `settings` (`id`, `name`, `value`) VALUES (4, 'motd', '');
+INSERT INTO `settings` (`id`, `name`, `value`) VALUES (5, 'debug', 'On');
+INSERT INTO `settings` (`id`, `name`, `value`) VALUES (6, 'inverted-nav', '1');
+INSERT INTO `groups` (`id`, `group_name`, `permissions`) VALUES (1, 'Standard', '');
+INSERT INTO `groups` (`id`, `group_name`, `permissions`) VALUES (2, 'Admin', '{"Admin":"1"}');

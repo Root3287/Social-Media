@@ -1,0 +1,171 @@
+<?php
+class User{
+	private $_db, $_data, $_isLogin, $_sessionName, $_cookieName, $_admLoggedIn;
+	public function __construct($user = null){
+		$this->_db = DB::getInstance();
+		$this->_sessionName = Config::get('session/session_name');
+		$this->_cookieName = Config::get('session/cookie_name');
+		if(!$user){
+			if(Session::exists($this->_sessionName)){
+				$user = Session::get($this->_sessionName);
+				
+				if($this->find($user)){
+					$this->_isLogin = true;
+				}else{
+					//Log out
+				}
+			}
+			if(Session::exists('adm_'.$this->_sessionName)){
+				$user = Session::get('adm_'.$this->_sessionName);
+				
+				if($this->find($user)){
+					$this->_admLoggedIn = true;
+				}else{
+					//Log out
+				}
+			}
+		}else{
+			$this->find($user);
+		}
+	}
+
+	public function update($fields = array(), $id = null) {
+		if(!$id && $this->isLoggedIn()) {
+			$id = $this->data()->id;
+		}
+		if(!$this->_db->update('users', $id, $fields)) {
+			throw new Exception("There was a problem updating");		
+		}
+	}
+	public function create($fields = array()){
+		// First user = admin!!!
+		if(!$this->_db->query('SELECT * FROM `users` WHERE 1=1')->count()){$fields['group'] = "2";}
+		if(!$this->_db->insert('users', $fields)){	
+			throw new Exception('There was an error adding the user! Contact an administrator!');
+		}
+	}
+	public function find($user = null){
+		if($user){
+			$field =  (is_numeric($user))? 'id' : 'username';
+			$data = $this->_db->get('users', array($field, '=', $user));
+			
+			if($data->count()){
+				$this->_data = $data->first();
+				return true;
+			}
+		}
+	}
+	public function login($username = null, $pass = null, $remember = false){
+		if(!$username && !$pass && $this->exists()){
+			Session::put($this->_sessionName, $this->data()->id);
+		}else{
+			$user = $this->find($username);
+			if($user){
+				if($this->_data->password === Hash::make($pass, $this->_data->salt)){
+					Session::put($this->_sessionName, $this->_data->id);
+					
+					if($remember){
+						$hash = Hash::unique();
+						$hashCheck = $this->_db->get('user_session', array('user_id','=',$this->data()->id));
+						if(!$hashCheck->count()){
+							$this->_db->insert('user_session',array(
+									'user_id' => $this->_data->id,
+									'hash' => $hash
+							));
+						}else{
+							$hash = $hashCheck->first()->hash;
+						}
+						Cookies::put($this->_cookieName, $hash, config::get('remember/expiry'));
+					}
+					return true;
+				}
+			}
+		}
+		return false;	
+	}
+	public function admlogin($username = null, $pass = null, $remember = false){
+		if(!$username && !$pass && $this->exsit()){
+			Session::put('adm_'.$this->_sessionName, $this->data()->id);
+		}else{
+			$user = $this->find($username);
+			if($user){
+				if($this->_data->password === Hash::make($pass, $this->_data->salt)){
+					Session::put('adm_'.$this->_sessionName, $this->_data->id);
+					
+					if($remember){
+						$hash = hash::unique();
+						$hashCheck = $this->_db->get('adm_user_session', array('user_id','=',$this->data()->id));
+						if(!$hashCheck->count()){
+							$this->_db->insert('adm_user_session',array(
+									'user_id' => $this->_data->id,
+									'hash' => $hash
+							));
+						}else{
+							$hash = $hashCheck->first()->hash;
+						}
+						Cookies::put('adm_'.$this->_cookieName, $hash, config::get('remember/expiry'));
+					}
+					return true;
+				}
+			}
+		}
+		return false;	
+	}
+	public function hasPermission($key) {
+		$group = $this->_db->get('groups', array('id', '=', $this->data()->group));
+		if ($group->count()); {
+			$permissions = json_decode($group->first()->permissions, true);
+			if ($permissions[$key] == true) {
+				return true;
+			}
+		}
+		return false;
+	}
+	public function getFollowers(){
+		return $this->_db->get('following', ['following_id', '=', $this->_data->id])->results();
+	}
+	public function getFollowing(){
+		return $this->_db->get('following', ['user_id', '=', $this->_data->id])->results();
+	}
+	public function isFollowing($user2){
+		foreach ($this->getFollowing() as $following) {
+			if($following->following_id == $user2){
+				return true;
+			}
+		}
+		return false;
+	}
+	public function addFollowing($user2, $type="Following"){
+		if($this->_db->insert('following', [
+			"user_id"=>$this->_data->id,
+			"following_id"=>$user2,
+			"type"=>$type,
+		])){
+			return true;
+		}
+		return false;
+	}
+	public function exists() {
+		return (!empty($this->_data)) ? true : false;
+	}
+	public function getGroupId(){
+		return $this->_data->group;
+	}
+	public function data(){
+		return $this->_data;
+	}
+	public function isLoggedIn(){
+		return $this->_isLogin;
+	}
+	public function isAdmLoggedIn(){
+		return $this->_admLoggedIn;
+	}
+	public function getAvatarURL($size = '32'){
+		return "https://gravatar.com/avatar/".md5($this->data()->email)."?d=mm&s={$size}&r=pg";
+	}
+	public function logout() {
+		$this->_db->delete('user_session', array('user_id', '=', $this->data()->id));
+		Session::delete($this->_sessionName);
+		cookies::delete($this->_cookieName);
+	}
+}
