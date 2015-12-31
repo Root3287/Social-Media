@@ -39,5 +39,8 @@ $router->add('/logout', function(){
 $router->add('/post/(.*)', function($pid){
 	require 'pages/post.php';
 });
+$router->add('/action/profile(.*)', function(){
+	require 'pages/action/profile.php';
+});
 
 $router->run();

@@ -74,6 +74,7 @@ CREATE TABLE `following` (
 	`id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`user_id` BIGINT(20) UNSIGNED NOT NULL,
 	`following_id` BIGINT(20) UNSIGNED NOT NULL,
+	`accepted` INT(11) NOT NULL,
 	`type` TEXT NULL,
 	PRIMARY KEY (`id`)
 )
@@ -95,6 +96,16 @@ CREATE TABLE `likes` (
 )
 ENGINE=InnoDB
 ;
+CREATE TABLE `friends` (
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`user_id` INT(10) UNSIGNED NOT NULL,
+	`friend_id` INT(10) UNSIGNED NOT NULL,
+	`accepted` INT(10) UNSIGNED NOT NULL,
+	PRIMARY KEY (`id`)
+)
+ENGINE=InnoDB
+;
+
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (1, 'install', '1');
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (2, 'title', 'Socal-Media');
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (3, 'bootstrap-theme', '3');

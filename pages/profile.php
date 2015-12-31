@@ -26,11 +26,26 @@ if($user->data()->username !== $user2->data()->username){
 	<body>
 		<?php include 'assets/nav.php';?>
 		<div class="container">
+			<?php if(Session::exists('complete')){echo Session::flash('complete');}if(Session::exists('error')){echo Session::flash('error');}?>
 			<div class="row">
 				<div class="jumbotron">
 					<h1>
 						<img class="img-circle" src="<?php echo $user2->getAvatarURL('96')?>">
 						<?php echo $user2->data()->username?>
+						<?php if(!$user->isFollowing($user2->data()->id)):?>
+							<a class="btn btn-primary btn-md" href="/action/profile/?action=Follow&user=<?php echo $user2->data()->id;?>">Follow</a>
+						<?php else:?>
+							<a class="btn btn-primary btn-md" href="/action/profile/?action=UnFollow&user=<?php echo $user2->data()->id;?>">UnFollow</a>
+								<?php if($user->isFriends($user2->data()->id)){?>
+								<a class="btn btn-primary btn-md" href="/action/profile/?action=unFriend&user=<?php echo $user2->data()->id;?>">UnFriend</a>
+								<?php }else{?>
+									<?php if(!$user->hasFriendRequest($user2->data()->id)){?>
+									<a class="btn btn-primary btn-md" href="/action/profile/?action=Friend&user=<?php echo $user2->data()->id;?>">Friend</a>
+									<?php }else{?>
+									<a href="/action/profile/?action=unFriend&user=<?php echo $user2->data()->id;?>" class="btn btn-primary btn-md">Request Sent!</a>
+								<?php }} ?>
+						<?php endif;?>
+
 					</h1>
 				</div>
 			</div>
@@ -45,7 +60,7 @@ if($user->data()->username !== $user2->data()->username){
 								<?php echo count($user2->getFollowers());?>
 								<h4><u>Following</u></h4>
 								<?php echo count($user2->getFollowing());?>
-							<?php if($user2->data()->private == 0 || $user->isFollowing($user2->data()->id)):?>
+							<?php if($user2->data()->private == 0 || $user->isFriends($user2->data()->id)):?>
 								<h4><u>Email</u></h4>
 								<p><?php echo $user2->data()->email?></p>
 								<h4><u>Joined Date</u></h4>
@@ -61,7 +76,7 @@ if($user->data()->username !== $user2->data()->username){
 				<div class="col-md-9">
 					<h1>Timeline</h1>
 					<?php
-					if($user2->data()->private == 0 || $user->isFollowing($user2->data()->id)){
+					if($user2->data()->private == 0 || $user->isFriends($user2->data()->id)) {
 						foreach($post->getPostForUser($user2->data()->id) as $uPost){
 							$userPost = new User($uPost['user_id']);
 							echo "<div class='well'>";

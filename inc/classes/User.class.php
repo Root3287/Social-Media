@@ -121,11 +121,22 @@ class User{
 		}
 		return false;
 	}
+	public function isFriends($user){
+		$q= $this->_db->query("SELECT * FROM `friends` WHERE user_id=$user OR friend_id=$user");
+		if(empty($q->results())){
+			return false;
+		}else{
+			if($q->results()[0]->accepted == 1){
+				return true;
+			}
+		}
+		return false;
+	}
 	public function getFollowers(){
-		return $this->_db->get('following', ['following_id', '=', $this->_data->id])->results();
+		return $q= $this->_db->get('following', ['following_id', '=', $this->_data->id])->results();
 	}
 	public function getFollowing(){
-		return $this->_db->get('following', ['user_id', '=', $this->_data->id])->results();
+		return $q = $this->_db->get('following', ['user_id', '=', $this->_data->id])->results();
 	}
 	public function isFollowing($user2){
 		foreach ($this->getFollowing() as $following) {
@@ -135,12 +146,53 @@ class User{
 		}
 		return false;
 	}
-	public function addFollowing($user2, $type="Following"){
+	public function addFollowing($user2){
 		if($this->_db->insert('following', [
 			"user_id"=>$this->_data->id,
 			"following_id"=>$user2,
-			"type"=>$type,
 		])){
+			return true;
+		}
+		return false;
+	}
+	public function deleteFollowing($user2){
+		if($this->_db->query("DELETE FROM following WHERE following_id=$user2")->results()){
+			return true;
+		}
+		return false;
+	}
+	public function addFriend($user2){
+		if($this->isFollowing($user2)){
+			if(!$this->_db->insert('friends', ['user_id'=>$this->_data->id, 'friend_id'=>$user2, 'accepted'=>0,])){
+				throw new Exception('Error while adding friend');
+			}
+		}
+	}
+	public function hasFriendRequest($user=null){
+		if($user){
+			$q = $this->_db->query("SELECT * FROM `friends` WHERE friend_id=$user OR user_id=$user AND accepted=0");
+			if($q->count()){
+				return true;
+			}
+		}else{
+			$q = $this->_db->query("SELECT * FROM `friends` WHERE user_id=$this->_data->id OR friend_id=$this->_data->id AND accepted=0");
+			if($q->count()){
+				return true;
+			}
+		}
+		return false;
+	}
+	public function acceptFriendRequest($user, $response=0){
+		if($this->hasFriendRequest($user)){
+			$id = $this->_db->query("SELECT id WHERE friend_id=$user")->results();
+			if($response == 1){
+				Notifaction::createMessage("$this->_data->username has accepted your friend request!", $user);
+			}
+			$this->_db->update('friends',$id, ['accepted'=>$response]);
+		}
+	}
+	public function deleteFriend($user2){
+		if($this->_db->query("DELETE FROM friends WHERE user_id=$user2 OR friend_id=$user2")){
 			return true;
 		}
 		return false;
