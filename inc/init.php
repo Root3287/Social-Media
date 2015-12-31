@@ -4,7 +4,7 @@ $GLOBALS['config'] = array(
 	"mysql" => array(
 		"host" => "127.0.0.1",
 		"user" => "root",
-		"password" => "root",
+		"password" => "password",
 		"db" => "Social-Media",
 		"port" => "3306",
 	),

@@ -7,7 +7,6 @@ $quote = array(
 	"This is not the webpage you are looking for... Move on!",
 	"Nothing to see here",
 	"Can't touch this",
-	
 );
 $n = rand(0,count($quote)-1);
 ?>

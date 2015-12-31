@@ -42,5 +42,7 @@ $router->add('/post/(.*)', function($pid){
 $router->add('/action/profile(.*)', function(){
 	require 'pages/action/profile.php';
 });
-
+$router->add('/search', function(){
+	require 'pages/search.php';
+});
 $router->run();

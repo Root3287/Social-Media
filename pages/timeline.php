@@ -72,25 +72,6 @@ if(Input::exists()){
 				CKEDITOR.replace('message', {
 					removeButtons: 'Source'
 				});
-				/*$("#submit").click(function(){
-					var message = CKEDITOR.instances.message.getData();
-					var token = $("#token").val();
-					$.ajax({
-						type: "POST",
-						url: "/scripts/post",
-						data:{
-							post: message,
-							token: token,
-						},
-						success: function(data){
-							if(data == 0){
-
-							}else{
-
-							}
-						}
-					});
-				});	*/
 			});
 		</script>
 	</body>

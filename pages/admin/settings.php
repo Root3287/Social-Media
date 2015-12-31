@@ -19,7 +19,7 @@
 				$debug = (Input::get('debug') == 'on')? 'On':'Off';
 				if(Setting::update('title', Input::get('title')) 
 					&& Setting::update('motd', Input::get('motd')) 
-					&& Setting::update(' -theme', Input::get('theme')) 
+					&& Setting::update('bootstrap-theme', Input::get('theme')) 
 					&& Setting::update('debug', $debug) 
 					&& Setting::update('inverted-nav', Input::get('nav'))){
 					Session::flash('complete', 'You have updated the site!');
