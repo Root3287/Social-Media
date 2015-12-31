@@ -74,8 +74,6 @@ CREATE TABLE `following` (
 	`id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`user_id` BIGINT(20) UNSIGNED NOT NULL,
 	`following_id` BIGINT(20) UNSIGNED NOT NULL,
-	`accepted` INT(11) NOT NULL,
-	`type` TEXT NULL,
 	PRIMARY KEY (`id`)
 )
 ENGINE=InnoDB
