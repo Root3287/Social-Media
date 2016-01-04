@@ -32,10 +32,8 @@ if(Input::exists()){
 					</div>
 					<div class="form-group">
 						<select class="form-control" name="table">
-						  <option value="">Groups</option>
-						  <option <?php if(Input::get('table') == "users"):?>selected="selected"<?php endif;?>value="users">Users</option>
-						  <option value="friends">Friends</option>
-						  <option value="following">Following</option>
+						  <option <?php if(Input::get('table') == "users"):?>selected="selected"<?php endif;?> value="users">Users</option>
+						  <option <?php if(Input::get('table') == "name"):?>selected="selected"<?php endif;?> value="name">Name</option>
 						</select>
 					</div>
 					<div class="form-group">
@@ -49,8 +47,14 @@ if(Input::exists()){
 				<?php
 				if(Input::exists()){
 					if($validate->passed()){
-						if(escape(Input::get('table')) == "friends"){
-							$q = $db->query('SELECT * FROM friends WHERE accepted=1 AND user_id='.$user->data()->id.' OR friend_id='.$user->data()->id.' AND user_id LIKE %'.escape(Input::get('search')).'% OR friend_id LIKE %'.escape(Input::get('search')).'%');
+						if(escape(Input::get('table')) == "name"){
+							$q = $db->query("SELECT * FROM `users` WHERE `name` LIKE '%".escape(Input::get('search'))."%'");
+							if($q->results()){
+								foreach ($q->results() as $result) {
+									$searchUser = new User($result->id);
+									echo "<div class='col-md-3'><img class='img-circle img-responsive' src=". $searchUser->getAvatarURL('96')."><h3><a href='/profile/".$searchUser->data()->username."'>".$searchUser->data()->username."</a></h3></div>";
+								}
+							}
 						}
 						if(escape(Input::get('table')) == "users"){
 							$q = $db->query("SELECT * FROM users WHERE username LIKE '%".escape(Input::get('search'))."%'");
@@ -60,9 +64,6 @@ if(Input::exists()){
 									echo "<div class='col-md-3'><img class='img-circle img-responsive' src=". $searchUser->getAvatarURL('96')."><h3><a href='/profile/".$searchUser->data()->username."'>".$searchUser->data()->username."</a></h3></div>";
 								}
 							}
-						}
-						if(escape(Input::get('table')) == "following"){
-							$q=$db->query("SELECT * FROM following WHERE user_id = ".$user->data()->id." AND following_id LIKE `%".escape(Input::get('search'))."%`");
 						}
 					}				
 				}

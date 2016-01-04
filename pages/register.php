@@ -31,14 +31,14 @@ if(Input::exists()){
 		}else{
 			$user = new User();
 			
-			$salt = hash::salt(32);
+			$salt = Hash::salt(32);
 			
-			$password = hash::make(escape(Input::get('password')) , $salt);
+			$password = Hash::make(escape(Input::get('password')) , $salt);
 			
 			try{
 				$user->create(array(
 						'username' => escape(Input::get('username')),
-						'password'=> Hash::make(escape(Input::get('password')), $salt),
+						'password'=> $password,
 						'salt' => $salt,
 						'name'=> escape(Input::get('name')),
 						'joined'=> date('Y-m-d- H:i:s'),
@@ -49,7 +49,7 @@ if(Input::exists()){
 				die($e->getMessage());
 			}
 			if($user->login(escape(Input::get('username')), escape(Input::get('password')), false)){
-				Notifaction::createMessage('Welcome to the forums '. $user->data()->name, $user->data()->id);
+				Notifaction::createMessage('Welcome to the Social-Media '. $user->data()->name, $user->data()->id);
 				session::flash('complete', 'You completely register and you just got logged in.');
 				Redirect::to('/');
 			}

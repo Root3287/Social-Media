@@ -4,8 +4,8 @@
 <title><?php echo Setting::show('title');?></title> 
 <meta name="author" content="Timothy Gibbons">
 <meta name="copyright" content="Copyright (C) Timothy Gibbons 2015;">
-<meta name="description" content="Forums">
-<meta name="keywords" content="Forums">
+<meta name="description" content="Social-Media">
+<meta name="keywords" content="Social-Media, Beta">
 <meta charset="UTF-8">
 <link rel="stylesheet" href="/assets/css/<?php echo Setting::get('bootstrap-theme');?>.css">
 <!-- Latest compiled and minified JavaScript -->

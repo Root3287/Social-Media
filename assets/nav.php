@@ -15,7 +15,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <!--<li><a href="/forums">Forums</a></li>-->
+       <?php if($user->isLoggedIn()):?><li><a href="/search">Search</a></li><?php endif;?>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <!-- Make mail -->
