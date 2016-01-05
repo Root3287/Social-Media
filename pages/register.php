@@ -11,7 +11,8 @@ if(Input::exists()){
 					'required' => true,
 					'min' => 2,
 					'max' => 50,
-					'unique' => 'users'
+					'unique' => 'users',
+					'spaces'=>false,
 				),
 				'email'=> array(
 					'required'=> true,
@@ -23,7 +24,7 @@ if(Input::exists()){
 				),
 				'password_conf' => array(
 						'required' => true,
-						'matches'=> 'password'
+						'matches'=> 'password',
 				)
 		));
 		if(!$val->passed()){
@@ -69,7 +70,7 @@ if(Input::exists()){
 			<?php endif;endif;endif;?>
 			<div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
 				<h1>Register</h1>
-				<form action="" method="post">
+				<form action="" method="post" autocomplete="off">
 					<div class="form-group">
 						<input name="name" value="<?php echo Input::get('name');?>" placeholder="Name" type="text" class="form-control input-lg">
 					</div>

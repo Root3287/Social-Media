@@ -34,6 +34,11 @@ class Validation{
 								$this->addError("{$item} already exsits!");
 							}
 							break;
+						case 'spaces':
+							if ((count(explode(' ', $value)) > 1) && !$rule_value) {
+  								$this->addError("{$item} may not contain any spaces");
+							}
+							break;
 					}
 				}
 			}

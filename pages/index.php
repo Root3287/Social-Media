@@ -10,10 +10,10 @@ $user = new User();
 		<div class="container">
 			<?php
 				if(Session::exists('complete')){
-					echo "<div class='alert alert-success'>".Session::flash('complete')."</div><br/>";
+					echo Session::flash('complete');
 				}
 				if(Session::exists('error')){
-					echo "<div class='alert alert-danger'>".Session::flash('error')."</div><br/>";
+					echo Session::flash('error');
 				}
 				
 				if($user->isLoggedIn()){

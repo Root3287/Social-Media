@@ -16,7 +16,7 @@ if(Input::exists()){
 			$user2 = new User();
 			$login = $user2->login(escape(Input::get('username')), Input::get('password'), $remember);
 			if($login){
-				//Session::flash('complete', 'You have been logged in!');
+				Session::flash('complete', '<div class="alert alert-complete">You have been logged in!</div>');
 				Redirect::to('/');
 			}
 		}else{
@@ -37,7 +37,7 @@ if(Input::exists()){
 			<?php endif;endif;endif;?>
 			<div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
 				<h1>Login</h1>
-				<form action="" method="post">
+				<form action="" method="post" autocomplete="off">
 					<div class="form-group">
 						<input type="text" name="username" placeholder="Username" value="<?php echo Input::get('username')?>" class="form-control input-lg">
 					</div>

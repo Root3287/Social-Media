@@ -35,6 +35,8 @@ if(Input::exists()){
 				echo Session::flash('success');
 			}else if(Session::exists('error')){
 				echo Session::flash('error');
+			}else if(Session::exists('complete')){
+				echo Session::flash('complete');
 			}
 			?>
 			<div class="col-md-2">

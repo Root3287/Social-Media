@@ -93,7 +93,7 @@ class User{
 					Session::put('adm_'.$this->_sessionName, $this->_data->id);
 					
 					if($remember){
-						$hash = hash::unique();
+						$hash = Hash::unique();
 						$hashCheck = $this->_db->get('adm_user_session', array('user_id','=',$this->data()->id));
 						if(!$hashCheck->count()){
 							$this->_db->insert('adm_user_session',array(

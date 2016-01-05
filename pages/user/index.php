@@ -2,8 +2,8 @@
 $user = new User();
 $db = DB::getInstance();
 if(!$user->isLoggedIn()){
-	Session::flash('error', 'You are not logged in!');
-	Redirect::to(path);
+	Session::flash('error', '<div class="alert alert-danger">You are not logged in!</div>');
+	Redirect::to("/");
 }
 if($_GET == null){}
 ?>
@@ -14,8 +14,8 @@ if($_GET == null){}
 	<body>
 		<?php include 'assets/nav.php';?>
 		<div class="container">
-			<?php if(Session::exists('complete')){echo "<div class='alert alert-success'>".Session::flash('complete')."</div>";}?>
-			<?php if(Session::exists('error')){echo "<div class='alert alert-danger'>".Session::flash('error')."</div>";}?>
+			<?php if(Session::exists('complete')){echo Session::flash('complete');}?>
+			<?php if(Session::exists('error')){echo Session::flash('error');}?>
 			<div class="col-md-3">
 				<div class="well">
 					<a href="?page=">UserCP Home</a><br/>
