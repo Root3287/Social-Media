@@ -4,17 +4,17 @@ $GLOBALS['config'] = array(
 	"mysql" => array(
 		"host" => "127.0.0.1",
 		"user" => "root",
-		"password" => "password",
-		"db" => "Social-Media",
+		"password" => "root",
+		"db" => "social-media",
 		"port" => "3306",
 	),
 	"remember" => array(
 		"expiry" => 604800,
 	),
 	"session" => array (
-		"token_name" => "token",
-		"cookie_name"=>"cookie",
-		"session_name"=>"Session"
+		"token_name" => "token_sm",
+		"cookie_name"=>"cookie_sm",
+		"session_name"=>"session_sm"
 	),
 );
 
