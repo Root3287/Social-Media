@@ -1,15 +1,31 @@
-<?php 
+<?php
 require 'inc/init.php';
+if(file_exists('install.php')){
+	include_once 'inc/classes/Router.class.php';
+	include_once 'inc/classes/Redirect.class.php';
+}
 
 $router = new Router();
-$user = new User();
+
 echo '<!DOCTYPE HTML>';
 $router->add('/', function (){
-	$user = new User();
-	if(!$user->isLoggedIn()){
-		require 'pages/index.php';
+	if(file_exists('install.php')){
+		Redirect::to('/install');
+		die();
 	}else{
-		require 'pages/timeline.php';
+		$user = new User();
+		if(!$user->isLoggedIn()){
+			require 'pages/index.php';
+		}else{
+			require 'pages/timeline.php';
+		}
+	}
+});
+$router->add('/install(.*)', function(){
+	if(file_exists('install.php')){
+		require 'install.php';
+	}else{
+		Redirect::to('/');
 	}
 });
 $router->add('/login', function(){
