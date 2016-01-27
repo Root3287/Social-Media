@@ -1,15 +1,11 @@
 <?php
 require 'inc/init.php';
-if(file_exists('install.php')){
-	include_once 'inc/classes/Router.class.php';
-	include_once 'inc/classes/Redirect.class.php';
-}
 
 $router = new Router();
 
 echo '<!DOCTYPE HTML>';
 $router->add('/', function (){
-	if(file_exists('install.php')){
+	if(file_exists('install.php') || !isset($GLOBALS['config'])){
 		Redirect::to('/install');
 		die();
 	}else{

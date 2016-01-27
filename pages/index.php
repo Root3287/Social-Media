@@ -15,7 +15,9 @@ $user = new User();
 				if(Session::exists('error')){
 					echo Session::flash('error');
 				}
-				
+				if(Session::exists('info')){
+					echo Session::flash('info');
+				}
 				if($user->isLoggedIn()){
 					
 				}else{

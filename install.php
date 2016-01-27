@@ -180,130 +180,120 @@ if(!isset($_GET['step'])){
 				}elseif($step === 4){
 					$db = DB::getInstance();
 
-					$dbInsert = "
-					CREATE TABLE `groups` (
-						`id` INT(11) NOT NULL AUTO_INCREMENT,
-						`group_name` TEXT NOT NULL,
-						`permissions` TEXT NOT NULL,
-						PRIMARY KEY (`id`)
-					)
-					COLLATE='latin1_swedish_ci'
-					ENGINE=InnoDB
-					;
-					CREATE TABLE `settings` (
-						`id` INT(11) NOT NULL AUTO_INCREMENT,
-						`name` TEXT NOT NULL,
-						`value` TEXT NULL,
-						PRIMARY KEY (`id`)
-					)
-					COLLATE='latin1_swedish_ci'
-					ENGINE=InnoDB
-					;
-					CREATE TABLE `users` (
-						`id` INT(11) NOT NULL AUTO_INCREMENT,
-						`username` VARCHAR(50) NOT NULL,
-						`password` LONGTEXT NOT NULL,
-						`salt` LONGTEXT NOT NULL,
-						`name` VARCHAR(50) NOT NULL,
-						`email` TEXT NOT NULL,
-						`group` INT(11) NOT NULL,
-						`joined` DATETIME NOT NULL,
-						`private` INT(11) NULL DEFAULT '0',
-						PRIMARY KEY (`id`)
-					)
-					COLLATE='latin1_swedish_ci'
-					ENGINE=InnoDB
-					;
-					CREATE TABLE `user_session` (
-						`id` INT(11) NOT NULL AUTO_INCREMENT,
-						`user_id` INT(11) NOT NULL,
-						`hash` LONGTEXT NOT NULL,
-						PRIMARY KEY (`id`)
-					)
-					COLLATE='latin1_swedish_ci'
-					ENGINE=InnoDB
-					;
-					CREATE TABLE `adm_user_session` (
-						`id` INT(11) NOT NULL AUTO_INCREMENT,
-						`user_id` INT(11) NOT NULL,
-						`hash` LONGTEXT NOT NULL,
-						PRIMARY KEY (`id`)
-					)
-					COLLATE='latin1_swedish_ci'
-					ENGINE=InnoDB
-					;
-					CREATE TABLE `notification` (
-						`id` BIGINT(255) NOT NULL AUTO_INCREMENT,
-						`user` INT(255) NOT NULL,
-						`message` MEDIUMTEXT NULL,
-						`read` INT(11) NULL DEFAULT '0',
-						PRIMARY KEY (`id`)
-					)
-					COLLATE='latin1_swedish_ci'
-					ENGINE=InnoDB
-					;
-					CREATE TABLE `posts` (
-						`id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-						`user_id` INT(10) UNSIGNED NOT NULL,
-						`content` LONGTEXT NOT NULL,
-						`hash` TEXT NULL,
-						`time` DATETIME NULL DEFAULT NULL,
-						PRIMARY KEY (`id`)
-					)
-					COLLATE='latin1_swedish_ci'
-					ENGINE=InnoDB
-					;
-					CREATE TABLE `following` (
-						`id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-						`user_id` BIGINT(20) UNSIGNED NOT NULL,
-						`following_id` BIGINT(20) UNSIGNED NOT NULL,
-						PRIMARY KEY (`id`)
-					)
-					ENGINE=InnoDB
-					;
-					CREATE TABLE `mensions` (
-						`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-						`user_id` BIGINT(20) UNSIGNED NOT NULL,
-						`post_hash` TEXT NOT NULL,
-						PRIMARY KEY (`id`)
-					)
-					ENGINE=InnoDB
-					;
-					CREATE TABLE `likes` (
-						`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-						`user_id` INT(10) UNSIGNED NOT NULL,
-						`post_hash` INT(10) UNSIGNED NOT NULL,
-						PRIMARY KEY (`id`)
-					)
-					ENGINE=InnoDB
-					;
-					CREATE TABLE `friends` (
-						`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-						`user_id` INT(10) UNSIGNED NOT NULL,
-						`friend_id` INT(10) UNSIGNED NOT NULL,
-						`accepted` INT(10) UNSIGNED NOT NULL,
-						PRIMARY KEY (`id`)
-					)
-					ENGINE=InnoDB
-					;
-
-					INSERT INTO `settings` (`id`, `name`, `value`) VALUES (1, 'install', '1');
-					INSERT INTO `settings` (`id`, `name`, `value`) VALUES (2, 'title', 'Socal-Media');
-					INSERT INTO `settings` (`id`, `name`, `value`) VALUES (3, 'bootstrap-theme', '3');
-					INSERT INTO `settings` (`id`, `name`, `value`) VALUES (4, 'motd', '');
-					INSERT INTO `settings` (`id`, `name`, `value`) VALUES (5, 'debug', 'On');
-					INSERT INTO `settings` (`id`, `name`, `value`) VALUES (6, 'inverted-nav', '1');
-					INSERT INTO `groups` (`id`, `group_name`, `permissions`) VALUES (1, 'Standard', '');
-					INSERT INTO `groups` (`id`, `group_name`, `permissions`) VALUES (2, 'Admin', '{\"Admin\":\"1\"}');
-					";
+					$dbInsert = file_get_contents('install.txt');
 
 					if(!$db->query($dbInsert)->error()){
-						echo "<div class=\"alert alert-success\">Databaes Installed!</div>";
+						echo "<div class=\"alert alert-success\">Databases Installed!</div><br/><a class=\"btn btn-primary\" href=\"?step=5\">Next</a>";
 					}else{
 						echo "<div class=\"alert alert-danger\">Error Installing databases!</div><br/><div class=\"well\">{$dbInsert}</div>";
 					}
 			?>
 			<?php 
+				}elseif ($step === 5) {
+					if(Input::exists()){
+						if(Token::check(Input::get('token'))){
+							$val = new Validation();
+							$validate = $val->check($_POST, [
+								'name'=>[
+									'required' => true,
+								],
+								'username'=>[
+									'required' => true,
+									'min' => 2,
+									'max' => 50,
+									'unique' => 'users',
+									'spaces'=>false,
+								],
+								'email'=>[
+									'required'=> true,
+									'unique' => 'users',
+								],
+								'password'=>[
+									'required' => true,
+									'min' => 8
+								],
+								'password_conf'=>[
+									'required' => true,
+								'matches'=> 'password',
+								],
+							]);
+							if($validate->passed()){
+								$user = new User();
+
+								$salt = Hash::salt(32);
+			
+								$password = Hash::make(escape(Input::get('password')) , $salt);
+								
+								try{
+									$user->create(array(
+											'username' => escape(Input::get('username')),
+											'password'=> $password,
+											'salt' => $salt,
+											'name'=> escape(Input::get('name')),
+											'joined'=> date('Y-m-d- H:i:s'),
+											'group'=> 2,
+											'email'=> escape(Input::get('email')),
+									));
+								}catch (Exception $e){
+									die($e->getMessage());
+								}
+								if($user->login(escape(Input::get('username')), escape(Input::get('password')), false)){
+									Notifaction::createMessage('Welcome to the Social-Media '. $user->data()->name, $user->data()->id);
+									Session::flash('complete', '<div class="alert alert-info">You need to delete install-disable.php! Hacker could use this to their advantage!</div>');
+									rename('install.php', 'install-disable.php');
+									Redirect::to('?step=6');
+								} 
+							}
+						}
+					}
+			?>
+			<div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+				<h1>Register</h1>
+				<form action="" method="post" autocomplete="off">
+					<div class="form-group">
+						<input name="name" value="<?php echo Input::get('name');?>" placeholder="Name" type="text" class="form-control input-lg">
+					</div>
+					<div class="form-group">
+						<input name="username" value="<?php echo Input::get('username');?>" placeholder="username" type="text" class="form-control input-lg">
+					</div>
+					<div class="form-group">
+						<input name="email" value="<?php echo Input::get('email');?>" placeholder="email" type="email" class="form-control input-lg">
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-md-6">
+							<div class="form-group">
+								<input name="password" value="<?php echo Input::get('password');?>" placeholder="Password" type="password" class="form-control input-lg">
+							</div>
+						</div>
+						<div class="col-xs-12 col-md-6">
+							<div class="form-group">
+								<input name="password_conf" placeholder="Confirm Password" type="password" class="form-control input-lg">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-md-6">
+							<div class="form-group">
+								<a href="/login" class="btn btn-lg btn-block btn-danger">Login</a>
+							</div>
+						</div>
+						<div class="col-xs-12 col-md-6">
+							<div class="form-group">
+								<input type="submit" class="btn btn-lg btn-block btn-primary" value="Register">
+								<input type="hidden" name="token" value="<?php echo Token::generate();?>"/>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<?php
+				}elseif ($step === 6) {
+			?>
+			You're done! Click continue to go to the home page!<br/>
+			<a href="/" class="btn btn-primary">Finish</a>
+			<?php
+				}else{
+					Redirect::to('/404');
 				}
 			?>
 		</div>
