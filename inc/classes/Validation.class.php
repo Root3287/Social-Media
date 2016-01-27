@@ -2,8 +2,7 @@
 class Validation{
 	private $_passed = false, $_errors = array(), $_db = null;
 	public function __construct(){
-		$host = Config::get('mysql/host');
-		if(!empty($host)){
+		if(isset($GLOBALS['config'])){
 			$this->_db = DB::getInstance();
 		}
 	}
