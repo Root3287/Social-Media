@@ -197,6 +197,19 @@ if(!isset($_GET['step'])){
 					}else{
 						echo "<div class=\"alert alert-danger\">Error Installing databases!</div><br/><div class=\"well\">{$dbInsert}</div>";
 					}
+
+					$db->insert('settings', [
+						'name'=> 'version',
+						'value'=> '0.1.0',
+					]);
+					$db->insert('settings', [
+						'name'=>'unique_id',
+						'value'=>substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0,62),
+					]);
+					$db->insert('settings', [
+						'name'=>'server_stats',
+						'value'=>'false',
+					]);
 			?>
 			<?php 
 				}elseif ($step === 5) {
