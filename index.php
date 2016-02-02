@@ -5,7 +5,7 @@ $router = new Router();
 
 echo '<!DOCTYPE HTML>';
 $router->add('/', function (){
-	if(file_exists('install.php') || !isset($GLOBALS['config'])){
+	if(file_exists('pages/install/install.php') || !isset($GLOBALS['config'])){
 		Redirect::to('/install');
 		die();
 	}else{
@@ -18,8 +18,8 @@ $router->add('/', function (){
 	}
 });
 $router->add('/install(.*)', function(){
-	if(file_exists('install.php')){
-		require 'install.php';
+	if(file_exists('pages/install/install.php')){
+		require 'pages/install/install.php';
 	}else{
 		Redirect::to('/');
 	}
