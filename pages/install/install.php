@@ -115,7 +115,17 @@ if(!isset($_GET['step'])){
 									fwrite($file, $insert.$config);
 									fclose($file);
 
-									echo '<script>window.location.replace("/install?step=4");</script>';
+									$db = DB::getInstance();
+
+									$dbInsert = file_get_contents('pages/install/install.txt');
+
+									if(!$db->query($dbInsert)->error()){
+										echo "<div class=\"alert alert-success\">Databases Installed!</div><br/><a class=\"btn btn-primary\" href=\"?step=5\">Next</a>";
+									}else{
+										echo "<div class=\"alert alert-danger\">Error Installing databases!</div><br/><div class=\"well\">{$dbInsert}</div><a class=\"btn btn-primary\" href=\"?step=5\">Next</a>";
+									}
+
+									//echo '<script>window.location.replace("/install?step=5");</script>';
 									die();
 								}else{
 									$config = file_get_contents('inc/init.php');
@@ -180,7 +190,7 @@ if(!isset($_GET['step'])){
 				}elseif($step === 4){
 					$db = DB::getInstance();
 
-					$dbInsert = file_get_contents('install.txt');
+					$dbInsert = file_get_contents('pages/install/install.txt');
 
 					if(!$db->query($dbInsert)->error()){
 						echo "<div class=\"alert alert-success\">Databases Installed!</div><br/><a class=\"btn btn-primary\" href=\"?step=5\">Next</a>";
@@ -288,6 +298,7 @@ if(!isset($_GET['step'])){
 			</div>
 			<?php
 				}elseif ($step === 6) {
+					rename('pages/install/install.php', 'pages/install/install.php');
 			?>
 			You're done! Click continue to go to the home page!<br/>
 			<a href="/" class="btn btn-primary">Finish</a>
