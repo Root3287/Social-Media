@@ -250,7 +250,6 @@ if(!isset($_GET['step'])){
 								if($user->login(escape(Input::get('username')), escape(Input::get('password')), false)){
 									Notifaction::createMessage('Welcome to the Social-Media '. $user->data()->name, $user->data()->id);
 									Session::flash('complete', '<div class="alert alert-info">You need to delete install-disable.php! Hacker could use this to their advantage!</div>');
-									rename('install.php', 'install-disable.php');
 									Redirect::to('?step=6');
 								} 
 							}
@@ -298,7 +297,7 @@ if(!isset($_GET['step'])){
 			</div>
 			<?php
 				}elseif ($step === 6) {
-					rename('pages/install/install.php', 'pages/install/install.php');
+					rename('pages/install/install.php', 'pages/install/install-disable.php');
 			?>
 			You're done! Click continue to go to the home page!<br/>
 			<a href="/" class="btn btn-primary">Finish</a>
