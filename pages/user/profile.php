@@ -6,10 +6,10 @@ if(Input::exists('post')){
 		$validation = $val->check($_POST, array());
 		if($validation->passed()){
 			if($db->update('users', $user->data()->id, array('private'=>$private,))){
-				Session::flash('complete', 'You have updated your profile');
+				Session::flash('complete', '<div class="alert alert-success">You have updated your profile</div>');
 				Redirect::to('?page=profile');
 			}else{
-				session::flash('error', 'Something went wrong updating the profile');
+				session::flash('error', '<div class="alert alert-danger">Something went wrong updating the profile</div>');
 				Redirect::to('?page=profile');
 			}
 		}

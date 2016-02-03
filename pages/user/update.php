@@ -16,7 +16,7 @@ if(Input::exists()){
 							'email'=>escape(Input::get('email')),
 							//'username'=>escape(Input::get('username')),
 					), $user->data()->id);
-					session::flash('complete', 'You have updated your details');
+					session::flash('complete', '<div class="alert alert-success">You have updated your details</div>');
 					Redirect::to('');
 					}catch (Exception $e){
 						
@@ -29,7 +29,7 @@ if(Input::exists()){
 						'email'=>escape(Input::get('email')),
 						//'username'=>escape(Input::get('username')),
 				), $user->data()->id);
-				session::flash('complete', 'You have updated your details');
+				session::flash('complete', '<div class="alert alert-success">You have updated your details</div>');
 				Redirect::to('');
 				}Catch(Exception $e){
 					

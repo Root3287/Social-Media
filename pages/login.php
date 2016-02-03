@@ -16,7 +16,7 @@ if(Input::exists()){
 			$user2 = new User();
 			$login = $user2->login(escape(Input::get('username')), Input::get('password'), $remember);
 			if($login){
-				Session::flash('complete', '<div class="alert alert-complete">You have been logged in!</div>');
+				Session::flash('complete', '<div class="alert alert-success">You have been logged in!</div>');
 				Redirect::to('/');
 			}
 		}else{
