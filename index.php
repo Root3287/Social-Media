@@ -57,4 +57,7 @@ $router->add('/action/profile(.*)', function(){
 $router->add('/search', function(){
 	require 'pages/search.php';
 });
+$router->add('/pokes(.*)', function(){
+	require 'pages/pokes.php';
+});
 $router->run();

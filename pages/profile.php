@@ -1,6 +1,8 @@
 <?php
 $user = new User();
 $post = new Post();
+$poke = new Pokes();
+$token = Token::generate();
 if(!$user->isLoggedIn()){Redirect::to('/404');}
 if(!$profile_user){
 	Redirect::to('/404');//MAke 404
@@ -70,6 +72,12 @@ if($user->data()->username !== $user2->data()->username){
 							<?php else:?>
 							<h3>This is a private profile</h3>
 							<?php endif;?>
+						</div>
+					</div>
+					<div class="panel panel-primary">
+						<div class="panel-heading">Function</div>
+						<div class="panel-body">
+							<?php if($poke->hasPendingPoke($user->data()->id) || $poke->hasNoPokesPending($user->data()->id, $user2->data()->id)){?><a href="/pokes?token=<?php echo $token;?>&user2=<?php echo $user2->data()->id;?>">Poke</a><?php }?>
 						</div>
 					</div>
 				</div>
