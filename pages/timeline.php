@@ -1,6 +1,7 @@
 <?php
 $user = new User();
 $post = new Post();
+$pokes= new Pokes();
 if(Input::exists()){
 	if(Token::check(Input::get('token'))){
 		$val = new Validation();
@@ -39,9 +40,17 @@ if(Input::exists()){
 				echo Session::flash('complete');
 			}
 			?>
-			<div class="col-md-2">
+			<div class="col-md-3">
+				<div class="list-group">
+					<a href="/user" class="list-group-item active">
+						<img src="<?php echo $user->getAvatarURL(16);?>" alt="{userimg.png}">
+						<?php echo $user->data()->name;?>
+					</a>
+					<a href="/pokes" class="list-group-item"><span class="glyphicon glyphicon-hand-right"></span> Pokes <?php if($pcount = $pokes->getPendingPokesCount($user->data()->id) >=1){?><span class="badge"><?php echo $pcount;?></span></a><?php }?>
+					<a href="#" class="list-group-item">{link}</a>	
+				</div>
 			</div>
-			<div class="col-md-8">
+			<div class="col-md-6">
 				<div class="row"><!-- Posts a status -->
 					<form action="/" method="post">
 						<div class="form-group">
@@ -53,6 +62,7 @@ if(Input::exists()){
 						</div>
 					</form>
 				</div>
+				<br>
 				<div class="row"><!-- Other people status -->
 					<?php foreach($post->getPostForTimeline($user->data()->id) as $timeline):?>
 						<div class="well">
@@ -64,9 +74,16 @@ if(Input::exists()){
 					<?php endforeach;?>
 				</div>
 			</div>
-			<div class="col-md-2">
-				<p id="me"></p>
+			<div class="col-md-3">
+				<div class="list-group">
+					<a href="/user/friends" class="list-group-item active">Friends</a>
+					<?php foreach ($user->getFriends() as $friend){ $friend_user = new User($friend->friend_id);?>
+					<a href="/profile/<?php echo $friend_user->data()->username;?>" class="list-group-item"><img src="<?php echo $friend_user->getAvatarURL();?>" alt="friend_user"> <?php echo $friend_user->data()->username;?></a>
+					<?php } ?>
+				</div>		
 			</div>
+
+			
 		</div>
 		<?php require 'assets/foot.php';?>
 		<script type="text/javascript">

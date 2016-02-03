@@ -77,7 +77,7 @@ if($user->data()->username !== $user2->data()->username){
 					<div class="panel panel-primary">
 						<div class="panel-heading">Function</div>
 						<div class="panel-body">
-							<?php if($poke->hasPendingPoke($user->data()->id) || $poke->hasNoPokesPending($user->data()->id, $user2->data()->id)){?><a href="/pokes?token=<?php echo $token;?>&user2=<?php echo $user2->data()->id;?>">Poke</a><?php }?>
+							<?php if($poke->hasNoPokesPending($user->data()->id, $user2->data()->id)){?><a href="/pokes?token=<?php echo $token;?>&user2=<?php echo $user2->data()->id;?>">Poke</a><?php }?>
 						</div>
 					</div>
 				</div>

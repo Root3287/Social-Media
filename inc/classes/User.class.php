@@ -159,6 +159,9 @@ class User{
 		}
 		return false;
 	}
+	public function getFriends(){
+		return $this->_db->get('friends', ['user_id', '=', $this->_data->id])->results();
+	}
 	public function addFriend($user2){
 		if($this->isFollowing($user2)){
 			if(!$this->_db->insert('friends', ['user_id'=>$this->_data->id, 'friend_id'=>$user2, 'accepted'=>0,])){

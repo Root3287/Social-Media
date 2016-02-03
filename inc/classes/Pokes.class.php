@@ -29,6 +29,14 @@ class Pokes{
 		$return = $this->_db->get('pokes_pending', ['user2', '=', $user]);
 		return ($return)? $return->results():null;
 	}
+	public function getPendingPokesCount($user){
+		$pokes = $this->getPendingPokes($user);
+		$return = 0;
+		foreach ($pokes as $ppoke) {
+			$return++;
+		}
+		return $return;
+	}
 	public function getCount($user1, $user2){
 		$return = $this->_db->query("SELECT * FROM `pokes_count` WHERE `user1`=? AND `user2`=?", [$user2, $user1]);
 		return $return->results()[0]->count;
@@ -41,10 +49,10 @@ class Pokes{
 	}
 	public function hasNoPokesPending($user1, $user2){
 		$d1= $this->_db->query("SELECT * FROM `pokes_pending` WHERE user1=? AND user2=?", [$user1, $user2]);
-		$d2= $this->_db->query("SELECT * FROM `pokes_pending` WHERE user2=? AND user1=?", [$user1, $user2]);
-		if($d1->count() || $d2->count()){
-			return false;
+		//$d2= $this->_db->query("SELECT * FROM `pokes_pending` WHERE user2=? AND user1=?", [$user1, $user2]);
+		if($d1->count() ==0 /*|| $d2->count() ==0*/){
+			return true;
 		}
-		return true;
+		return false;
 	}
 }
