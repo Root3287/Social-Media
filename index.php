@@ -13,9 +13,12 @@ $router->add('/', function (){
 		if(!$user->isLoggedIn()){
 			require 'pages/index.php';
 		}else{
-			require 'pages/timeline.php';
+			Redirect::to('/timeline');
 		}
 	}
+});
+$router->add('/timeline(.*)', function(){
+	require 'pages/timeline.php';
 });
 $router->add('/install(.*)', function(){
 	if(file_exists('pages/install/install.php')){

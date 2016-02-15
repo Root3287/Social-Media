@@ -1,28 +1,26 @@
+<?php
 // Recreated from http://code.tutsplus.com/tutorials/how-to-paginate-data-with-php--net-2928
 // Thank you so much!
-<?php
-class Pagination{
-	private $_db, $_limit, $_page, $_query, $_total;
+class PaginateArray{
+	private $_limit, $_page, $_array, $_total;
 	
-	public function __construct($query){
-		$this->_db = DB::getInstance();
-		$this->_query = $query;
-		$rs = $this->_db->get($this->_query);
-		$this->_total = $rs->count();
+	public function __construct($array = array()){
+		$this->_array = $array;
+		$this->_total = count($array);
 	}
 
 	public function getData($limit = 10, $page = 1){
 		$this->_limit = $limit;
 		$this->_page = $page;	
-		
+		$index = ($page*$limit)-1;
+
 		if($this->_limit == -1){ // Everything
-			$query = $this->_query;
+			$finalArray = $this->_array;
 		}else{
-			$query = $this->_query." LIMIT ".$this->_page-1*$this->_limit.", $this->_limit";
+			$finalArray = array_slice($this->_array, $index, $limit);
 		}
-		$rs = $this->_db->query($query)->results();
 		$res = [];
-		foreach($rs as $r){
+		foreach($finalArray as $r){
 			$res[] = $r;
 		}
 		$result = new stdClass();
@@ -33,25 +31,27 @@ class Pagination{
 		
 		return $result;
 	}
-	
-	public function createLinks($links, $list_class){
-		if($this->_limit == -1){
-			return '';
+	public function getArrayData($limit = 10, $page = 0){
+		$this->_limit = $limit;
+		$this->_page = $page;	
+		
+		$start = ($this->_page - 1)*$limit;
+		$finish = $start+$limit;
+		
+		if($this->_limit == -1){ // Everything
+			$finalArray = $this->_array;
+		}else{
+			$finalArray = array_slice($this->_array, $start, $finish);
 		}
-		$last = ceil($this->_total / $this->_limit);
-		$start = ($this->_page - $links > 0) ? $this->_page - $links : 1;
-		$end = ($this->_page + $links < $last)? $this->_page+$links:$last;
 
-		if($start > 1){
-		// Create Links
+		$res = [];
+		foreach($finalArray as $r){
+			$res[] = $r;
 		}
-		for($i = $start; $i <= $end; $i++){
-		//Create Links
-		}
-		if($end < $last){
-		//create links
-		}
-		return $html;
+		return $res;
+	}
+	public function getTotalPages(){
+		return (ceil($this->_total/$this->_limit)<=10)? ceil($this->_total/$this->_limit):10;
 	}
 }
 /* At the top of the page

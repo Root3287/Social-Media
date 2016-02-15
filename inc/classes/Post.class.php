@@ -59,8 +59,12 @@ class Post{
 		usort($return, "date_compare");
 		return $return;
 	}
-	public function getPostForTimeline($user, $page=0,$limit = 10){
-		$start = ($page> 1)? ($page * $limit) - $limit: 0;
+	 /**
+	  * Get the post for the timeline
+	  * @param  integer $user  userID
+	  * @return array   array of all the post for the timeline
+	  */
+	public function getPostForTimeline($user){
 		$return = array();
 		//Get the user post
 		$userPosts = $this->getPostByUser($user);
