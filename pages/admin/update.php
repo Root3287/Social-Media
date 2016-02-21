@@ -28,3 +28,4 @@ if($latus_version !== "Failed"){
 		Setting::update('server_stats', $latus_version);
 	}
 }
+?>

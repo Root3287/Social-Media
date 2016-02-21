@@ -1,12 +1,40 @@
 <?php
 $user = new User();
 if(!$user->isLoggedIn()){
-	Redirect::to('/404');
+	Redirect::to('/');
 }
-if(!$user->data()->group == 2){
-	Redirect::to('/404');
-}
-if(!$user->isAdmLoggedIn()){
+if($user->isAdmLoggedIn()){
+	if($user->data()->group !=2){
+		Redirect::to('/');
+	}
+	
+?>
+<html>
+	<head>
+		<?php require 'assets/head.php';?>
+	</head>
+	<body>
+		<?php require 'assets/nav.php';?>
+		<div class="container">
+			<div class="jumbotron">
+				<h1>AdminCP</h1>
+			</div>
+			<div class="row">
+				<div class="col-md-3">
+					<?php require 'pages/admin/sidebar.php';?>
+				</div>
+				<div class="col-md-9">
+					<div class="well well-sm">
+						<h1>Your settings would come here.</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php require 'assets/foot.php';?>
+	</body>
+</html>
+<?php
+}else{
 	if(Input::exists()){
 		if(Token::check(Input::get('token'))){
 			$val = new Validation();
@@ -64,25 +92,7 @@ if(!$user->isAdmLoggedIn()){
 		<?php require 'assets/foot.php';?>
 	</body>
 </html>
-<?php
-}
-if($user->isAdmLoggedIn()){
-?>
-<html>
-	<head>
-		<?php require 'assets/head.php';?>
-	</head>
-	<body>
-		<?php require 'assets/nav.php';?>
-		<div class="container">
-			<div class="jumbotron">
-				<h1>AdminCP</h1>
-			</div>
-			
-		</div>
-		<?php require 'assets/foot.php';?>
-	</body>
-</html>
+
 <?php
 }
 ?>

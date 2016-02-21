@@ -33,8 +33,15 @@ $router->add('/login', function(){
 $router->add('/register', function(){
 	require 'pages/register.php';
 });
-$router->add('/admin', function(){
+$router->add('/admin', function(){Redirect::to('/admin/');});
+$router->add('/admin/(.*)', function($x){
+	if(!$x){
 	require 'pages/admin/index.php';
+	}else{
+		if(!include "pages/admin/".escape($x).".php"){
+			Redirect::to('/404');
+		}
+	}
 });
 $router->add('/404', function(){
 	require 'pages/404.php';

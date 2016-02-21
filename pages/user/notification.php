@@ -26,9 +26,6 @@ if(Input::exists('get')){
 	<thead>
 		<tr>
 			<td>
-				ID
-			</td>
-			<td>
 				Message
 			</td>
 			<td>
@@ -42,9 +39,6 @@ if(Input::exists('get')){
 	<tbody>
 		<?php foreach (Notifaction::get($user->data()->id) as $message){
 		echo '<tr>';
-			echo '<td>';
-				echo $message->id;
-			echo '</td>';
 			echo '<td>';
 				echo $message->message;
 			echo '</td>';

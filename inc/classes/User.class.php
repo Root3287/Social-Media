@@ -218,7 +218,15 @@ class User{
 	}
 	public function logout() {
 		$this->_db->delete('user_session', array('user_id', '=', $this->data()->id));
+		$this->_db->delete('adm_user_session', ['user_id', '=', $this->data()->id]);
 		Session::delete($this->_sessionName);
+		Session::delete('adm_'.$this->_sessionName);
 		cookies::delete($this->_cookieName);
+		cookies::delete('adm_'.$this->_cookieName);
+	}
+	public function admLogout() {
+		$this->_db->delete('adm_user_session', ['user_id', '=', $this->data()->id]);
+		Session::delete('adm_'.$this->_sessionName);
+		cookies::delete('adm_'.$this->_cookieName);
 	}
 }
