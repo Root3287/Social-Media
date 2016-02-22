@@ -37,7 +37,7 @@ if(Input::exists()){
 		<div class="container">
 		<div class="col-md-3"><?php require 'pages/admin/sidebar.php';?></div>
 		<div class="col-md-9">
-			<form class="form-inline" method="post" action="?page=user">
+			<form class="form-inline" method="post" action="/admin/users">
 				<div class="form-group">
 					<input name="search" type="text" class="form-control input-md" placeholder="Search">
 				</div>
