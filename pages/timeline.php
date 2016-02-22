@@ -46,7 +46,7 @@ if(Input::exists()){
 			?>
 			<div class="col-sm-6 col-md-6 col-sm-push-3">
 				<div class="row"><!-- Posts a status -->
-					<form action="/" method="post">
+					<form action="/timeline" method="post">
 						<div class="form-group">
 							<textarea name="post" id="message" rows="1" placeholder="Talk about your life here!"></textarea>
 						</div>
