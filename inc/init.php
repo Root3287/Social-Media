@@ -42,3 +42,13 @@ if(!file_exists('/pages/install/install.php')){
 	$error_reporting =(Setting::get('debug') == 'Off')? '0':'-1';
 	error_reporting($error_reporting);
 }
+
+/**
+ * Get Notification
+ */
+/**
+ * Check if we have a unique_id
+ */
+if(Setting::get('unique_id') == null || Setting::get('unique_id') == ""){
+	Setting::update('unique_id', substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0,62));
+}
