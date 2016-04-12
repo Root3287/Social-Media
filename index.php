@@ -33,15 +33,23 @@ $router->add('/login', function(){
 $router->add('/register', function(){
 	require 'pages/register.php';
 });
-$router->add('/admin', function(){Redirect::to('/admin/');});
-$router->add('/admin/(.*)', function($x){
-	if(!$x){
+$router->add('/admin/', function(){
 	require 'pages/admin/index.php';
-	}else{
-		if(!include "pages/admin/".escape($x).".php"){
-			Redirect::to('/404');
-		}
-	}
+});
+$router->add('/admin/update/', function(){
+	require 'pages/admin/update.php';
+});
+$router->add('/admin/logout/', function(){
+	require 'pages/admin/logout.php';
+});
+$router->add('/admin/settings/', function(){
+	require 'pages/admin/settings.php';
+});
+$router->add('/admin/login/', function(){
+	require 'pages/admin/login.php';
+});
+$router->add('/admin', function(){
+	Redirect::to('/admin/');
 });
 $router->add('/404', function(){
 	require 'pages/404.php';
