@@ -33,24 +33,6 @@ $router->add('/login', function(){
 $router->add('/register', function(){
 	require 'pages/register.php';
 });
-$router->add('/admin/', function(){
-	require 'pages/admin/index.php';
-});
-$router->add('/admin/update/', function(){
-	require 'pages/admin/update.php';
-});
-$router->add('/admin/logout/', function(){
-	require 'pages/admin/logout.php';
-});
-$router->add('/admin/settings/', function(){
-	require 'pages/admin/settings.php';
-});
-$router->add('/admin/login/', function(){
-	require 'pages/admin/login.php';
-});
-$router->add('/admin', function(){
-	Redirect::to('/admin/');
-});
 $router->add('/404', function(){
 	require 'pages/404.php';
 });
@@ -77,5 +59,43 @@ $router->add('/search', function(){
 });
 $router->add('/pokes(.*)', function(){
 	require 'pages/pokes.php';
+});
+
+/*
+Admin Stuff
+*/
+$router->add('/admin/', function(){
+	require 'pages/admin/index.php';
+});
+$router->add('/admin/update/', function(){
+	require 'pages/admin/update.php';
+});
+$router->add('/admin/logout/', function(){
+	require 'pages/admin/logout.php';
+});
+$router->add('/admin/settings/', function(){
+	require 'pages/admin/settings.php';
+});
+$router->add('/admin/login/', function(){
+	require 'pages/admin/login.php';
+});
+$router->add('/admin/user', function(){
+	require 'pages/admin/users.php';
+});
+$router->add('/admin/users/delete/', function(){
+
+});
+$router->add('/admin/users/edit/', function(){
+
+});
+$router->add('/admin', function(){
+	Redirect::to('/admin/');
+});
+
+/*
+API
+*/
+$router->add('/api/(.*)', function(){
+
 });
 $router->run();
