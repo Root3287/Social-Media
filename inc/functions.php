@@ -24,7 +24,7 @@ function phrase($text, $hash = 0){
             if($user->count() != 0){
                 $user = $user->first();
                 //Do notification
-                $message = "You have been mensioned on a post! Click <a href='/post/'>here</a> to visit the post!";
+                $message = "You have been mensioned on a post! Click <a href='/post/{$hash}'>here</a> to visit the post!";
                 $db->insert('notification', array(
                    'user' => $user->id,
                     'message'=> $message,

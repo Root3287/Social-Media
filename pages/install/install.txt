@@ -120,6 +120,17 @@ CREATE TABLE `pokes_count` (
 )
 ENGINE=InnoDB
 ;
+CREATE TABLE `comments` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`user_id` INT(11) NOT NULL,
+	`original_post` INT(11) NOT NULL,
+	`content` LONGTEXT NOT NULL,
+	`time` DATETIME NULL DEFAULT NULL,
+	PRIMARY KEY (`id`)
+)
+COLLATE='latin1_swedish_ci'
+ENGINE=InnoDB
+;
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (1, 'install', '1');
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (2, 'title', 'Socal-Media');
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (3, 'bootstrap-theme', '3');

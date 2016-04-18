@@ -2,6 +2,7 @@
 $user = new User();
 $post = new Post();
 $pokes= new Pokes();
+$like = new Like();
 $pagination = new PaginateArray($post->getPostForTimeline($user->data()->id));
 $page = (Input::get('p') !=null)?Input::get('p'):1;
 $limit = (Input::get('l') !=null)? Input::get('l'):10;
@@ -26,6 +27,7 @@ if(Input::exists()){
 		}
 	}
 }
+$token = Token::generate();
 ?>
 <html>
 	<head>
@@ -51,19 +53,95 @@ if(Input::exists()){
 							<textarea name="post" id="message" rows="1" placeholder="Talk about your life here!"></textarea>
 						</div>
 						<div class="form-group">
-							<input name="token" type="hidden" id="token" value="<?php echo Token::generate();?>">
+							<input name="token" type="hidden" id="token" value="<?php echo $token;?>">
 							<span class="pull-right"><button id="submit" class="btn btn-sm btn-primary">Post!</button></span>
 						</div>
 					</form>
 				</div>
 				<br>
-				<div class="row"><!-- Other people status -->
+				<div class="row"><!-- Posted Status -->
 					<?php foreach($timelineData as $timeline):?>
 						<div class="well">
 							<div class="page-header">
 								<h1><?php $timelineUser = new User($timeline['user_id']); echo "<a href='/profile/{$timelineUser->data()->username}'>".$timelineUser->data()->username."</a>";?></h1>
 							</div>
 							<p><?php echo $timeline['content'];?></p>
+							<div class="row">
+								<form action="/action/reply/" class="form-inline" method="post" autocomplete="off">
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-btn">
+										   		<?php if($like->hasLike($user->data()->id, $timeline['id']) <= 0){?><a href="/action/like/?t=<?php echo $timeline['id'];?>&token=<?php echo $token;?>" id="like" class="btn btn-primary"><span class="glyphicon glyphicon-star-empty"></span> <?php echo $like->getLikesByPost($timeline['id'])->count();?></a><?php }else{?><a href="/action/dislike/?t=<?php echo $timeline['id'];?>&token=<?php echo $token;?>" id="dislike" class="btn btn-primary"><span class="glyphicon glyphicon-star-empty"></span> <?php echo $like->getLikeByPost($timeline['id'])->count();?></a><?php }?>
+										   </span>
+										   <input name="post" type="text" class="form-control">
+										   <span class="input-group-btn">
+										        <input type="submit" value="Post Comment" class="btn btn-default" type="button">
+										   </span>
+										   <span class="input-group-btn">
+										   		<button type="button" class="btn btn-info" data-toggle="modal" data-target="#PostModel<?php echo $timeline['id'];?>">Comments</button>
+										   </span>
+										</div>
+									</div>
+									<input type="hidden" name="original_post" value="<?php echo $timeline['id'];?>"></input>
+									<input type="hidden" name="token" value="<?php echo $token;?>">
+								</form>
+							</div>
+						</div>
+
+						<!-- Model for post -->
+						<div id="PostModel<?php echo $timeline['id'];?>" class="modal fade" role="dialog">
+						  <div class="modal-dialog">
+
+						    <!-- Modal content-->
+						    <div class="modal-content">
+						      <div class="modal-header">
+						        <button type="button" class="close" data-dismiss="modal">&times;</button>
+						        <h4 class="modal-title"><?php echo "<a href='/profile/{$timelineUser->data()->username}'>".$timelineUser->data()->username."</a>";?></h4>
+						      </div>
+						      <div class="modal-body">
+						        <div class="row">
+						        	<div class="col-md-7"><p><?php echo $timeline['content'];?></p></div>
+						        	<div class="col-md-5">
+						      			<strong>Comments</strong><br>
+						      			<?php if($post->getComments($timeline['id'])){foreach($post->getComments($timeline['id']) as $comment): $commentUser = new User($comment->user_id)?>
+						      				<div class="row">
+							      				<ul class="media-list">
+												  <li class="media">
+												    <div class="media-left">
+												      <a href="<?php echo "/profile/{$timelineUser->data()->username}";?>">
+												        <img class="media-object img-circle" src="<?php echo $commentUser->getAvatarURL('48')?>" alt="<?php echo $commentUser->data()->username;?>">
+												      </a>
+												    </div>
+												    <div class="media-body">
+												      <h4 class="media-heading"><a href="<?php echo "/profile/{$timelineUser->data()->username}";?>"><?php echo $commentUser->data()->username;?></h4></a>
+												      <p><?php echo $comment->content;?></p>
+												    </div>
+												  </li>
+												</ul>
+						      				</div>
+						      			<?php endforeach;}?>
+						        	</div>
+						        </div>
+						      </div>
+						      <div class="modal-footer">
+								<form action="/action/reply/" class="form-inline" method="post" autocomplete="off">
+									<div class="form-group">
+										<div class="input-group">
+										   <input name="post" type="text" class="form-control">
+										   <span class="input-group-btn">
+										        <input type="submit" value="Post Comment" class="btn btn-default" type="button">
+										   </span>
+										   <span class="input-group-btn">
+										        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+										   </span>
+										</div>
+									</div>
+									<input type="hidden" name="original_post" value="<?php echo $timeline['id'];?>"></input>
+									<input type="hidden" name="token" value="<?php echo $token;?>">
+								</form>
+						      </div>
+						    </div>
+						  </div>
 						</div>
 					<?php endforeach;?>
 					<ul class="pagination">

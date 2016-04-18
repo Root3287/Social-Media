@@ -4,11 +4,17 @@ class Post{
 	public function __construct(){
 		$this->_db = DB::getInstance();
 	}
+	/**
+	 * Create a post
+	 * @param  String $message The post content
+	 * @param  Int    $user    The User's ID
+	 * @return [type]          [description]
+	 */
 	public function create($message, $user){
 		$count = 0;
 		$success = false;
 		while($count <= 10 && !$success){
-			$hash = Hash::unique_length(rand(3,6));
+			$hash = Hash::unique_length(11);
 			
 			$posts = $this->_db->query("SELECT * FROM posts WHERE hash=$hash");
 			
@@ -25,6 +31,17 @@ class Post{
 			])){
 				throw new Exception('Error making post',0);
 		}
+	}
+	public function createComment($fields = array()){
+		$op = $this->getPost($fields['original_post']);
+		$fields['content'] = phrase($fields['content'], $op[0]->hash);
+		if(!$this->_db->insert('comments', $fields)){
+			throw new Exception("Error making post!", 0);
+		}
+	}
+	public function getPost($id = null){
+		$where = ($id)? ['id','=', escape($id)] : ['1','=','1'];
+		return $this->_db->get('posts', $where)->results();
 	}
 	public function getPostByHash($hash){
 		return $this->_db->get('posts', ['hash','=',$hash])->first();
@@ -94,5 +111,13 @@ class Post{
 		}
 		usort($return, "date_compare");
 		return $return;
+	}
+	/**
+	 * Get the comments
+	 * @param  int 	  $orignal The orignal post id
+	 * @return class           Mysql return
+	 */
+	public function getComments($orignal){
+		return $this->_db->get('comments', ['original_post', '=', escape($orignal)])->results();
 	}
 }

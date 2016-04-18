@@ -39,9 +39,7 @@ $router->add('/404', function(){
 $router->add('/profile/(.*)', function($profile_user){
 	require 'pages/profile.php';
 });
-$router->add('/user(.*)',function(){
-	require 'pages/user/index.php';
-});
+
 $router->add('/test',function(){
 	require 'pages/test.php';
 });
@@ -51,9 +49,7 @@ $router->add('/logout', function(){
 $router->add('/post/(.*)', function($pid){
 	require 'pages/post.php';
 });
-$router->add('/action/profile(.*)', function(){
-	require 'pages/action/profile.php';
-});
+
 $router->add('/search', function(){
 	require 'pages/search.php';
 });
@@ -97,5 +93,43 @@ API
 */
 $router->add('/api/(.*)', function(){
 
+});
+
+/*
+User
+*/
+$router->add('/user/',function(){
+	require 'pages/user/index.php';
+});
+$router->add('/user/profile/(.*)',function(){
+	require 'pages/user/profile.php';
+});
+$router->add('/user/notification/(.*)',function(){
+	require 'pages/user/notification.php';
+});
+$router->add('/user/update/(.*)',function(){
+	require 'pages/user/update.php';
+});
+$router->add('/user',function(){
+	Redirect::to('/user/');
+});
+$router->add('/user/profile',function(){
+	Redirect::to('/user/profile/');
+});
+$router->add('/user/notification',function(){
+	Redirect::to('/user/notification/');
+});
+$router->add('/user/update',function(){
+	Redirect::to('/user/update/');
+});
+
+/*
+Action
+*/
+$router->add('/action/profile(.*)', function(){
+	require 'pages/action/profile.php';
+});
+$router->add('/action/reply(.*)', function(){
+	require 'pages/action/reply.php';
 });
 $router->run();

@@ -3,7 +3,7 @@ $user = new User();
 $post = new Post();
 $post = $post->getPostByHash($pid);
 if(!$post){
-Redirect::to('/404');
+	Redirect::to('/404');
 }
 
 $user2 = new User($post->user_id);
