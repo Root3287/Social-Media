@@ -71,7 +71,7 @@ $token = Token::generate();
 									<div class="form-group">
 										<div class="input-group">
 											<span class="input-group-btn">
-										   		<?php if($like->hasLike($user->data()->id, $timeline['id']) <= 0){?><a href="/action/like/?t=<?php echo $timeline['id'];?>&token=<?php echo $token;?>" id="like" class="btn btn-primary"><span class="glyphicon glyphicon-star-empty"></span> <?php echo $like->getLikesByPost($timeline['id'])->count();?></a><?php }else{?><a href="/action/dislike/?t=<?php echo $timeline['id'];?>&token=<?php echo $token;?>" id="dislike" class="btn btn-primary"><span class="glyphicon glyphicon-star-empty"></span> <?php echo $like->getLikeByPost($timeline['id'])->count();?></a><?php }?>
+										   		<?php if($like->hasLike($user->data()->id, $timeline['id']) <= 0){?><a href="/action/like/?t=<?php echo $timeline['id'];?>&token=<?php echo $token;?>" id="like" class="btn btn-primary"><span class="glyphicon glyphicon-star-empty"></span> <?php echo $like->getLikesByPost($timeline['id'])->count();?></a><?php }else{?><a href="/action/dislike/?t=<?php echo $timeline['id'];?>&token=<?php echo $token;?>" id="dislike" class="btn btn-primary"><span class="glyphicon glyphicon-star"></span> <?php echo $like->getLikesByPost($timeline['id'])->count();?></a><?php }?>
 										   </span>
 										   <input name="post" type="text" class="form-control">
 										   <span class="input-group-btn">
@@ -127,6 +127,9 @@ $token = Token::generate();
 								<form action="/action/reply/" class="form-inline" method="post" autocomplete="off">
 									<div class="form-group">
 										<div class="input-group">
+											<span class="input-group-btn">
+											   		<?php if($like->hasLike($user->data()->id, $timeline['id']) <= 0){?><a href="/action/like/?t=<?php echo $timeline['id'];?>&token=<?php echo $token;?>" id="like" class="btn btn-primary"><span class="glyphicon glyphicon-star-empty"></span> <?php echo $like->getLikesByPost($timeline['id'])->count();?></a><?php }else{?><a href="/action/dislike/?t=<?php echo $timeline['id'];?>&token=<?php echo $token;?>" id="dislike" class="btn btn-primary"><span class="glyphicon glyphicon-star"></span> <?php echo $like->getLikesByPost($timeline['id'])->count();?></a><?php }?>
+											   </span>
 										   <input name="post" type="text" class="form-control">
 										   <span class="input-group-btn">
 										        <input type="submit" value="Post Comment" class="btn btn-default" type="button">

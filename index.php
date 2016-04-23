@@ -132,4 +132,10 @@ $router->add('/action/profile(.*)', function(){
 $router->add('/action/reply(.*)', function(){
 	require 'pages/action/reply.php';
 });
+$router->add('/action/like(.*)', function(){
+	require 'pages/action/like.php';
+});
+$router->add('/action/dislike(.*)', function(){
+	require 'pages/action/dislike.php';
+});
 $router->run();
