@@ -9,7 +9,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/"><?php echo Setting::get('title')?></a>
+      <a class="navbar-brand" href="/"><?php echo Setting::get('title')?> <span class="label label-danger">Alpha</span></a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->

@@ -138,6 +138,6 @@ INSERT INTO `settings` (`id`, `name`, `value`) VALUES (4, 'motd', '');
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (5, 'debug', 'On');
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (6, 'inverted-nav', '1');
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (7, 'unique_id', '');
-INSERT INTO `settings` (`id`, `name`, `value`) VALUES (8, 'version', '0.0.1');
+INSERT INTO `settings` (`id`, `name`, `value`) VALUES (8, 'version', '1.0.0');
 INSERT INTO `groups` (`id`, `group_name`, `permissions`) VALUES (1, 'Standard', '');
 INSERT INTO `groups` (`id`, `group_name`, `permissions`) VALUES (2, 'Admin', '{"Admin":"1"}');
