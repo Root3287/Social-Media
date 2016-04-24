@@ -1,13 +1,16 @@
 <?php
 $user = new User();
 $post = new Post();
-$post = $post->getPostByHash($pid);
+$like = new Like();
+$original_post = $post->getPostByHash($pid);
 if(!$post){
 	Redirect::to('/404');
 }
 
-$user2 = new User($post->user_id);
+$user2 = new User($original_post->user_id);
+$token = Token::generate();
 ?>
+<!DOCTYPE HTML>
 <html>
 	<head>
 		<?php require 'assets/head.php';?>
@@ -15,6 +18,11 @@ $user2 = new User($post->user_id);
 	<body>
 		<?php require 'assets/nav.php';?>
 		<div class="container">
+			<?php 
+			if(Session::exists('complete')){
+				echo Session::flash('complete');
+			}
+			?>
 			<div class="col-md-2"></div>
 			<div class="col-md-8">
 				<div class="well">
@@ -22,17 +30,86 @@ $user2 = new User($post->user_id);
 						<div class="page-header">
   							<h1><img class="img-circle" src="<?php echo $user2->getAvatarURL('64')?>"><a href="/profile/<?php echo $user2->data()->username;?>"><?php echo $user2->data()->username;?></a></h1>
 						</div>
-						<?php echo $post->content;?>
+						<?php echo $original_post->content;?>
 						<hr>
 						<?php if($user->isLoggedIn()):?>
-						<a href="">__ Likes</a>
-						<a href="">Repost</a>
+						<form id="reply" action="/action/reply/" class="form-inline" method="post" autocomplete="off">
+							<div class="form-group">
+								<div class="input-group">
+									<span class="input-group-btn">
+										<?php if($like->hasLike($user->data()->id, $original_post->id) <= 0){?><a href="/action/like" id="like" class="btn btn-primary"><span class="glyphicon glyphicon-star-empty"></span> <?php echo $like->getLikesByPost($original_post->id)->count();?></a><?php }else{?><a href="/action/dislike/" id="dislike" class="btn btn-primary"><span class="glyphicon glyphicon-star"></span> <?php echo $like->getLikesByPost($original_post->id)->count();?></a><?php }?>
+									</span>
+									<input name="post" type="text" id="comment" class="form-control">
+									<span class="input-group-btn">
+								    	<input type="submit" value="Post Comment" class="btn btn-default" type="button">
+									</span>
+								</div>
+							</div>
+							<input name="token" type="hidden" id="token" value="<?php echo $token;?>">
+							<input name="original_post" type="hidden" id="post" value="<?php echo $original_post->id;?>">
+						</form>
 						<?php endif;?>
 					</div>
+				</div>
+				<div class="row">
+					<h1>Replies</h1>
+					<?php if($post->getComments($original_post->id)){
+						foreach($post->getComments($original_post->id) as $reply){
+							$reply_user = new User($reply->user_id);?>
+						<div class="well">
+							<h2><?php echo $reply_user->data()->username;?></h2>
+							<hr>
+							<p><?php echo $reply->content?></p>
+						</div>
+					<?php }}?>
 				</div>
 			</div>
 			<div class="col-md-2"></div>
 		</div>
 		<?php require 'assets/foot.php';?>
+		<script>
+			$(function(){
+				$("#like").click(function(e){
+					e.preventDefault();
+					$.post(
+						"/action/like",
+						{
+							"token": $("input#token").val(), 
+							"post": $("input#post").val(),
+						},
+						function(data){
+							if(data["success"]){
+								location.reload();
+							}
+						}, 
+						"json"
+					);
+				});
+				$("#dislike").click(function(e){
+					e.preventDefault();
+					$.post(
+						"/action/dislike",
+						{
+							"token": $("input#token").val(), 
+							"post": $("input#post").val()
+						},
+						function(data){
+							if(data["success"]){
+								location.reload();
+							}
+						}, 
+						"json"
+					);
+				});
+				$("form#reply").submit(function (e) {
+					e.preventDefault();
+					$.post("/action/reply", $("form#reply").serialize(), function(data){
+						if(data["success"] == true){
+							location.reload();
+						}
+					}, "json");
+				});
+			});
+		</script>
 	</body>
 </html>

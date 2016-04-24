@@ -3,7 +3,7 @@ require 'inc/init.php';
 
 $router = new Router();
 
-echo '<!DOCTYPE HTML>';
+#echo '<!DOCTYPE HTML>';
 $router->add('/', function (){
 	if(file_exists('pages/install/install.php') || !isset($GLOBALS['config'])){
 		Redirect::to('/install');
@@ -137,5 +137,8 @@ $router->add('/action/like(.*)', function(){
 });
 $router->add('/action/dislike(.*)', function(){
 	require 'pages/action/dislike.php';
+});
+$router->add('/action/status(.*)', function(){
+	require 'pages/action/status.php';
 });
 $router->run();

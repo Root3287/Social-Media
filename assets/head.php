@@ -11,3 +11,4 @@
 <!-- Latest compiled and minified JavaScript -->
 <script src="/assets/js/jquery.js"></script>
 <script src="/assets/js/bootstrap.js"></script>
+<script src="/assets/js/jquery.session.js"></script>

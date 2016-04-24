@@ -7,26 +7,6 @@ $pagination = new PaginateArray($post->getPostForTimeline($user->data()->id));
 $page = (Input::get('p') !=null)?Input::get('p'):1;
 $limit = (Input::get('l') !=null)? Input::get('l'):10;
 $timelineData = $pagination->getArrayData($limit, $page);
-if(Input::exists()){
-	if(Token::check(Input::get('token'))){
-		$val = new Validation();
-		$validate = $val->check($_POST, [
-			'post'=>[
-				'required'=>true,
-			],
-		]);
-		if($validate->passed()){
-			try{
-				$post->create(Input::get('post'),$user);
-				Session::flash('success', '<div class="alert alert-success">You created your post</div>');
-				Redirect::to('/');
-			}catch(Exception $e){
-				Session::flash('error', '<div class="alert alert-danger">There was an error making a post!</div>');
-				Redirect::to('/');
-			}
-		}
-	}
-}
 $token = Token::generate();
 ?>
 <html>
@@ -48,7 +28,7 @@ $token = Token::generate();
 			?>
 			<div class="col-sm-6 col-md-6 col-sm-push-3">
 				<div class="row"><!-- Posts a status -->
-					<form action="/timeline" method="post">
+					<form id="status" action="/timeline" method="post">
 						<div class="form-group">
 							<textarea name="post" id="message" rows="1" placeholder="Talk about your life here!"></textarea>
 						</div>
@@ -67,11 +47,11 @@ $token = Token::generate();
 							</div>
 							<p><?php echo $timeline['content'];?></p>
 							<div class="row">
-								<form action="/action/reply/" class="form-inline" method="post" autocomplete="off">
+								<form id="reply" action="/action/reply" class="form-inline" method="post" autocomplete="off">
 									<div class="form-group">
 										<div class="input-group">
 											<span class="input-group-btn">
-										   		<?php if($like->hasLike($user->data()->id, $timeline['id']) <= 0){?><a href="/action/like/?t=<?php echo $timeline['id'];?>&token=<?php echo $token;?>" id="like" class="btn btn-primary"><span class="glyphicon glyphicon-star-empty"></span> <?php echo $like->getLikesByPost($timeline['id'])->count();?></a><?php }else{?><a href="/action/dislike/?t=<?php echo $timeline['id'];?>&token=<?php echo $token;?>" id="dislike" class="btn btn-primary"><span class="glyphicon glyphicon-star"></span> <?php echo $like->getLikesByPost($timeline['id'])->count();?></a><?php }?>
+										   		<?php if($like->hasLike($user->data()->id, $timeline['id']) <= 0){?><a href="/action/like/" id="like" class="btn btn-primary"><span class="glyphicon glyphicon-star-empty"></span> <?php echo $like->getLikesByPost($timeline['id'])->count();?></a><?php }else{?><a href="/action/dislike/" id="dislike" class="btn btn-primary"><span class="glyphicon glyphicon-star"></span> <?php echo $like->getLikesByPost($timeline['id'])->count();?></a><?php }?>
 										   </span>
 										   <input name="post" type="text" class="form-control">
 										   <span class="input-group-btn">
@@ -84,6 +64,7 @@ $token = Token::generate();
 									</div>
 									<input type="hidden" name="original_post" value="<?php echo $timeline['id'];?>"></input>
 									<input type="hidden" name="token" value="<?php echo $token;?>">
+									<input id="orignal_post" type="hidden" value="<?php echo $timeline['id'];?>">
 								</form>
 							</div>
 						</div>
@@ -124,11 +105,11 @@ $token = Token::generate();
 						        </div>
 						      </div>
 						      <div class="modal-footer">
-								<form action="/action/reply/" class="form-inline" method="post" autocomplete="off">
+								<form id="reply" action="/action/reply/" class="form-inline" method="post" autocomplete="off">
 									<div class="form-group">
 										<div class="input-group">
 											<span class="input-group-btn">
-											   		<?php if($like->hasLike($user->data()->id, $timeline['id']) <= 0){?><a href="/action/like/?t=<?php echo $timeline['id'];?>&token=<?php echo $token;?>" id="like" class="btn btn-primary"><span class="glyphicon glyphicon-star-empty"></span> <?php echo $like->getLikesByPost($timeline['id'])->count();?></a><?php }else{?><a href="/action/dislike/?t=<?php echo $timeline['id'];?>&token=<?php echo $token;?>" id="dislike" class="btn btn-primary"><span class="glyphicon glyphicon-star"></span> <?php echo $like->getLikesByPost($timeline['id'])->count();?></a><?php }?>
+											   		<?php if($like->hasLike($user->data()->id, $timeline['id']) <= 0){?><a id="like" href="/action/like/&token=<?php echo $token;?>" id="like" class="btn btn-primary"><span class="glyphicon glyphicon-star-empty"></span> <?php echo $like->getLikesByPost($timeline['id'])->count();?></a><?php }else{?><a href="/action/dislike/" id="dislike" class="btn btn-primary"><span class="glyphicon glyphicon-star"></span> <?php echo $like->getLikesByPost($timeline['id'])->count();?></a><?php }?>
 											   </span>
 										   <input name="post" type="text" class="form-control">
 										   <span class="input-group-btn">
@@ -139,8 +120,8 @@ $token = Token::generate();
 										   </span>
 										</div>
 									</div>
-									<input type="hidden" name="original_post" value="<?php echo $timeline['id'];?>"></input>
-									<input type="hidden" name="token" value="<?php echo $token;?>">
+									<input type="hidden" id="orignal_post" name="original_post" value="<?php echo $timeline['id'];?>"></input>
+									<input type="hidden" id="token" name="token" value="<?php echo $token;?>">
 								</form>
 						      </div>
 						    </div>
@@ -161,7 +142,7 @@ $token = Token::generate();
 						<?php echo $user->data()->name;?>
 					</a>
 					<a href="/pokes" class="list-group-item"><span class="glyphicon glyphicon-hand-right"></span> Pokes <?php if($pcount = $pokes->getPendingPokesCount($user->data()->id) >=1){?><span class="badge"><?php echo $pcount;?></span></a><?php }?>
-					<a href="#" class="list-group-item">{link}</a>	
+					<a href="#" class="list-group-item">{link}</a>
 				</div>
 			</div>
 			<div class="col-sm-3 col-md-3">
@@ -174,6 +155,78 @@ $token = Token::generate();
 			</div>
 		</div>
 		<?php require 'assets/foot.php';?>
+		<script>
+			$(function(){
+				$("#like").click(function(e){
+					e.preventDefault();	
+					$.post(
+						"/action/like",
+						{
+							"token": $(this).parent().parent().parent().children("input#token").val(), 
+							"post": $(this)parent().parent().parent().children("input#oringal_post").val(),
+						},
+						function(data){
+							if(data["success"]){
+								location.reload();
+							}
+						}, 
+						"json"
+					);
+				});
+				/*)
+				$("#like").click(function(e){
+					e.preventDefault();
+					$.post(
+						"/action/like",
+						{
+							"token": $("input#token").val(), 
+							"post": $("input#post").val(),
+						},
+						function(data){
+							if(data["success"]){
+								location.reload();
+							}
+						}, 
+						"json"
+					);
+				});
+				*/
+				$("#dislike").click(function(e){
+					e.preventDefault();
+					$.post(
+						"/action/dislike/",
+						{
+							"token": $(this).parent().children("input#token").val(), 
+							"post": $(this).parent().child("input#post").val()
+						},
+						function(data){
+							if(data["success"] == true){
+								location.reload();
+							}
+						}, 
+						"json"
+					);
+				});
+				$("form#status").submit(function(e){
+					e.preventDefault();
+
+					$.post("/action/status", $("form#status").serialize(), function(data){
+						if(data["success"]){
+							location.reload();
+						}
+					}, "json");
+				});
+				$("form#reply").submit(function(e){
+					e.preventDefault();
+
+					$.post("/action/reply", $(this).serialize(), function(data){
+						if(data["success"]){
+							location.reload();
+						}
+					}, "json");
+				});
+			});
+		</script>
 		<script type="text/javascript">
 			$().ready(function(){
 				CKEDITOR.replace('message', {
