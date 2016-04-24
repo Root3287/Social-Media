@@ -50,7 +50,7 @@ if(Input::exists()){
 					<div class="row">
 						<div class="col-xs-12 col-md-6">
 							<div class="form-group">
-								<a class="btn btn-lg btn-danger btn-block" href="../register">Register</a>
+								<a class="btn btn-lg btn-danger btn-block" href="/register">Register</a>
 							</div>
 						</div>
 						<div class="col-xs-12 col-md-6">

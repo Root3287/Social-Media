@@ -27,7 +27,7 @@ class Post{
 				'user_id'=> $user->data()->id,
 				'content'=> phrase($message,$hash),
 				'hash'=>$hash,
-				'time'=>date('Y-m-d- H:i:s'),
+				'time'=>date('Y-m-d H:i:s'),
 			])){
 				throw new Exception('Error making post',0);
 		}

@@ -1,5 +1,8 @@
 <?php
 $user = new User();
+if($user->isLoggedIn()){
+	Redirect::to('/');
+}
 if(Input::exists()){
 	if(Token::check(Input::get('token'))){
 		$val = new Validation();
@@ -42,7 +45,7 @@ if(Input::exists()){
 						'password'=> $password,
 						'salt' => $salt,
 						'name'=> escape(Input::get('name')),
-						'joined'=> date('Y-m-d- H:i:s'),
+						'joined'=> date('Y-m-d H:i:s'),
 						'group'=> 1,
 						'email'=> escape(Input::get('email')),
 				));
