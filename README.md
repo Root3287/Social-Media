@@ -2,7 +2,7 @@
 
 * * *
 
-The alpha stages have been released! You could download it [here. The current program is now released as a somewhat stable build, and comes with an alpha tag. So far we are currentally trying to add features and killing bugs.](https://github.com/root3287/Social-Media/archive/master.zip)
+The alpha stages have been released! You could download it [here](https://github.com/root3287/Social-Media/archive/master.zip). The current program is now released as a somewhat stable build, and comes with an alpha tag. So far we are currentally trying to add features and killing bugs.
 
 * * *
 
