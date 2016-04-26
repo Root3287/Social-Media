@@ -87,7 +87,9 @@ $router->add('/admin/users/edit/', function(){
 $router->add('/admin', function(){
 	Redirect::to('/admin/');
 });
-
+$router->add('/admin/notification/', function(){
+	require 'pages/admin/notification.php';	
+});
 /*
 API
 */
