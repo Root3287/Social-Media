@@ -213,7 +213,7 @@ $token = Token::generate();
 				});
 				$("form#reply").keypress(function(e){
 					if (e.which == 13) {
-						$('form#login').submit();
+						$(this).submit();
 						return false;
 					}
 				}).submit(function(e){
