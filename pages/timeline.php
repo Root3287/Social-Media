@@ -47,7 +47,7 @@ $token = Token::generate();
 							</div>
 							<p><?php echo $timeline['content'];?></p>
 							<div class="row">
-								<form id="reply" action="/action/reply" class="form-inline" method="post" autocomplete="off">
+								<form id="reply" action="" class="form-inline" method="post" autocomplete="off">
 									<div class="form-group">
 										<div class="input-group">
 											<span class="input-group-btn">
@@ -59,10 +59,12 @@ $token = Token::generate();
 										   </span>
 										   <input name="post" type="text" class="form-control">
 										   <span class="input-group-btn">
-										        <input type="submit" value="Post Comment" class="btn btn-default" type="button">
+										        <button type="submit" value="Post Comment" class="btn btn-default"><span class="glyphicon glyphicon-send"></span></button>
 										   </span>
 										   <span class="input-group-btn">
-										   		<button type="button" class="btn btn-info" data-toggle="modal" data-target="#PostModel<?php echo $timeline['id'];?>">Comments</button>
+										   		<button type="button" class="btn btn-info" data-toggle="modal" data-target="#PostModel<?php echo $timeline['id'];?>">
+													<span class="glyphicon glyphicon-list"></span>
+												</button>
 										   </span>
 										</div>
 									</div>
@@ -109,7 +111,7 @@ $token = Token::generate();
 						        </div>
 						      </div>
 						      <div class="modal-footer">
-								<form id="reply" action="/action/reply/" class="form-inline" method="post" autocomplete="off">
+								<form id="reply" action="" class="form-inline" method="post" autocomplete="off">
 									<div class="form-group">
 										<div class="input-group">
 											<span class="input-group-btn">
@@ -117,10 +119,12 @@ $token = Token::generate();
 											   </span>
 										   <input name="post" type="text" class="form-control">
 										   <span class="input-group-btn">
-										        <input type="submit" value="Post Comment" class="btn btn-default" type="button">
+										        <button type="submit" value="Post Comment" class="btn btn-default">
+													<span class="glyphicon glyphicon-send"></span>
+												</button>
 										   </span>
 										   <span class="input-group-btn">
-										        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+										        <button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove-circle"></span></button>
 										   </span>
 										</div>
 									</div>
@@ -171,11 +175,12 @@ $token = Token::generate();
 						},
 						function(data){
 							if(data["success"]){
-								location.reload();
+								window.location.replace("/");
 							}
 						}, 
 						"json"
 					);
+					return false;
 				});
 
 				$("[id='dislike']").click(function(e){
@@ -189,30 +194,37 @@ $token = Token::generate();
 						},
 						function(data){
 							if(data["success"] == true){
-								location.reload();
+								window.location.replace("/");
 							}
 						}, 
 						"json"
 					);
+					return false;
 				});
-
 				$("form#status").submit(function(e){
 					e.preventDefault();
 
 					$.post("/action/status", $(this).serialize(), function(data){
 						if(data["success"]){
-							location.reload();
+							window.location.replace("/");
 						}
 					}, "json");
+					return false;
 				});
-				$("form#reply").submit(function(e){
+				$("form#reply").keypress(function(e){
+					if (e.which == 13) {
+						$('form#login').submit();
+						return false;
+					}
+				}).submit(function(e){
 					e.preventDefault();
 
 					$.post("/action/reply", $(this).serialize(), function(data){
 						if(data["success"]){
-							location.reload();
+							window.location.replace("/");
 						}
 					}, "json");
+					return false;
 				});
 			});
 		</script>
