@@ -39,9 +39,21 @@ $token = Token::generate();
 									<span class="input-group-btn">
 										<?php if($like->hasLike($user->data()->id, $original_post->id) <= 0){?><a href="/action/like" id="like" class="btn btn-primary"><span class="glyphicon glyphicon-star-empty"></span> <?php echo $like->getLikesByPost($original_post->id)->count();?></a><?php }else{?><a href="/action/dislike/" id="dislike" class="btn btn-primary"><span class="glyphicon glyphicon-star"></span> <?php echo $like->getLikesByPost($original_post->id)->count();?></a><?php }?>
 									</span>
-									<input name="post" type="text" id="comment" class="form-control">
+									<input style="width: 100%" placeholder="comment" name="post" type="text" id="comment" class="form-control">
 									<span class="input-group-btn">
-								    	<input type="submit" value="Post Comment" class="btn btn-default" type="button">
+								    	<button type="submit" value="Post Comment" class="btn btn-default"><span class="glyphicon glyphicon-send"></span></button>
+									</span>
+									<span class="input-group-btn">
+										<div class="dropdown">
+											<button class="btn btn-default dropdown-toggle" type="button" id="PostMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+											    ...
+											    <span class="caret"></span>
+											</button>
+											<ul class="dropdown-menu pull-right" aria-labelledby="PostMenu">
+										 		<li><a target="_blank" href="https://twitter.com/intent/tweet?text=<?php echo getSelfURL()."/post/".$original_post->hash;?>">Tweet</a></li>
+												<li><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo getSelfURL()."/post/".$original_post->hash;?>">Share on Facebook</a></li>
+											</ul>
+										</div>
 									</span>
 								</div>
 							</div>

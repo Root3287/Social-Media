@@ -8,6 +8,10 @@ $page = (Input::get('p') !=null)?Input::get('p'):1;
 $limit = (Input::get('l') !=null)? Input::get('l'):10;
 $timelineData = $pagination->getArrayData($limit, $page);
 $token = Token::generate();
+
+if(!$user->isLoggedIn()){
+	Redirect::to('/');
+}
 ?>
 <html>
 	<head>
@@ -84,6 +88,19 @@ $token = Token::generate();
 						      <div class="modal-header">
 						        <button type="button" class="close" data-dismiss="modal">&times;</button>
 						        <h4 class="modal-title"><?php echo "<a href='/profile/{$timelineUser->data()->username}'>".$timelineUser->data()->username."</a>";?></h4>
+						        <span class="pull-right">
+						        <div class="dropdown">
+						        	<button class="btn btn-xs btn-default dropdown-toggle" type="button" id="PostMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+								    ...
+								    <span class="caret"></span>
+								  </button>
+									<ul class="dropdown-menu pull-right" aria-labelledby="PostMenu">
+								    <li><a target="_blank" href="https://twitter.com/intent/tweet?text=<?php echo getSelfURL()."/post/".$timeline['hash'];?>">Tweet</a></li>
+								    <li><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo getSelfURL()."/post/".$timeline['hash'];?>">Share on Facebook</a></li>
+								    <li><a href="/post/<?php echo $timeline['hash'];?>">Post</a></li>
+								  </ul>
+								</div>
+						        </span>
 						      </div>
 						      <div class="modal-body">
 						        <div class="row">
