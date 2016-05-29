@@ -7,7 +7,7 @@ $GLOBALS['config'] = array(
 		"host" => "127.0.0.1", //127.0.0.1
 		"user" => "root", //root
 		"password" => "", //password
-		"db" => "", //social-media
+		"db" => "social-media", //social-media
 		"port" => "3306", //3306
 	),
 	"remember" => array(

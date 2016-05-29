@@ -168,8 +168,8 @@ if(!$user->isLoggedIn()){
 					</a>
 					<a href="/p/<?php echo $user->data()->username;?>" class="list-group-item">Profile</a>
 					<a href="/pokes" class="list-group-item"><span class="glyphicon glyphicon-hand-right"></span> Pokes <?php if($pcount = $pokes->getPendingPokesCount($user->data()->id) >=1){?><span class="badge"><?php echo $pcount;?></span></a><?php }?>
-					<a href="/user/friends/" class="list-group-item">Friends</a>
-					<a href="/user/following/" class="list-group-item">Following</a>
+					<a href="/user/friends/" class="list-group-item"><span class="glyphicon glyphicon-heart"></span> Friends</a>
+					<a href="/user/following/" class="list-group-item"><span class="glyphicon glyphicon-user"></span> People</a>
 				</div>
 			</div>
 			<div class="col-sm-3 col-md-3">
