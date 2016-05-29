@@ -175,7 +175,13 @@ if(!$user->isLoggedIn()){
 			<div class="col-sm-3 col-md-3">
 				<div class="list-group">
 					<a href="/user/friends" class="list-group-item active">Friends</a>
-					<?php foreach ($user->getFriends() as $friend){ $friend_user = new User($friend->friend_id);?>
+					<?php foreach ($user->getFriends() as $friend){ 
+						if($friend->friend_id !== $user->data()->id){
+							$friend_user = new User($friend->friend_id);
+						}else if($friend->user_id !== $user->data()->id){
+							$friend_user = new User($friend->user_id);
+						}
+					?>
 					<a href="/p/<?php echo $friend_user->data()->username;?>" class="list-group-item"><img src="<?php echo $friend_user->getAvatarURL();?>" alt="friend_user"> <?php echo $friend_user->data()->username;?></a>
 					<?php } ?>
 				</div>		
