@@ -4,7 +4,7 @@
 * Copyright (c) Timothy Gibbons 2015, All Rights Reserved; 
 * License: MIT
 */
-class Notifaction{
+class Notification{
 	public static function get($user){
 		$db = DB::getInstance();
 		return $db->query("SELECT * FROM `notification` WHERE `user`=?",array($user))->results();

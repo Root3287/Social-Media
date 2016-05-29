@@ -53,7 +53,7 @@ if(Input::exists()){
 				die($e->getMessage());
 			}
 			if($user->login(escape(Input::get('username')), escape(Input::get('password')), false)){
-				Notifaction::createMessage('Welcome to the Social-Media '. $user->data()->name, $user->data()->id);
+				Notification::createMessage('Welcome to the Social-Media '. $user->data()->name, $user->data()->id);
 				session::flash('complete', '<div class="alert alert-success">You completely register and you just got logged in.</div>');
 				Redirect::to('/');
 			}

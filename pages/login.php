@@ -1,5 +1,8 @@
 <?php 
 $user = new User();
+if($user->isLoggedIn()){
+	Redirect::to('/timeline');
+}
 if(Input::exists()){
 	if(Token::check(Input::get('token'))){
 		$val = new Validation();

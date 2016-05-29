@@ -28,7 +28,7 @@ $token = Token::generate();
 				<div class="well">
 					<div class="row">
 						<div class="page-header">
-  							<h1><img class="img-circle" src="<?php echo $user2->getAvatarURL('64')?>"><a href="/profile/<?php echo $user2->data()->username;?>"><?php echo $user2->data()->username;?></a></h1>
+  							<h1><img class="img-circle" src="<?php echo $user2->getAvatarURL('64')?>"><a href="/p/<?php echo $user2->data()->username;?>"><?php echo $user2->data()->username;?></a></h1>
 						</div>
 						<?php echo $original_post->content;?>
 						<hr>

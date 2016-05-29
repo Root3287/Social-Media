@@ -1,6 +1,7 @@
 <?php
 $user = new User();
-if($user->isAmdLoggedIn()){
+$db = DB::getInstance();
+if($user->isAdmLoggedIn()){
 	if($user->data()->group != 2){
 		Redirect::to('/admin/login/');
 	}
@@ -20,6 +21,8 @@ if(Input::exists()){
 			$f= $db->query("SELECT * FROM `users` WHERE {$t} LIKE '%{$q}%'")->results();
 		}
 	}
+}else{
+	$f = $db->query("SELECT * FROM `users` WHERE 1=1")->results();
 }
 $page = (Input::get('p') !=null)?Input::get('p'):1;
 $limit = (Input::get('l') !=null)? Input::get('l'):10;
@@ -36,35 +39,33 @@ $userData = $pagination->getArrayData($limit, $page);
 		<?php require 'assets/nav.php';?>
 		<div class="container">
 			<div class="row">
-					<form class="form-inline" method="post" action="/admin/users/">
-					<div class="form-group">
-						<input name="search" type="text" class="form-control input-md" placeholder="Search">
-					</div>
-					<div class="form-group">
-						<select name="option">
-							<option value="id">
-								ID
-							</option>
-							<option selected="selected" value="username">
-								Username
-							</option>
-							<option value="name">
-								Name
-							</option>
-							<option value="email">
-								Email
-							</option>
-						</select>
-					</div>
-					<div class="form-group">
-						<input type="hidden" name="token" value="<?php echo Token::generate()?>">
-						<input class="btn btn-md btn-primary" type="submit" value="find">
-					</div>
-				</form>
-			</div>
-			<div class="row">
 				<div class="col-md-3"><?php require 'pages/admin/sidebar.php';?></div>
 				<div class="col-md-9">
+					<form class="form-inline" method="post" action="/admin/users/">
+						<div class="form-group">
+							<input name="search" type="text" class="form-control input-md" placeholder="Search">
+						</div>
+						<div class="form-group">
+							<select name="option">
+								<option value="id">
+									ID
+								</option>
+								<option selected="selected" value="username">
+									Username
+								</option>
+								<option value="name">
+									Name
+								</option>
+								<option value="email">
+									Email
+								</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<input type="hidden" name="token" value="<?php echo Token::generate()?>">
+							<input class="btn btn-md btn-primary" type="submit" value="find">
+						</div>
+					</form>
 					<table class="table">
 						<thead>
 							<tr>
@@ -139,13 +140,13 @@ $userData = $pagination->getArrayData($limit, $page);
 						</tbody>
 					</table>	
 				</div>
-			</div>
-			<div class="row">
-				<ul class="pagination">
+				<div class="row">
+					<ul class="pagination">
 						<?php for($i = 1; $i<=$pagination->getTotalPages(); $i++):?>
 							<li><a href="?p=<?php echo $i?>"><?php echo $i;?></a></li>
 						<?php endfor; ?>
 					</ul>
+				</div>
 			</div>
 		</div>
 		<?php require 'assets/foot.php';?>

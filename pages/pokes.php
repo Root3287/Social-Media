@@ -45,7 +45,7 @@ $token = Token::generate();
 					<div class="media">
 						<div class="media-left"><a href="?user="><img src="<?php echo $user->getAvatarURL(64);?>" alt="" class="media-object"></a></div>
 						<div class="media-body">
-							<h4 class="media-heading"><?php echo $user2->data()->name;?></h3>
+							<h4 class="media-heading"><?php echo $user2->data()->name;?></h4>
 							<p class="media-heading">Has poked you <?php echo $pokes->getCount($user->data()->id,$user2->data()->id);?> times In a row! <a class="btn btn-sm btn-primary" href="?token=<?php echo $token;?>&user2=<?php echo $user2->data()->id?>">Poke</a></p>
 						</div>
 					</div>

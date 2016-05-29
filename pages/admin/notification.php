@@ -18,7 +18,7 @@ if(Input::exists()){
 		));
 		if($validation->passed()){
 			foreach($db->get('users', array('1','=','1'))->results() as $userAcc){
-				try{Notifaction::createMessage(Input::get('message'), $userAcc->id); Session::flash('complete', '<div class="alert alert-success"> You sent a mass message!</div>');Redirect::to('/admin/notification');}catch (Exception $e){}
+				try{Notification::createMessage(Input::get('message'), $userAcc->id); Session::flash('complete', '<div class="alert alert-success"> You sent a mass message!</div>');Redirect::to('/admin/notification');}catch (Exception $e){}
 			}
 		}
 	}

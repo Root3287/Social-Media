@@ -261,7 +261,7 @@ if(!isset($_GET['step'])){
 									die($e->getMessage());
 								}
 								if($user->login(escape(Input::get('username')), escape(Input::get('password')), false)){
-									Notifaction::createMessage('Welcome to the Social-Media '. $user->data()->name, $user->data()->id);
+									Notification::createMessage('Welcome to the Social-Media '. $user->data()->name, $user->data()->id);
 									Session::flash('complete', '<div class="alert alert-info">You need to delete install-disable.php! Hacker could use this to their advantage!</div>');
 									Redirect::to('?step=6');
 								} 

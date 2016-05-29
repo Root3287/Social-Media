@@ -36,7 +36,7 @@ $router->add('/register', function(){
 $router->add('/404', function(){
 	require 'pages/404.php';
 });
-$router->add('/profile/(.*)', function($profile_user){
+$router->add('/p/(.*)', function($profile_user){
 	require 'pages/profile.php';
 });
 
@@ -75,7 +75,7 @@ $router->add('/admin/settings/', function(){
 $router->add('/admin/login/', function(){
 	require 'pages/admin/login.php';
 });
-$router->add('/admin/user', function(){
+$router->add('/admin/user(.*)', function(){
 	require 'pages/admin/users.php';
 });
 $router->add('/admin/users/delete/', function(){
@@ -124,7 +124,12 @@ $router->add('/user/notification',function(){
 $router->add('/user/update',function(){
 	Redirect::to('/user/update/');
 });
-
+$router->add('/user/friend(.*)', function(){
+	require 'pages/user/friends.php';
+});
+$router->add('/user/following(.*)', function(){
+	require 'pages/user/following.php';
+});
 /*
 Action
 */
@@ -142,5 +147,17 @@ $router->add('/action/dislike(.*)', function(){
 });
 $router->add('/action/status(.*)', function(){
 	require 'pages/action/status.php';
+});
+$router->add('/action/follow(.*)', function(){
+	require 'pages/action/follow.php';
+});
+$router->add('/action/friend(.*)', function(){
+	require 'pages/action/friend.php';
+});
+$router->add('/action/unfriend(.*)', function(){
+	require 'pages/action/unfriend.php';
+});
+$router->add('/action/request(.*)', function(){
+	require 'pages/action/request.php';
 });
 $router->run();

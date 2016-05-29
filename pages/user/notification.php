@@ -53,7 +53,7 @@ if(Input::exists('get')){
 						</tr>
 					</thead>
 					<tbody>
-						<?php foreach (Notifaction::get($user->data()->id) as $message){
+						<?php foreach (Notification::get($user->data()->id) as $message){
 						echo '<tr>';
 							echo '<td>';
 								echo $message->message;

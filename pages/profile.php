@@ -19,7 +19,7 @@ $user2= new User(escape($profile_user));
 if(!$user2->exists()){
 	Redirect::to('/404');
 }
-if($user->data()->username !== $user2->data()->username){
+if($user->data()->username !== $user2->data()->username){ // Users is not viewing their own page
 ?>
 <html>
 	<head>
@@ -35,19 +35,10 @@ if($user->data()->username !== $user2->data()->username){
 						<img class="img-circle" src="<?php echo $user2->getAvatarURL('96')?>">
 						<?php echo $user2->data()->username?>
 						<?php if(!$user->isFollowing($user2->data()->id)):?>
-							<a class="btn btn-primary btn-md" href="/action/profile/?action=Follow&user=<?php echo $user2->data()->id;?>">Follow</a>
+							<button id="follow" class="btn btn-primary btn-md" data-user="<?php echo $user2->data()->id;?>" data-token="<?php echo $token;?>">Follow</button>
 						<?php else:?>
-							<a class="btn btn-primary btn-md" href="/action/profile/?action=UnFollow&user=<?php echo $user2->data()->id;?>">UnFollow</a>
-								<?php if($user->isFriends($user2->data()->id)){?>
-								<a class="btn btn-primary btn-md" href="/action/profile/?action=unFriend&user=<?php echo $user2->data()->id;?>">UnFriend</a>
-								<?php }else{?>
-									<?php if(!$user->hasFriendRequest($user2->data()->id)){?>
-									<a class="btn btn-primary btn-md" href="/action/profile/?action=Friend&user=<?php echo $user2->data()->id;?>">Friend</a>
-									<?php }else{?>
-									<a href="/action/profile/?action=unFriend&user=<?php echo $user2->data()->id;?>" class="btn btn-primary btn-md">Request Sent!</a>
-								<?php }} ?>
+							<button id="unfollow" class="btn btn-primary btn-md" data-user="<?php echo $user2->data()->id;?>" data-token="<?php echo $token;?>">UnFollow</button>
 						<?php endif;?>
-
 					</h1>
 				</div>
 			</div>
@@ -99,10 +90,53 @@ if($user->data()->username !== $user2->data()->username){
 				</div>
 			</div>
 		</div>
-		<?php include 'assets/foot.php'?>
+		<?php include 'assets/foot.php';?>
+		<script>
+			$().ready(function(){
+				$("button#follow").click(function(e){
+					e.preventDefault();
+					$.post(
+						"/action/follow",
+						{
+							"token": $(this).data('token'), 
+							"user": $(this).data('user'),
+							"action": 1,
+						},
+						function(data){
+							if(data["success"] == true){
+								location.reload();
+							}
+						}, 
+						"json"
+					);
+					return false;
+				});
+				$("button#unfollow").click(function(e){
+					e.preventDefault();
+					$.post(
+						"/action/follow",
+						{
+							"token": $(this).data('token'), 
+							"user": $(this).data('user'),
+							"action": 0,
+						},
+						function(data){
+							if(data["success"] == true){
+								location.reload();
+							}
+						}, 
+						"json"
+					);
+					return false;
+				});
+				$("button#request").click(function(){
+					
+				});
+			});
+		</script>
 	</body>
 </html>
-<?php }else{?>
+<?php }else{ // user is viewing their own page?>
 <html>
 	<head>
 		<?php include 'assets/head.php';?>

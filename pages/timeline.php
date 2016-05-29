@@ -47,7 +47,7 @@ if(!$user->isLoggedIn()){
 					<?php foreach($timelineData as $timeline):?>
 						<div class="well">
 							<div class="page-header">
-								<h1><?php $timelineUser = new User($timeline['user_id']); echo "<a href='/profile/{$timelineUser->data()->username}'>".$timelineUser->data()->username."</a>";?></h1>
+								<h1><?php $timelineUser = new User($timeline['user_id']); echo "<a href='/p/{$timelineUser->data()->username}'>".$timelineUser->data()->username."</a>";?></h1>
 							</div>
 							<p><?php echo $timeline['content'];?></p>
 							<div class="row">
@@ -87,7 +87,7 @@ if(!$user->isLoggedIn()){
 						    <div class="modal-content">
 						      <div class="modal-header">
 						        <button type="button" class="close" data-dismiss="modal">&times;</button>
-						        <h4 class="modal-title"><?php echo "<a href='/profile/{$timelineUser->data()->username}'>".$timelineUser->data()->username."</a>";?></h4>
+						        <h4 class="modal-title"><?php echo "<a href='/p/{$timelineUser->data()->username}'>".$timelineUser->data()->username."</a>";?></h4>
 						        <span class="pull-right">
 						        <div class="dropdown">
 						        	<button class="btn btn-xs btn-default dropdown-toggle" type="button" id="PostMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -112,12 +112,12 @@ if(!$user->isLoggedIn()){
 							      				<ul class="media-list">
 												  <li class="media">
 												    <div class="media-left">
-												      <a href="<?php echo "/profile/{$timelineUser->data()->username}";?>">
+												      <a href="<?php echo "/p/{$timelineUser->data()->username}";?>">
 												        <img class="media-object img-circle" src="<?php echo $commentUser->getAvatarURL('48')?>" alt="<?php echo $commentUser->data()->username;?>">
 												      </a>
 												    </div>
 												    <div class="media-body">
-												      <h4 class="media-heading"><a href="<?php echo "/profile/{$timelineUser->data()->username}";?>"><?php echo $commentUser->data()->username;?></h4></a>
+												      <h4 class="media-heading"><a href="<?php echo "/p/{$timelineUser->data()->username}";?>"><?php echo $commentUser->data()->username;?></h4></a>
 												      <p><?php echo $comment->content;?></p>
 												    </div>
 												  </li>
@@ -166,15 +166,17 @@ if(!$user->isLoggedIn()){
 						<img src="<?php echo $user->getAvatarURL(16);?>" alt="{userimg.png}">
 						<?php echo $user->data()->name;?>
 					</a>
+					<a href="/p/<?php echo $user->data()->username;?>" class="list-group-item">Profile</a>
 					<a href="/pokes" class="list-group-item"><span class="glyphicon glyphicon-hand-right"></span> Pokes <?php if($pcount = $pokes->getPendingPokesCount($user->data()->id) >=1){?><span class="badge"><?php echo $pcount;?></span></a><?php }?>
-					<a href="#" class="list-group-item">{link}</a>
+					<a href="/user/friends/" class="list-group-item">Friends</a>
+					<a href="/user/following/" class="list-group-item">Following</a>
 				</div>
 			</div>
 			<div class="col-sm-3 col-md-3">
 				<div class="list-group">
 					<a href="/user/friends" class="list-group-item active">Friends</a>
 					<?php foreach ($user->getFriends() as $friend){ $friend_user = new User($friend->friend_id);?>
-					<a href="/profile/<?php echo $friend_user->data()->username;?>" class="list-group-item"><img src="<?php echo $friend_user->getAvatarURL();?>" alt="friend_user"> <?php echo $friend_user->data()->username;?></a>
+					<a href="/p/<?php echo $friend_user->data()->username;?>" class="list-group-item"><img src="<?php echo $friend_user->getAvatarURL();?>" alt="friend_user"> <?php echo $friend_user->data()->username;?></a>
 					<?php } ?>
 				</div>		
 			</div>

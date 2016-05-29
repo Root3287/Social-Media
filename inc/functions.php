@@ -34,7 +34,7 @@ function phrase($text, $hash = 0){
                     'user_id'=>$user->id,
                     'post_hash'=>$hash,
                 ]);
-                $text = preg_replace('/@(\w+)/','<a href="/profile/$1">@$1</a>',$text);
+                $text = preg_replace('/@(\w+)/','<a href="/p/$1">@$1</a>',$text);
             }else{
                 continue;
             }
