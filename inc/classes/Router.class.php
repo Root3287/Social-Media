@@ -10,7 +10,7 @@ class Router{
 		foreach($this->_uri as $uri => $url_val){
 			if(preg_match("#^$url_val$#", $surl, $params)){
 				array_shift($params);
-				call_user_func_array($this->_callback[$uri], $params);
+				return call_user_func_array($this->_callback[$uri], $params);
 			}
 		}
 	}

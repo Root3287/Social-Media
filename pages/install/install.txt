@@ -131,6 +131,19 @@ CREATE TABLE `comments` (
 COLLATE='latin1_swedish_ci'
 ENGINE=InnoDB
 ;
+CREATE TABLE `report` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`reporter_id` INT(11) NULL DEFAULT NULL,
+	`infring_id` INT(11) NULL DEFAULT NULL,
+	`infringement_type` ENUM('user','post') NULL DEFAULT NULL,
+	`infringement` ENUM('nudity','threat','copyright','spam','hacked','abusive','harmful','other') NULL DEFAULT NULL,
+	`reason_text` LONGTEXT NULL,
+	`final_decisions` LONGTEXT NULL,
+	PRIMARY KEY (`id`)
+)
+COLLATE='latin1_swedish_ci'
+ENGINE=InnoDB
+;
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (1, 'install', '1');
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (2, 'title', 'Socal-Media');
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (3, 'bootstrap-theme', '3');

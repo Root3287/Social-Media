@@ -47,7 +47,7 @@ if(!$user->isLoggedIn()){
 					<?php foreach($timelineData as $timeline):?>
 						<div class="well">
 							<div class="page-header">
-								<h1><?php $timelineUser = new User($timeline['user_id']); echo "<a href='/p/{$timelineUser->data()->username}'>".$timelineUser->data()->username."</a>";?></h1>
+								<h1><?php $timelineUser = new User($timeline['user_id']); echo "<a href='/u/{$timelineUser->data()->username}'>".$timelineUser->data()->username."</a>";?></h1>
 							</div>
 							<p><?php echo $timeline['content'];?></p>
 							<div class="row">
@@ -87,7 +87,7 @@ if(!$user->isLoggedIn()){
 						    <div class="modal-content">
 						      <div class="modal-header">
 						        <button type="button" class="close" data-dismiss="modal">&times;</button>
-						        <h4 class="modal-title"><?php echo "<a href='/p/{$timelineUser->data()->username}'>".$timelineUser->data()->username."</a>";?></h4>
+						        <h4 class="modal-title"><?php echo "<a href='/u/{$timelineUser->data()->username}'>".$timelineUser->data()->username."</a>";?></h4>
 						        <span class="pull-right">
 						        <div class="dropdown">
 						        	<button class="btn btn-xs btn-default dropdown-toggle" type="button" id="PostMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -95,9 +95,9 @@ if(!$user->isLoggedIn()){
 								    <span class="caret"></span>
 								  </button>
 									<ul class="dropdown-menu pull-right" aria-labelledby="PostMenu">
-								    <li><a target="_blank" href="https://twitter.com/intent/tweet?text=<?php echo getSelfURL()."/post/".$timeline['hash'];?>">Tweet</a></li>
-								    <li><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo getSelfURL()."/post/".$timeline['hash'];?>">Share on Facebook</a></li>
-								    <li><a href="/post/<?php echo $timeline['hash'];?>">Post</a></li>
+								    <li><a target="_blank" href="https://twitter.com/intent/tweet?text=<?php echo getSelfURL()."/p/".$timeline['hash'];?>">Tweet</a></li>
+								    <li><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo getSelfURL()."/p/".$timeline['hash'];?>">Share on Facebook</a></li>
+								    <li><a href="/p/<?php echo $timeline['hash'];?>">Post</a></li>
 								  </ul>
 								</div>
 						        </span>
@@ -107,17 +107,19 @@ if(!$user->isLoggedIn()){
 						        	<div class="col-md-7"><p><?php echo $timeline['content'];?></p></div>
 						        	<div class="col-md-5">
 						      			<strong>Comments</strong><br>
-						      			<?php if($post->getComments($timeline['id'])){foreach($post->getComments($timeline['id']) as $comment): $commentUser = new User($comment->user_id)?>
+						      			<?php if($post->getComments($timeline['id'])){
+						      					foreach($post->getComments($timeline['id']) as $comment): 
+						      						$commentUser = new User($comment->user_id)?>
 						      				<div class="row">
 							      				<ul class="media-list">
 												  <li class="media">
 												    <div class="media-left">
-												      <a href="<?php echo "/p/{$timelineUser->data()->username}";?>">
+												      <a href="<?php echo "/u/{$timelineUser->data()->username}";?>">
 												        <img class="media-object img-circle" src="<?php echo $commentUser->getAvatarURL('48')?>" alt="<?php echo $commentUser->data()->username;?>">
 												      </a>
 												    </div>
 												    <div class="media-body">
-												      <h4 class="media-heading"><a href="<?php echo "/p/{$timelineUser->data()->username}";?>"><?php echo $commentUser->data()->username;?></h4></a>
+												      <h4 class="media-heading"><a href="<?php echo "/u/{$timelineUser->data()->username}";?>"><?php echo $commentUser->data()->username;?></h4></a>
 												      <p><?php echo $comment->content;?></p>
 												    </div>
 												  </li>
@@ -166,9 +168,9 @@ if(!$user->isLoggedIn()){
 						<img src="<?php echo $user->getAvatarURL(16);?>" alt="{userimg.png}">
 						<?php echo $user->data()->name;?>
 					</a>
-					<a href="/p/<?php echo $user->data()->username;?>" class="list-group-item">Profile</a>
+					<a href="/u/<?php echo $user->data()->username;?>" class="list-group-item">Profile</a>
 					<a href="/pokes" class="list-group-item"><span class="glyphicon glyphicon-hand-right"></span> Pokes <?php if($pcount = $pokes->getPendingPokesCount($user->data()->id) >=1){?><span class="badge"><?php echo $pcount;?></span></a><?php }?>
-					<a href="/user/friends/" class="list-group-item"><span class="glyphicon glyphicon-heart"></span> Friends</a>
+					<a href="/user/friends/" class="list-group-item"><span class="glyphicon glyphicon-heart"></span> Friends <?php if($user->hasFriendRequest()){?><span class="badge"><?php echo count($user->getFriendRequest()); ?></span><?php }?></a>
 					<a href="/user/following/" class="list-group-item"><span class="glyphicon glyphicon-user"></span> People</a>
 				</div>
 			</div>
@@ -182,7 +184,7 @@ if(!$user->isLoggedIn()){
 							$friend_user = new User($friend->user_id);
 						}
 					?>
-					<a href="/p/<?php echo $friend_user->data()->username;?>" class="list-group-item"><img src="<?php echo $friend_user->getAvatarURL();?>" alt="friend_user"> <?php echo $friend_user->data()->username;?></a>
+					<a href="/u/<?php echo $friend_user->data()->username;?>" class="list-group-item"><img src="<?php echo $friend_user->getAvatarURL();?>" alt="friend_user"> <?php echo $friend_user->data()->username;?></a>
 					<?php } ?>
 				</div>		
 			</div>
@@ -252,13 +254,6 @@ if(!$user->isLoggedIn()){
 					return false;
 				});
 			});
-		</script>
-		<script type="text/javascript">
-			/*$().ready(function(){
-				CKEDITOR.replace('post_status', {
-					removeButtons: 'Source'
-				});
-			});*/
 		</script>
 	</body>
 </html>

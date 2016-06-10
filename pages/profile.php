@@ -69,6 +69,7 @@ if($user->data()->username !== $user2->data()->username){ // Users is not viewin
 						<div class="panel-heading">Function</div>
 						<div class="panel-body">
 							<?php if($poke->hasNoPokesPending($user->data()->id, $user2->data()->id)){?><a href="/pokes?token=<?php echo $token;?>&user2=<?php echo $user2->data()->id;?>">Poke</a><?php }?>
+							<a href="/report/u/<?php echo $user2->data()->id;?>">Report User</a>
 						</div>
 					</div>
 				</div>

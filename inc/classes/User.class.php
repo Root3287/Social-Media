@@ -194,7 +194,7 @@ class User{
 		return false;
 	}
 	public function getFriends(){
-		return $this->_db->query("SELECT * FROM `friends` WHERE user_id=? OR friend_id=?", [$this->data()->id, $this->data()->id])->results();
+		return $this->_db->query("SELECT * FROM `friends` WHERE user_id=? OR friend_id=? AND accepted=?", [$this->data()->id, $this->data()->id, 1])->results();
 	}
 	public function addFriend($user2){
 		if($this->isFollowing($user2)){

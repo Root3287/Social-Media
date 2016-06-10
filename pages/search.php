@@ -52,7 +52,7 @@ if(Input::exists()){
 							if($q->results()){
 								foreach ($q->results() as $result) {
 									$searchUser = new User($result->id);
-									echo "<div class='col-md-3'><img class='img-circle img-responsive' src=". $searchUser->getAvatarURL('96')."><h3><a href='/p/".$searchUser->data()->username."'>".$searchUser->data()->username."</a></h3></div>";
+									echo "<div class='col-md-3'><img class='img-circle img-responsive' src=". $searchUser->getAvatarURL('96')."><h3><a href='/u/".$searchUser->data()->username."'>".$searchUser->data()->username."</a></h3></div>";
 								}
 							}
 						}
@@ -61,7 +61,7 @@ if(Input::exists()){
 							if($q->results()){
 								foreach ($q->results() as $result) {
 									$searchUser = new User($result->id);
-									echo "<div class='col-md-3'><img class='img-circle img-responsive' src=". $searchUser->getAvatarURL('96')."><h3><a href='/p/".$searchUser->data()->username."'>".$searchUser->data()->username."</a></h3></div>";
+									echo "<div class='col-md-3'><img class='img-circle img-responsive' src=". $searchUser->getAvatarURL('96')."><h3><a href='/u/".$searchUser->data()->username."'>".$searchUser->data()->username."</a></h3></div>";
 								}
 							}
 						}

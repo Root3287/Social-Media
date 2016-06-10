@@ -24,7 +24,7 @@ function phrase($text, $hash = 0){
             if($user->count() != 0){
                 $user = $user->first();
                 //Do notification
-                $message = "You have been mensioned on a post! Click <a href='/post/{$hash}'>here</a> to visit the post!";
+                $message = "You have been mensioned on a post! Click <a href='/p/{$hash}'>here</a> to visit the post!";
                 $db->insert('notification', array(
                    'user' => $user->id,
                     'message'=> $message,
@@ -34,7 +34,7 @@ function phrase($text, $hash = 0){
                     'user_id'=>$user->id,
                     'post_hash'=>$hash,
                 ]);
-                $text = preg_replace('/@(\w+)/','<a href="/p/$1">@$1</a>',$text);
+                $text = preg_replace('/@(\w+)/','<a href="/u/$1">@$1</a>',$text);
             }else{
                 continue;
             }

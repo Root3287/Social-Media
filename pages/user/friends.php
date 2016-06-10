@@ -18,22 +18,24 @@ $db = DB::getInstance();
 				<h1>Friends</h1>
 				<?php
 				foreach ($user->getFriends() as $friend) {
-					if($friend->user_id == $user->data()->id){
-						$f = new User($friend->friend_id);
-					}else if($friend->friend_id == $user->data()->id){
-						$f = new User($friend->user_id);
-					}
+					if($friend->accepted == 1){
+						if($friend->user_id == $user->data()->id){
+							$f = new User($friend->friend_id);
+						}else if($friend->friend_id == $user->data()->id){
+							$f = new User($friend->user_id);
+						}
 				?>
 				<div class="user">
 					<div class="media">
-						<div class="media-left"><a href="/p/<?php echo $f->data()->username;?>"><img src="<?php echo $f->getAvatarURL(70);?>" alt="{user.png}" class="media-object"></a>
+						<div class="media-left"><a href="/u/<?php echo $f->data()->username;?>"><img src="<?php echo $f->getAvatarURL(70);?>" alt="{user.png}" class="media-object"></a>
 						</div>
 						<div class="media-body">
-							<h3 class="media-heading"><a href="/p/<?php echo $f->data()->username;?>"><?php echo $f->data()->name;?></a></h3>
+							<h3 class="media-heading"><a href="/u/<?php echo $f->data()->username;?>"><?php echo $f->data()->name;?></a></h3>
 						</div>
 					</div>
 				</div>
 				<?php
+					}
 				}
 				?>
 			</div>
@@ -79,7 +81,7 @@ $db = DB::getInstance();
 					?>
 					<div class="user">
 						<div class="media">
-							<div class="media-left"><a href="/p/<?php ?>"><img src="<?php echo $pf_user->getAvatarURL(70);?>" alt="{user.png}" class="media-object"></a>
+							<div class="media-left"><a href="/u/<?php ?>"><img src="<?php echo $pf_user->getAvatarURL(70);?>" alt="{user.png}" class="media-object"></a>
 							</div>
 							<div class="media-body">
 								<h3 class="media-heading"><?php echo $pf_user->data()->name;?></h3>
@@ -87,6 +89,7 @@ $db = DB::getInstance();
 							</div>
 						</div>
 					</div>
+					<br>
 					<?php
 								}
 							}else{
