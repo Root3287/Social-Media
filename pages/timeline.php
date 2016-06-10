@@ -44,10 +44,26 @@ if(!$user->isLoggedIn()){
 				</div>
 				<br>
 				<div class="row"><!-- Posted Status -->
-					<?php foreach($timelineData as $timeline):?>
+					<?php 
+					foreach($timelineData as $timeline):
+						$post_user_private = false;
+						$timelineUser = new User($timeline['user_id']);
+						if($timelineUser->data()->id != $user->data()->id){ //Is it someone else viewing their own post
+							if($timelineUser->data()->private == 1){ // is the timeline user private?
+								if(!$user->isFriends($timelineUser->data()->id)){
+									$post_user_private = true;
+								}
+							}
+						}
+						if($timeline['active'] !=0){
+							if(!$post_user_private){
+
+						// if the user is the same as the topic we can display it without checking if its friends;
+						// if the topic is not disabled
+						?>
 						<div class="well">
 							<div class="page-header">
-								<h1><?php $timelineUser = new User($timeline['user_id']); echo "<a href='/u/{$timelineUser->data()->username}'>".$timelineUser->data()->username."</a>";?></h1>
+								<h1><?php echo "<a href='/u/{$timelineUser->data()->username}'>".$timelineUser->data()->username."</a>";?></h1>
 							</div>
 							<p><?php echo $timeline['content'];?></p>
 							<div class="row">
@@ -154,7 +170,7 @@ if(!$user->isLoggedIn()){
 						    </div>
 						  </div>
 						</div>
-					<?php endforeach;?>
+					<?php }}else{} endforeach;?>
 					<ul class="pagination">
 						<?php for($i = 1; $i<=$pagination->getTotalPages(); $i++):?>
 							<li><a href="?p=<?php echo $i?>"><?php echo $i;?></a></li>
@@ -177,11 +193,13 @@ if(!$user->isLoggedIn()){
 			<div class="col-sm-3 col-md-3">
 				<div class="list-group">
 					<a href="/user/friends" class="list-group-item active">Friends</a>
-					<?php foreach ($user->getFriends() as $friend){ 
-						if($friend->friend_id !== $user->data()->id){
-							$friend_user = new User($friend->friend_id);
-						}else if($friend->user_id !== $user->data()->id){
-							$friend_user = new User($friend->user_id);
+					<?php foreach ($user->getFriends() as $friend){
+						if($user->isFriends($friend->friend_id)){
+							if($friend->friend_id !== $user->data()->id){
+								$friend_user = new User($friend->friend_id);
+							}else if($friend->user_id !== $user->data()->id){
+								$friend_user = new User($friend->user_id);
+							}
 						}
 					?>
 					<a href="/u/<?php echo $friend_user->data()->username;?>" class="list-group-item"><img src="<?php echo $friend_user->getAvatarURL();?>" alt="friend_user"> <?php echo $friend_user->data()->username;?></a>

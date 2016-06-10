@@ -9,5 +9,8 @@ class Report{
 			throw new Exception("There was an error placing a infringment");
 		}
 	}
+	public function get(){
+		return $this->_db->get('report', ['1','=','1'])->results();
+	}
 	
 }

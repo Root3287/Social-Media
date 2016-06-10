@@ -65,7 +65,7 @@ if(Input::exists()){
 				<div class="form-group">
 					<b>Infringment User/Post ID</b>
 					<input type="text" name="infringID" class="form-control" placeholder="Infringment User/Post id" value="<?php echo escape($id);?>" readonly>
-					<span id="helpBlock" class="help-block">This is the id of the user/post that you are reporting. You don't need to change this!</span>
+					<span id="helpBlock" class="help-block">This is the id of the user/post that you are reporting. You don't need to change this! If it's a comment on the post please tell us which one it is.</span>
 				</div>
 				<div class="form-group">
 					<select class="form-control" name="infringment">

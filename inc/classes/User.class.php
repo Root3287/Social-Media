@@ -154,15 +154,13 @@ class User{
 	/* END OF ORIGNAL FILE */
 
 	public function isFriends($user){
-		$q= $this->_db->query("SELECT * FROM `friends` WHERE user_id=$user OR friend_id=$user");
-		if(empty($q->results())){
-			return false;
+		$f1= $this->_db->query("SELECT * FROM `friends` WHERE user_id=? AND friend_id=? AND accepted=?", [$user, $this->data()->id, 1,])->results();
+		$f2= $this->_db->query("SELECT * FROM `friends` WHERE friend_id=? AND user_id=? AND accepted=?", [$user, $this->data()->id, 1,])->results();
+		if(!empty($f1) || !empty($f2)){
+			return true;
 		}else{
-			if($q->results()[0]->accepted == 1){
-				return true;
-			}
+			return false;
 		}
-		return false;
 	}
 	public function getFollowers(){
 		return $q= $this->_db->get('following', ['following_id', '=', $this->_data->id])->results();
@@ -225,10 +223,12 @@ class User{
 			$id = $this->_db->query("SELECT id WHERE friend_id=$user2")->results();
 			if($response == 1){
 				Notification::createMessage($this->_data->username." has accepted your friend request!", $user2);
-			}else{
+				$this->_db->update('friends',$id[0]->id, ['accepted'=>$response]);
+			}else if($response ==2){
 				Notification::createMessage($this->_data->username." has declined your friend request!", $user2);
+				
+				$this->_db->delete('friends', ['id', '=', $id[0]->id]);
 			}
-			$this->_db->update('friends',$id[0]->id, ['accepted'=>$response]);
 			return true;
 		}
 		return false;

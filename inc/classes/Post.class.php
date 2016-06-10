@@ -14,7 +14,7 @@ class Post{
 		$count = 0;
 		$success = false;
 		while($count <= 10 && !$success){
-			$hash = Hash::unique_length(11);
+			$hash = Hash::unique_length(16);
 			
 			$posts = $this->_db->query("SELECT * FROM posts WHERE hash=$hash");
 			
@@ -91,6 +91,7 @@ class Post{
 				'content'=>$userPost->content, 
 				'hash'=>$userPost->hash, 
 				'date'=>$userPost->time,
+				'active'=> $userPost->active,
 			];
 		}
 		//get the list of followings
@@ -106,6 +107,7 @@ class Post{
 					'content'=>$followingPost->content,
 					'hash'=>$followingPost->hash,
 					'date'=>$followingPost->time,
+					'active' => $followingPost->active,
 				];
 			}
 		}

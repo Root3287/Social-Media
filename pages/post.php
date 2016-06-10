@@ -3,7 +3,7 @@ $user = new User();
 $post = new Post();
 $like = new Like();
 $original_post = $post->getPostByHash($pid);
-if(!$post){
+if(!$post || $original_post->active==0){
 	Redirect::to('/404');
 }
 
@@ -52,6 +52,7 @@ $token = Token::generate();
 											<ul class="dropdown-menu pull-right" aria-labelledby="PostMenu">
 										 		<li><a target="_blank" href="https://twitter.com/intent/tweet?text=<?php echo getSelfURL()."/p/".$original_post->hash;?>">Tweet</a></li>
 												<li><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo getSelfURL()."/p/".$original_post->hash;?>">Share on Facebook</a></li>
+												<li><a href="/report/p/<?php echo $pid;?>">Report Post</a></li>
 											</ul>
 										</div>
 									</span>

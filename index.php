@@ -36,6 +36,7 @@ $router->add('/login', function(){
 });
 $router->add('/register', function(){
 	require 'pages/register.php';
+	return true;
 });
 $router->add('/404', function(){
 	require 'pages/404.php';
@@ -43,6 +44,7 @@ $router->add('/404', function(){
 });
 $router->add('/u/(.*)', function($profile_user){
 	require 'pages/profile.php';
+	return true;
 });
 
 $router->add('/test',function(){
@@ -113,6 +115,10 @@ $router->add('/admin', function(){
 });
 $router->add('/admin/notification/', function(){
 	require 'pages/admin/notification.php';	
+	return true;
+});
+$router->add('/admin/reports', function(){
+	require 'pages/admin/reports.php';
 	return true;
 });
 /*

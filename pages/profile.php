@@ -68,7 +68,7 @@ if($user->data()->username !== $user2->data()->username){ // Users is not viewin
 					<div class="panel panel-primary">
 						<div class="panel-heading">Function</div>
 						<div class="panel-body">
-							<?php if($poke->hasNoPokesPending($user->data()->id, $user2->data()->id)){?><a href="/pokes?token=<?php echo $token;?>&user2=<?php echo $user2->data()->id;?>">Poke</a><?php }?>
+							<?php if($poke->hasNoPokesPending($user->data()->id, $user2->data()->id)){?><a href="/pokes?token=<?php echo $token;?>&user2=<?php echo $user2->data()->id;?>">Poke</a><?php }?><br>
 							<a href="/report/u/<?php echo $user2->data()->id;?>">Report User</a>
 						</div>
 					</div>
@@ -85,7 +85,7 @@ if($user->data()->username !== $user2->data()->username){ // Users is not viewin
 							echo "</div>";
 						}
 					}else{
-							echo "<h2>This user is private! You need to follow them to get their info.</h2>";
+							echo "<h2>This user is private! You need to follow or friend them to get their info.</h2>";
 						}
 					?>
 				</div>
@@ -175,20 +175,47 @@ if($user->data()->username !== $user2->data()->username){ // Users is not viewin
 					</div>
 				</div>
 				<div class="col-md-9">
-					<h1>Timeline</h1>
-					<?php
-					foreach($post->getPostForUser($user2->data()->id) as $uPost){
-						$userPost = new User($uPost['user_id']);
-						echo "<div class='well'>";
-						echo "<div class='post-header'><h2>".$userPost->data()->username."</h2></div>";
-						echo "<p>".$uPost['content']."</p>";
-						echo "</div>";
-					}
-					?>
+					<div class="row">
+						<form id="status" action="/timeline" method="post">
+							<div class="form-group">
+								<textarea style="resize: none;" class="form-control" name="post_status" id="post_status" rows="10" placeholder="Talk about your life here!"></textarea>
+							</div>
+							<div class="form-group">
+								<input name="token" type="hidden" id="token" value="<?php echo $token;?>">
+								<span class="pull-right"><button id="submit" class="btn btn-sm btn-primary">Post!</button></span>
+							</div>
+						</form>
+					</div>
+					<div class="row">
+						<h1>Timeline</h1>
+						<?php
+						foreach($post->getPostForUser($user2->data()->id) as $uPost){
+							$userPost = new User($uPost['user_id']);
+							echo "<div class='well'>";
+							echo "<div class='post-header'><a href='/u/".$userPost->data()->username."'><h2>".$userPost->data()->username."</h2></a></div>";
+							echo "<p>".$uPost['content']."</p>";
+							echo "</div>";
+						}
+						?>
+					</div>
 				</div>
 			</div>
 		</div>
-		<?php include 'assets/foot.php'?>
+		<?php include 'assets/foot.php';?>
+		<script>
+			$(document).ready(function(){
+				$("form#status").submit(function(e){
+					e.preventDefault();
+
+					$.post("/action/status", $(this).serialize(), function(data){
+						if(data["success"]){
+							location.reload();
+						}
+					}, "json");
+					return false;
+				});
+			});
+		</script>
 	</body>
 </html>
 <?php } ?>

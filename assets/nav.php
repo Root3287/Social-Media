@@ -31,7 +31,7 @@
           </ul>
         </li>-->
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php if($user->isLoggedIn()){echo $user->data()->username;}else{echo 'Guest';}?> <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php if($user->isLoggedIn()){echo "<img src='".$user->getAvatarURL()."' alt='{Avatar}'> ".$user->data()->username;}else{echo 'Guest';}?> <span class="caret"></span></a>
           <?php if(!$user->isLoggedIn()){?>
           <ul class="dropdown-menu">
             <li><a href="/login">Login</a></li>
