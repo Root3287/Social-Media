@@ -7,7 +7,6 @@ $router = new Router();
 $router->add('/', function (){
 	if(file_exists('pages/install/install.php') || !isset($GLOBALS['config'])){
 		Redirect::to('/install');
-		die();
 	}else{
 		$user = new User();
 		if(!$user->isLoggedIn()){
@@ -16,7 +15,6 @@ $router->add('/', function (){
 			Redirect::to('/timeline');
 		}
 	}
-	return true;
 });
 $router->add('/timeline(.*)', function(){
 	require 'pages/timeline.php';
@@ -210,6 +208,7 @@ $router->add('/action/request(.*)', function(){
 	require 'pages/action/request.php';
 	return true;
 });
+
 if(!$router->run()){
 	Redirect::to('/404');
 }

@@ -200,10 +200,9 @@ if(!$user->isLoggedIn()){
 							}else if($friend->user_id !== $user->data()->id){
 								$friend_user = new User($friend->user_id);
 							}
-						}
 					?>
 					<a href="/u/<?php echo $friend_user->data()->username;?>" class="list-group-item"><img src="<?php echo $friend_user->getAvatarURL();?>" alt="friend_user"> <?php echo $friend_user->data()->username;?></a>
-					<?php } ?>
+					<?php }}?>
 				</div>		
 			</div>
 		</div>
