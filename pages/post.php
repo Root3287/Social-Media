@@ -4,7 +4,7 @@ $post = new Post();
 $like = new Like();
 $original_post = $post->getPostByHash($pid);
 if(!$post || $original_post->active==0){
-	Redirect::to('/404');
+	Redirect::to(404);
 }
 
 $user2 = new User($original_post->user_id);

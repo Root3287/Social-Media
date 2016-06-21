@@ -150,7 +150,16 @@ class User{
 		Session::delete('adm_'.$this->_sessionName);
 		cookies::delete('adm_'.$this->_cookieName);
 	}
-
+	public function getIP(){
+		if(!empty($_SERVER['HTTP_CLIENT_IP'])) {
+		  $ip = $_SERVER['HTTP_CLIENT_IP'];
+		} else if(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+		  $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		} else {
+		  $ip = $_SERVER['REMOTE_ADDR'];
+		}
+		return $ip;
+	}
 	/* END OF ORIGNAL FILE */
 
 	public function isFriends($user){

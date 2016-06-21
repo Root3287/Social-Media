@@ -54,6 +54,8 @@ if(!isset($_GET['step'])){
 				<li>PHP 5.3 <?php if(version_compare(phpversion(), '5.3', '<')): echo $error_message; $error = true; else: echo $success_message; endif;?></li>
 				<li>MCrypt <?php if(!function_exists("mcrypt_encrypt")): echo $error_message; $error = true; else: echo $success_message; endif;?></li>
 				<li>PDO <?php if(!extension_loaded('PDO')): echo $error_message; $error = true; else: echo $success_message; endif;?></li>
+				<li>Writeable Install <?php if(decoct(fileperms('pages/install/install.php') & 0777) != 777): echo $error_message; $error = true; else: echo $success_message; endif;?></li>
+				<li>Writeable Init <?php if(decoct(fileperms('inc/init.php') & 0777) != 777):echo $error_message;  $error = true; else: echo $success_message;endif;?></li>
 			</ul>
 			<a href="/install?step=3" class="btn btn-default <?php if($error): echo "disabled"; endif;?>">Next</a>
 			<?php
@@ -197,11 +199,6 @@ if(!isset($_GET['step'])){
 					}else{
 						echo "<div class=\"alert alert-danger\">Error Installing databases!</div><br/><div class=\"well\">{$dbInsert}</div>";
 					}
-
-					$db->insert('settings', [
-						'name'=> 'version',
-						'value'=> '0.1.0',
-					]);
 					$db->insert('settings', [
 						'name'=>'unique_id',
 						'value'=>substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0,62),
@@ -253,7 +250,7 @@ if(!isset($_GET['step'])){
 											'password'=> $password,
 											'salt' => $salt,
 											'name'=> escape(Input::get('name')),
-											'joined'=> date('Y-m-d- H:i:s'),
+											'joined'=> date('Y-m-d H:i:s'),
 											'group'=> 2,
 											'email'=> escape(Input::get('email')),
 									));
@@ -316,7 +313,7 @@ if(!isset($_GET['step'])){
 			<a href="/" class="btn btn-primary">Finish</a>
 			<?php
 				}else{
-					Redirect::to('/404');
+					Redirect::to(404);
 				}
 			?>
 		</div>

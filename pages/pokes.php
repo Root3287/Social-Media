@@ -2,7 +2,7 @@
 $user = new User();
 $pokes = new Pokes();
 if(!$user->isLoggedIn()){
-	Redirect::to('/404');
+	Redirect::to(404);
 }
 if(Input::exists('get')){
 	if(Token::check(Input::get('token'))){ 

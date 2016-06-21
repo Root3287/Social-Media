@@ -186,23 +186,19 @@ if(!$user->isLoggedIn()){
 					</a>
 					<a href="/u/<?php echo $user->data()->username;?>" class="list-group-item">Profile</a>
 					<a href="/pokes" class="list-group-item"><span class="glyphicon glyphicon-hand-right"></span> Pokes <?php if($pcount = $pokes->getPendingPokesCount($user->data()->id) >=1){?><span class="badge"><?php echo $pcount;?></span></a><?php }?>
-					<a href="/user/friends/" class="list-group-item"><span class="glyphicon glyphicon-heart"></span> Friends <?php if($user->hasFriendRequest()){?><span class="badge"><?php echo count($user->getFriendRequest()); ?></span><?php }?></a>
+					<a href="/user/friends/" class="list-group-item"><span class="glyphicon glyphicon-heart"></span> Friends <?php if($user->hasFriendRequest()){if(count($user->getFriendRequest()) >= 1){?><span class="badge"><?php echo count($user->getFriendRequest()); ?></span><?php }}?></a>
 					<a href="/user/following/" class="list-group-item"><span class="glyphicon glyphicon-user"></span> People</a>
 				</div>
 			</div>
 			<div class="col-sm-3 col-md-3">
 				<div class="list-group">
-					<a href="/user/friends" class="list-group-item active">Friends</a>
-					<?php foreach ($user->getFriends() as $friend){
-						if($user->isFriends($friend->friend_id)){
-							if($friend->friend_id !== $user->data()->id){
-								$friend_user = new User($friend->friend_id);
-							}else if($friend->user_id !== $user->data()->id){
-								$friend_user = new User($friend->user_id);
-							}
+					<a href="/user/friends" class="list-group-item active">People</a>
+					<?php foreach ($user->getFollowing() as $following){
+						$following_user = new User($following->following_id);
+						$following_user_online =($following_user->data()->last_online <= strtotime("-10 minutes"))? false: true;
 					?>
-					<a href="/u/<?php echo $friend_user->data()->username;?>" class="list-group-item"><img src="<?php echo $friend_user->getAvatarURL();?>" alt="friend_user"> <?php echo $friend_user->data()->username;?></a>
-					<?php }}?>
+					<a href="/u/<?php echo $following_user->data()->username;?>" class="list-group-item"><img src="<?php echo $following_user->getAvatarURL();?>" alt="friend_user"> <?php echo $following_user->data()->username;?> <?php if($following_user_online){echo "<span class=\"pull-right\"><span class=\"label label-success\">Online!</span></span>";}else{echo "<span class=\"pull-right\"><span class=\"label label-danger\">Offline!</span></span>";}?></a>
+					<?php }?>
 				</div>		
 			</div>
 		</div>

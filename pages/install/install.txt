@@ -26,6 +26,9 @@ CREATE TABLE `users` (
 	`group` INT(11) NOT NULL,
 	`joined` DATETIME NOT NULL,
 	`private` INT(11) NULL DEFAULT '0',
+	`banned` tinyint(4) NOT NULL DEFAULT '0',
+  	`last_online` int(11) DEFAULT NULL,
+  	`last_ip` text,
 	PRIMARY KEY (`id`)
 )
 COLLATE='latin1_swedish_ci'
@@ -145,6 +148,13 @@ CREATE TABLE `report` (
 COLLATE='latin1_swedish_ci'
 ENGINE=InnoDB
 ;
+CREATE TABLE `ip` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `date` datetime DEFAULT NULL,
+  `ip` text,
+  `recurrence` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (1, 'install', '1');
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (2, 'title', 'Socal-Media');
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (3, 'bootstrap-theme', '3');
@@ -152,6 +162,6 @@ INSERT INTO `settings` (`id`, `name`, `value`) VALUES (4, 'motd', '');
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (5, 'debug', 'On');
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (6, 'inverted-nav', '1');
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (7, 'unique_id', '');
-INSERT INTO `settings` (`id`, `name`, `value`) VALUES (8, 'version', '1.1.0');
+INSERT INTO `settings` (`id`, `name`, `value`) VALUES (8, 'version', '1.1.1');
 INSERT INTO `groups` (`id`, `group_name`, `permissions`) VALUES (1, 'Standard', '');
 INSERT INTO `groups` (`id`, `group_name`, `permissions`) VALUES (2, 'Admin', '{"Admin":"1"}');

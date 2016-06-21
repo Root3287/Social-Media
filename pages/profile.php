@@ -3,21 +3,21 @@ $user = new User();
 $post = new Post();
 $poke = new Pokes();
 $token = Token::generate();
-if(!$user->isLoggedIn()){Redirect::to('/404');}
+if(!$user->isLoggedIn()){Redirect::to(404);}
 if(!$profile_user){
-	Redirect::to('/404');//MAke 404
+	Redirect::to(404);//MAke 404
 }
 $db = DB::getInstance();
 $user_exists= $db->get('users', ['username','=', escape($profile_user)]);
 if(!$user_exists->first()){
-	Redirect::to('/404');
+	Redirect::to(404);
 }
 if(strcasecmp($user_exists->first()->username, $profile_user)){
-	Redirect::to('/404'); // Make 404
+	Redirect::to(404); // Make 404
 }
 $user2= new User(escape($profile_user));
 if(!$user2->exists()){
-	Redirect::to('/404');
+	Redirect::to(404);
 }
 if($user->data()->username !== $user2->data()->username){ // Users is not viewing their own page
 ?>

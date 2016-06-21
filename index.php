@@ -15,6 +15,7 @@ $router->add('/', function (){
 			Redirect::to('/timeline');
 		}
 	}
+	return true;
 });
 $router->add('/timeline(.*)', function(){
 	require 'pages/timeline.php';
@@ -37,7 +38,7 @@ $router->add('/register', function(){
 	return true;
 });
 $router->add('/404', function(){
-	require 'pages/404.php';
+	require 'pages/error/404.php';
 	return true;
 });
 $router->add('/u/(.*)', function($profile_user){
@@ -69,6 +70,9 @@ $router->add('/pokes(.*)', function(){
 $router->add('/report/(.*)/(.*)', function($type, $id){
 	require 'pages/report.php';
 	return true;
+});
+$router->add('/appeal', function(){
+	return false;
 });
 /*
 Admin Stuff
@@ -172,43 +176,192 @@ $router->add('/user/following(.*)', function(){
 /*
 Action
 */
-$router->add('/action/profile(.*)', function(){
-	require 'pages/action/profile.php';
-	return true;
-});
 $router->add('/action/reply(.*)', function(){
-	require 'pages/action/reply.php';
+	$post = new Post();
+	$user = new User();
+	if(Input::exists()){
+		if(Token::check(Input::get('token'))){
+			$val = new Validation();
+			$validate = $val->check($_POST, [
+				'post'=>[
+					'required'=> true,
+				],
+				'original_post'=>[
+					'required'=> true,
+				],
+			]);
+			if($validate->passed()){
+				try{
+					$post->createComment([
+						'content' => escape(Input::get('post')),
+						'original_post' => escape(Input::get('original_post')),
+						'user_id'=> escape($user->data()->id),
+					]);
+					echo(json_encode(['success'=>true]));
+				}catch(Exception $e){
+					echo(json_encode(['success'=>false]));
+				}
+			}
+		}
+	}
 	return true;
 });
 $router->add('/action/like(.*)', function(){
-	require 'pages/action/like.php';
+	$user = new User();
+	$post = new Post();
+	$like = new Like();
+
+	if(Input::exists()){
+		if(Token::check(Input::get('token'))){
+			if(Input::get('post') !== null){
+				try{
+					$like->likePost(['user_id'=>$user->data()->id, 'post_id'=>escape(Input::get('post')),]);
+					echo(json_encode(["success"=>true]));
+				}catch(Exception $e){
+					echo(json_encode(["success"=>false]));
+				}
+			}
+		}
+	}
 	return true;
 });
 $router->add('/action/dislike(.*)', function(){
-	require 'pages/action/dislike.php';
+	$user = new User();
+	$post = new Post();
+	$like = new Like();
+
+	if(Input::exists()){
+		if(Token::check(Input::get('token'))){
+			if(Input::get('post') !== null){
+				$post = $like->getLikesByPost(escape(Input::get('post')))->results();
+				try{
+					$like->dislikePost(['id', '=', escape($post[0]->id)]);
+					echo(json_encode(['success'=> true]));
+				}catch(Exception $e){
+					echo(json_encode(['success'=>true]));
+				}
+			}
+		}	
+	}
 	return true;
 });
 $router->add('/action/status(.*)', function(){
-	require 'pages/action/status.php';
+	$user = new User();
+	$post = new Post();
+	if(Input::exists()){
+		if(Token::check(Input::get('token'))){
+			$val = new Validation();
+			$validate = $val->check($_POST, [
+				'post_status'=>[
+					'required'=>true,
+				],
+			]);
+			if($validate->passed()){
+				try{
+					$post->create(escape(Input::get('post_status')),$user);
+					echo(json_encode(['success'=>true]));
+				}catch(Exception $e){
+					echo(json_encode(['success'=>false]));
+				}
+			}
+		}
+	}else{
+		echo(json_encode(['success'=>false]));
+	}
 	return true;
 });
 $router->add('/action/follow(.*)', function(){
-	require 'pages/action/follow.php';
+	$user = new User();
+	if(Input::exists()){
+		if(Token::check(Input::get('token'))){
+			$val = new Validation();
+			$validate = $val->check($_POST, [
+				'user'=>[
+					'required'=>true,
+				],
+			]);
+			if($validate->passed()){
+				if(Input::get('action') == 1){ //Follow
+					if(!$user->isFollowing(Input::get('user'))){
+						if($user->Follow(Input::get('user'))){
+							echo(json_encode(['success'=>true]));
+						}
+					}
+				}else if(Input::get('action') == 0){ // unfollow
+					if($user->isFollowing(Input::get('user'))){
+						if($user->unFollow(Input::get('user'))){
+							echo(json_encode(['success'=>true]));
+						}else{
+							echo(json_encode(['success'=>false]));
+						}
+					}
+				}
+			}
+		}
+	}
 	return true;
 });
 $router->add('/action/friend(.*)', function(){
-	require 'pages/action/friend.php';
-	return true;
-});
-$router->add('/action/unfriend(.*)', function(){
-	require 'pages/action/unfriend.php';
+	$user = new User();
+	$db = DB::getInstance();
+
+	if(Input::exists()){
+		if(Token::check(Input::get('token'))){
+			$val = new Validation();
+			$validate = $val->check($_POST, [
+				'user' => [
+					'required' => true,
+				],
+				'accept' => [
+					'required' => true,
+				],
+			]);
+			if($validate->passed()){
+				//Check if user is not already friends with
+				if(!$user->isFriends(escape(Input::get('user')))){
+					//Check if the user still have the friend request
+					if($user->hasFriendRequest(escape(Input::get('user')))){
+						if($user->respondFriendRequest(escape(Input::get('user')), escape(Input::get('accept')))){
+							echo json_encode(['success'=>true]); //{"success"=true}
+						}else{
+							echo json_encode(['success'=>false]); //{"success"=false}
+						}
+					}else{
+						echo json_encode(['success'=>false]); //{"success"=false}
+					}
+				}else{
+					echo json_encode(['success'=>false]); //{"success"=false}
+				}
+			}else{
+				echo json_encode(['success'=>false]); //{"success"=false}
+			}
+		}else{
+			echo json_encode(['success'=>false]); //{"success"=false}
+		}
+	}else{
+		echo json_encode(['success'=>false]); //{"success"=false}
+	}
 	return true;
 });
 $router->add('/action/request(.*)', function(){
-	require 'pages/action/request.php';
+	$user = new User();
+	if(Input::exists()){
+		if(Token::check(Input::get("token"))){
+			if(Input::get("user") !== null){
+				if(!$user->hasFriendRequest(Input::get('user')) && !$user->isFriends(Input::get('user'))){
+					try{
+						$user->addFriend(Input::get('user'));
+						echo (json_encode(['success'=>true, 'button'=>Input::get('button'),]));
+					}catch(Exception $e){
+						echo (json_encode(['success'=>false, 'button'=>Input::get('button'),]));
+					}
+				}
+			}
+		}
+	}
 	return true;
 });
 
 if(!$router->run()){
-	Redirect::to('/404');
+	Redirect::to(404);
 }

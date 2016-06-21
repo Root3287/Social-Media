@@ -5,6 +5,7 @@ if(!$user->isLoggedIn()){
 }
 $token = Token::generate();
 $db = DB::getInstance();
+$timeAgo = new TimeAgo();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,6 +25,7 @@ $db = DB::getInstance();
 						}else if($friend->friend_id == $user->data()->id){
 							$f = new User($friend->user_id);
 						}
+						$f_online =($f->data()->last_online <= strtotime("-10 minutes"))? false: true;
 				?>
 				<div class="user">
 					<div class="media">
@@ -31,6 +33,16 @@ $db = DB::getInstance();
 						</div>
 						<div class="media-body">
 							<h3 class="media-heading"><a href="/u/<?php echo $f->data()->username;?>"><?php echo $f->data()->name;?></a></h3>
+							<?php
+								$last = $f->data()->last_online;
+								$dt = new DateTime("@$last");
+								$timeAgo_words = $timeAgo->inWords($dt->format('Y/m/d H:i:s'));
+								if($f_online){
+									echo "<span class=\"label label-success\">Online!</span>";
+								}else{
+									echo "<span class=\"label label-danger\">Offline! $timeAgo_words ago</span>";
+								}
+							?>
 						</div>
 					</div>
 				</div>
