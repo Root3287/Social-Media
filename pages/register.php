@@ -28,34 +28,52 @@ if(Input::exists()){
 				'password_conf' => array(
 						'required' => true,
 						'matches'=> 'password',
-				)
+				),
 		));
 		if(!$val->passed()){
 			
 		}else{
-			$user = new User();
-			
-			$salt = Hash::salt(32);
-			
-			$password = Hash::make(escape(Input::get('password')) , $salt);
-			
-			try{
-				$user->create(array(
-						'username' => escape(Input::get('username')),
-						'password'=> $password,
-						'salt' => $salt,
-						'name'=> escape(Input::get('name')),
-						'joined'=> date('Y-m-d H:i:s'),
-						'group'=> 1,
-						'email'=> escape(Input::get('email')),
-				));
-			}catch (Exception $e){
-				die($e->getMessage());
+			$g_reponse = null;
+			if(Setting::get('enable-recaptcha') == 1){
+				$curl = curl_init();
+				curl_setopt_array($curl, [
+					CURLOPT_RETURNTRANSFER => 1, 
+					CURLOPT_URL => 'https://www.google.com/recaptcha/api/siteverify',
+					CURLOPT_POST => 1,
+					CURLOPT_POSTFIELDS => [
+						'secret'=> Setting::get('recaptcha-secret-key'),
+						'response'=> Input::get('g-recaptcha-response'),
+						'remoteip' => getClientIP(),
+					],
+				]);
+
+				$g_reponse = json_decode(curl_exec($curl));
 			}
-			if($user->login(escape(Input::get('username')), escape(Input::get('password')), false)){
-				Notification::createMessage('Welcome to the Social-Media '. $user->data()->name, $user->data()->id);
-				session::flash('complete', '<div class="alert alert-success">You completely register and you just got logged in.</div>');
-				Redirect::to('/');
+			if($g_reponse == null || $g_reponse->success){
+				$user = new User();
+				
+				$salt = Hash::salt(32);
+				
+				$password = Hash::make(escape(Input::get('password')) , $salt);
+				
+				try{
+					$user->create(array(
+							'username' => escape(Input::get('username')),
+							'password'=> $password,
+							'salt' => $salt,
+							'name'=> escape(Input::get('name')),
+							'joined'=> date('Y-m-d H:i:s'),
+							'group'=> 1,
+							'email'=> escape(Input::get('email')),
+					));
+				}catch (Exception $e){
+					die($e->getMessage());
+				}
+				if($user->login(escape(Input::get('username')), escape(Input::get('password')), false)){
+					Notification::createMessage('Welcome to the Social-Media '. $user->data()->name, $user->data()->id);
+					session::flash('complete', '<div class="alert alert-success">You completely register and you just got logged in.</div>');
+					Redirect::to('/');
+				}
 			}
 		}
 	}
@@ -64,6 +82,9 @@ if(Input::exists()){
 <html>
 	<head>
 	<?php Include 'assets/head.php';?>
+	<?php if(Setting::get('enable-recaptcha') == 1){?>
+		<script src='https://www.google.com/recaptcha/api.js'></script>
+	<?php }?>
 	</head>
 	<body>
 		<?php include 'assets/nav.php';?>
@@ -95,6 +116,11 @@ if(Input::exists()){
 							</div>
 						</div>
 					</div>
+					<?php if(Setting::get('enable-recaptcha')){?>
+					<div class="form-group">
+						<div class="g-recaptcha" data-sitekey="<?php echo Setting::get('recaptcha-site-key');?>"></div>
+					</div>
+					<?php }?>
 					<div class="row">
 						<div class="col-xs-12 col-md-6">
 							<div class="form-group">
@@ -112,5 +138,6 @@ if(Input::exists()){
 			</div>
 		</div>
 		<?php include 'assets/foot.php';?>
+
 	</body>
 </html>

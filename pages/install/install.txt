@@ -163,5 +163,8 @@ INSERT INTO `settings` (`id`, `name`, `value`) VALUES (5, 'debug', 'On');
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (6, 'inverted-nav', '1');
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (7, 'unique_id', '');
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (8, 'version', '1.1.1');
+INSERT INTO `settings` (`name`, `value`) VALUES ('enable-recaptcha', '0');
+INSERT INTO `settings` (`name`, `value`) VALUES ('recaptcha-secret-key', NULL);
+INSERT INTO `settings` (`name`, `value`) VALUES ('recaptcha-site-key', NULL);
 INSERT INTO `groups` (`id`, `group_name`, `permissions`) VALUES (1, 'Standard', '');
 INSERT INTO `groups` (`id`, `group_name`, `permissions`) VALUES (2, 'Admin', '{"Admin":"1"}');

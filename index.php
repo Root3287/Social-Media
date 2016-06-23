@@ -37,10 +37,6 @@ $router->add('/register', function(){
 	require 'pages/register.php';
 	return true;
 });
-$router->add('/404', function(){
-	require 'pages/error/404.php';
-	return true;
-});
 $router->add('/u/(.*)', function($profile_user){
 	require 'pages/profile.php';
 	return true;
@@ -111,6 +107,10 @@ return false;
 $router->add('/admin/users/edit/', function(){
 return false;
 });
+$router->add('/admin/recaptcha', function(){
+	require 'pages/admin/recaptcha.php';
+	return true;
+});
 $router->add('/admin', function(){
 	Redirect::to('/admin/');
 	return true;
@@ -171,6 +171,42 @@ $router->add('/user/friend(.*)', function(){
 });
 $router->add('/user/following(.*)', function(){
 	require 'pages/user/following.php';
+	return true;
+});
+/*
+Errors
+ */
+
+$router->add('/404', function(){ // Not found
+	require 'pages/error/404.php';
+	return true;
+});
+$router->add('/301', function(){ // Moved Permanently
+	//TODO: make 301
+	return true;
+});
+$router->add('/400', function(){ // Bad Request
+	//TODO: make 400
+	return true;
+});
+$router->add('/401', function(){ // Unauthorized
+	//TODO: make 401
+	return true;
+});
+$router->add('/402', function(){ // Payment Required
+	//TODO: make 402
+	return true;
+});
+$router->add('/408', function(){ // Request Timed Out
+	//TODO: make 408
+	return true;
+});
+$router->add('/410', function(){ // Gone
+	//TODO: make 410
+	return true;
+});
+$router->add('/500', function(){ // Internal Server Error
+	//TODO: make 500
 	return true;
 });
 /*

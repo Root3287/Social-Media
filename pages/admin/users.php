@@ -132,6 +132,9 @@ $userData = $pagination->getArrayData($limit, $page);
 										<?php echo $users->email?>
 									</td>
 									<td>
+										<?php echo $users->group?>
+									</td>
+									<td>
 										<?php echo $users->joined?>
 									</td>
 								</tr>
