@@ -13,6 +13,7 @@ if(!$user->isLoggedIn()){
 	Redirect::to('/');
 }
 ?>
+<!DOCTYPE html>
 <html>
 	<head>
 		<?php require 'assets/head.php';?>

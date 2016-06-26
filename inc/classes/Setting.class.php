@@ -38,10 +38,19 @@ class Setting{
 	public static function update($name, $value){
 		if(isset($GLOBALS['config'])){
 			$db = DB::getInstance();
-			$id = $db->get('settings', array('name', '=' , $name))->first();
-			$id = $id->id;
+			$id = $db->get('settings', array('name', '=' , $name))->first()->id;
 			$update = $db->update('settings', $id, array('name'=>escape($name), 'value'=>escape($value)));
 			return $update;
+		}
+	}
+	/**
+	 * add a item to the database
+	 * @param array $fields what to insert
+	 */
+	public static function add($fields=array()){
+		if(isset($GLOBALS['config'])){
+			$db = DB::getInstance();
+			return $insert = $db->insert('settings', $fields);
 		}
 	}
 }

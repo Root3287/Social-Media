@@ -123,6 +123,10 @@ $router->add('/admin/reports', function(){
 	require 'pages/admin/reports.php';
 	return true;
 });
+$router->add('/admin/update/database', function(){
+	require 'pages/admin/update-db.php';
+	return true;
+});
 /*
 API
 */

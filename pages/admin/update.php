@@ -27,12 +27,12 @@ $update = json_decode($api->getUpdate());
 							echo "Unfortunally the UpdateAPI link is invalid. Please report it <a href='https://github.com/root3287/Social-Media/issues'>here</a>" ;
 						}else{
 							if(!$update->update){
-								echo "<h1>All caught up!</h1><hr><p>Your current version is ".$update->version."</p>";
+								echo "<h1>All caught up!</h1><hr><p>Your current version is ".Setting::get('version')."</p>";
 							}else{
 								if(!file_exists("inc/updates/$update->new_version.zip")){
 									file_put_contents("inc/updates/$update->new_version.zip", fopen($update->download_url, 'r'));
 								}
-								echo "<h1>".$update->new_version."</h1><hr><p>There is a new version of Social-Media out on github! A zip file has been downloaded and placed in `inc/updates`!</p>";
+								echo "<h1>".$update->new_version."</h1><hr><p>There is a new version of Social-Media out on github! A zip file has been downloaded and placed in `inc/updates`! After you unzip an replace the files, you need to head over <a href='/admin/update/database'>here</a> to update the databases.</p>";
 							}
 						}
 					?>
