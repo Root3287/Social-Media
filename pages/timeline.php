@@ -216,7 +216,7 @@ if(!$user->isLoggedIn()){
 						},
 						function(data){
 							if(data["success"]){
-								window.location.replace("/");
+								location.reload();
 							}
 						}, 
 						"json"
@@ -235,7 +235,7 @@ if(!$user->isLoggedIn()){
 						},
 						function(data){
 							if(data["success"] == true){
-								window.location.replace("/");
+								location.reload();
 							}
 						}, 
 						"json"
@@ -247,7 +247,7 @@ if(!$user->isLoggedIn()){
 
 					$.post("/action/status", $(this).serialize(), function(data){
 						if(data["success"]){
-							window.location.replace("/");
+							location.reload();
 						}
 					}, "json");
 					return false;
@@ -262,7 +262,7 @@ if(!$user->isLoggedIn()){
 
 					$.post("/action/reply", $(this).serialize(), function(data){
 						if(data["success"]){
-							window.location.replace("/");
+							location.reload();
 						}
 					}, "json");
 					return false;

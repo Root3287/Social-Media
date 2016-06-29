@@ -2,6 +2,7 @@
 $user = new User();
 $post = new Post();
 $poke = new Pokes();
+$like = new Like();
 $token = Token::generate();
 if(!$user->isLoggedIn()){Redirect::to(404);}
 if(!$profile_user){
@@ -79,10 +80,49 @@ if($user->data()->username !== $user2->data()->username){ // Users is not viewin
 					if($user2->data()->private == 0 || $user->isFriends($user2->data()->id)) {
 						foreach($post->getPostForUser($user2->data()->id) as $uPost){
 							$userPost = new User($uPost['user_id']);
-							echo "<div class='well'>";
-							echo "<div class='post-header'><h2>".$userPost->data()->username."</h2></div>";
-							echo "<p>".$uPost['content']."</p>";
-							echo "</div>";
+					?>
+							<div class='well'>
+								<div class='post-header'>
+									<h2><?php echo $userPost->data()->username; ?></h2>
+								</div>
+								<p><?php echo $uPost['content'];?></p>
+								<hr>
+								<?php foreach($post->getComments($uPost['id']) as $pComment): 
+								$commentUser = new User($pComment->user_id);?>
+								<div class="media">
+									<div class="media-left"><a href="/u/<?php echo $commentUser->data()->username;?>"><img src="<?php echo $commentUser->getAvatarURL(48);?>" alt="{user.png}" class="media-object"></a>
+									</div>
+									<div class="media-body">
+										<h4 class="media-heading"><a href="/u/<?php echo $commentUser->data()->username;?>"><?php echo $commentUser->data()->name;?></a></h4>
+										<?php 
+										echo escape($pComment->content);
+										?>
+									</div>
+								</div>
+								<?php endforeach;?>
+								<hr>
+								<form id="reply" action="" class="form-inline" method="post" autocomplete="off">
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-btn">
+										   		<?php if($like->hasLike($user->data()->id, $uPost['id']) <= 0){?>
+										   		<a href="" id="like" data-token="<?php echo $token;?>" data-post="<?php echo $uPost['id'];?>" class="btn btn-primary"><span class="glyphicon glyphicon-star-empty"></span> <?php echo $like->getLikesByPost($uPost['id'])->count();?></a>
+										   		<?php }else{?>
+										   		<a href="" id="dislike" data-token="<?php echo $token;?>" data-post="<?php echo $uPost['id'];?>" class="btn btn-primary"><span class="glyphicon glyphicon-star"></span> <?php echo $like->getLikesByPost($uPost['id'])->count();?></a>
+										   		<?php }?>
+										   </span>
+										   <input name="post" type="text" class="form-control">
+										   <span class="input-group-btn">
+										        <button type="submit" value="Post Comment" class="btn btn-default"><span class="glyphicon glyphicon-send"></span></button>
+										   </span>
+										</div>
+									</div>
+									<input type="hidden" name="original_post" value="<?php echo $uPost['id'];?>"></input>
+									<input type="hidden" name="token" value="<?php echo $token;?>">
+									<input id="orignal_post" type="hidden" value="<?php echo $uPost['id'];?>">
+								</form>
+							</div>
+					<?php
 						}
 					}else{
 							echo "<h2>This user is private! You need to follow or friend them to get their info.</h2>";
@@ -130,8 +170,56 @@ if($user->data()->username !== $user2->data()->username){ // Users is not viewin
 					);
 					return false;
 				});
-				$("button#request").click(function(){
-					
+				$("form#reply").keypress(function(e){
+					if (e.which == 13) {
+						$(this).submit();
+						return false;
+					}
+				}).submit(function(e){
+					e.preventDefault();
+
+					$.post("/action/reply", $(this).serialize(), function(data){
+						if(data["success"]){
+							location.reload();
+						}
+					}, "json");
+					return false;
+				});
+				$("[id='like']").click(function(e){
+					e.preventDefault();	
+					$.post(
+						"/action/like",
+						{
+							"token": $(this).data('token'), 
+							"post": $(this).data('post'),
+						},
+						function(data){
+							if(data["success"]){
+								location.reload();
+							}
+						}, 
+						"json"
+					);
+					return false;
+				});
+
+				$("[id='dislike']").click(function(e){
+					e.preventDefault();
+
+					$.post(
+						"/action/dislike",
+						{
+							"token": $(this).data('token'), 
+							"post": $(this).data('post')
+						},
+						function(data){
+							if(data["success"] == true){
+								location.reload();
+							}
+						}, 
+						"json"
+					);
+					return false;
 				});
 			});
 		</script>
@@ -191,10 +279,51 @@ if($user->data()->username !== $user2->data()->username){ // Users is not viewin
 						<?php
 						foreach($post->getPostForUser($user2->data()->id) as $uPost){
 							$userPost = new User($uPost['user_id']);
-							echo "<div class='well'>";
-							echo "<div class='post-header'><a href='/u/".$userPost->data()->username."'><h2>".$userPost->data()->username."</h2></a></div>";
-							echo "<p>".$uPost['content']."</p>";
-							echo "</div>";
+						?>
+							<div class='well'>
+								<div class='post-header'>
+									<a href='/u/<?php echo $userPost->data()->username;?>'>
+										<h2><?php echo $userPost->data()->username;?></h2>
+									</a>
+								</div>
+								<p><?php echo $uPost['content'];?></p>
+								<hr>
+								<?php foreach($post->getComments($uPost['id']) as $pComment): 
+								$commentUser = new User($pComment->user_id);?>
+								<div class="media">
+									<div class="media-left"><a href="/u/<?php echo $commentUser->data()->username;?>"><img src="<?php echo $commentUser->getAvatarURL(48);?>" alt="{user.png}" class="media-object"></a>
+									</div>
+									<div class="media-body">
+										<h4 class="media-heading"><a href="/u/<?php echo $commentUser->data()->username;?>"><?php echo $commentUser->data()->name;?></a></h4>
+										<?php 
+										echo escape($pComment->content);
+										?>
+									</div>
+								</div>
+								<?php endforeach;?>
+								<hr>
+								<form id="reply" action="" class="form-inline" method="post" autocomplete="off">
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-btn">
+										   		<?php if($like->hasLike($user->data()->id, $uPost['id']) <= 0){?>
+										   		<a href="" id="like" data-token="<?php echo $token;?>" data-post="<?php echo $uPost['id'];?>" class="btn btn-primary"><span class="glyphicon glyphicon-star-empty"></span> <?php echo $like->getLikesByPost($uPost['id'])->count();?></a>
+										   		<?php }else{?>
+										   		<a href="" id="dislike" data-token="<?php echo $token;?>" data-post="<?php echo $uPost['id'];?>" class="btn btn-primary"><span class="glyphicon glyphicon-star"></span> <?php echo $like->getLikesByPost($uPost['id'])->count();?></a>
+										   		<?php }?>
+										   </span>
+										   <input name="post" type="text" class="form-control">
+										   <span class="input-group-btn">
+										        <button type="submit" value="Post Comment" class="btn btn-default"><span class="glyphicon glyphicon-send"></span></button>
+										   </span>
+										</div>
+									</div>
+									<input type="hidden" name="original_post" value="<?php echo $uPost['id'];?>"></input>
+									<input type="hidden" name="token" value="<?php echo $token;?>">
+									<input id="orignal_post" type="hidden" value="<?php echo $uPost['id'];?>">
+								</form>
+							</div>
+						<?php
 						}
 						?>
 					</div>
@@ -212,6 +341,57 @@ if($user->data()->username !== $user2->data()->username){ // Users is not viewin
 							location.reload();
 						}
 					}, "json");
+					return false;
+				});
+				$("form#reply").keypress(function(e){
+					if (e.which == 13) {
+						$(this).submit();
+						return false;
+					}
+				}).submit(function(e){
+					e.preventDefault();
+
+					$.post("/action/reply", $(this).serialize(), function(data){
+						if(data["success"]){
+							location.reload();
+						}
+					}, "json");
+					return false;
+				});
+				$("[id='like']").click(function(e){
+					e.preventDefault();	
+					$.post(
+						"/action/like",
+						{
+							"token": $(this).data('token'), 
+							"post": $(this).data('post'),
+						},
+						function(data){
+							if(data["success"]){
+								location.reload();
+							}
+						}, 
+						"json"
+					);
+					return false;
+				});
+
+				$("[id='dislike']").click(function(e){
+					e.preventDefault();
+
+					$.post(
+						"/action/dislike",
+						{
+							"token": $(this).data('token'), 
+							"post": $(this).data('post')
+						},
+						function(data){
+							if(data["success"] == true){
+								location.reload();
+							}
+						}, 
+						"json"
+					);
 					return false;
 				});
 			});

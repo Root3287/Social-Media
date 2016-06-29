@@ -133,6 +133,9 @@ API
 $router->add('/api/(.*)', function(){
 return false;
 });
+$router->add('/api/post(.*)', function(){
+	return false;
+});
 
 /*
 User
