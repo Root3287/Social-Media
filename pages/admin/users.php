@@ -41,6 +41,7 @@ $userData = $pagination->getArrayData($limit, $page);
 			<div class="row">
 				<div class="col-md-3"><?php require 'pages/admin/sidebar.php';?></div>
 				<div class="col-md-9">
+					<div class="row">
 					<form class="form-inline" method="post" action="/admin/users/">
 						<div class="form-group">
 							<input name="search" type="text" class="form-control input-md" placeholder="Search">
@@ -66,6 +67,8 @@ $userData = $pagination->getArrayData($limit, $page);
 							<input class="btn btn-md btn-primary" type="submit" value="find">
 						</div>
 					</form>
+					</div>
+					<div class="row">
 					<table class="table">
 						<thead>
 							<tr>
@@ -141,14 +144,15 @@ $userData = $pagination->getArrayData($limit, $page);
 								<?php endforeach;?>
 							<?php endif;?>
 						</tbody>
-					</table>	
-				</div>
-				<div class="row">
+					</table>
+					</div>
+					<div class="row">
 					<ul class="pagination">
 						<?php for($i = 1; $i<=$pagination->getTotalPages(); $i++):?>
 							<li><a href="?p=<?php echo $i?>"><?php echo $i;?></a></li>
 						<?php endfor; ?>
 					</ul>
+				</div>	
 				</div>
 			</div>
 		</div>

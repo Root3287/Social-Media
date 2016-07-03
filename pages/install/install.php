@@ -51,11 +51,22 @@ if(!isset($_GET['step'])){
 					$error = false;
 			?>
 			<ul>
-				<li>PHP 5.3 <?php if(version_compare(phpversion(), '5.3', '<')): echo $error_message; $error = true; else: echo $success_message; endif;?></li>
-				<li>MCrypt <?php if(!function_exists("mcrypt_encrypt")): echo $error_message; $error = true; else: echo $success_message; endif;?></li>
-				<li>PDO <?php if(!extension_loaded('PDO')): echo $error_message; $error = true; else: echo $success_message; endif;?></li>
-				<li>Writeable Install <?php if(decoct(fileperms('pages/install/install.php') & 0777) != 777): echo $error_message; $error = true; else: echo $success_message; endif;?></li>
-				<li>Writeable Init <?php if(decoct(fileperms('inc/init.php') & 0777) != 777):echo $error_message;  $error = true; else: echo $success_message;endif;?></li>
+				<li>
+					PHP 5.3 <?php if(version_compare(phpversion(), '5.3', '<')): echo $error_message; $error = true; else: echo $success_message; endif;?>
+				</li>
+				<li>
+					MCrypt <?php if(!function_exists("mcrypt_encrypt")): echo $error_message; $error = true; else: echo $success_message; endif;?>
+				</li>
+				<li>
+					PDO <?php if(!extension_loaded('PDO')): echo $error_message; $error = true; else: echo $success_message; endif;?>	
+				</li>
+				<li>
+					Writeable Install <?php if(decoct(fileperms('pages/install/install.php') & 0777) != 777): echo $error_message; $error = true; else: echo $success_message; endif;?>
+				</li>
+				<li>
+					Writeable Init <?php if(decoct(fileperms('inc/init.php') & 0777) != 777):echo $error_message;  $error = true; else: echo $success_message;endif;?>
+					</li>
+				<li>Writeable Config <?php if(decoct(fileperms('inc/config.php') & 0777) != 777): echo $error_message; $error = true; else: echo $success_message; endif;?></li>
 			</ul>
 			<a href="/install?step=3" class="btn btn-default <?php if($error): echo "disabled"; endif;?>">Next</a>
 			<?php
@@ -109,11 +120,11 @@ if(!isset($_GET['step'])){
 													'		"session_name"=>"'.escape(Input::get("session")).'"'.PHP_EOL.
 													'	),'.PHP_EOL.
 													');';
-								if(is_writable('inc/init.php')){
-									$config = file_get_contents('inc/init.php');
+								if(is_writable('inc/config.php')){
+									$config = file_get_contents('inc/config.php');
 									$config = substr($config, 5);
 
-									$file = fopen('inc/init.php', 'w');
+									$file = fopen('inc/config.php', 'w');
 									fwrite($file, $insert.$config);
 									fclose($file);
 
@@ -130,12 +141,12 @@ if(!isset($_GET['step'])){
 									//echo '<script>window.location.replace("/install?step=5");</script>';
 									die();
 								}else{
-									$config = file_get_contents('inc/init.php');
+									$config = file_get_contents('inc/config.php');
 									$config = substr($config, 5);
 									$config = nl2br(escape($insert.$config));
 
 								?>
-								Your <strong>inc/init.php</strong> file is not writeable. Please copy/paste the following into your <strong>inc/init.php</strong> file, overwriting all existing text.
+								Your <strong>inc/init.php</strong> file is not writeable. Please copy/paste the following into your <strong>inc/config.php</strong> file, overwriting all existing text.
 								  <div class="well">
 									<?php
 									echo $config;

@@ -9,6 +9,11 @@ if(!$user->isLoggedIn()){
 <html lang="en">
 	<head>
 		<?php require 'assets/head.php';?>
+		<style>
+			.user {
+				padding-bottom: 10px;
+			}
+		</style>
 	</head>
 	<body>
 		<?php require 'assets/nav.php';?>

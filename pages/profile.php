@@ -3,44 +3,57 @@ $user = new User();
 $post = new Post();
 $poke = new Pokes();
 $like = new Like();
-$token = Token::generate();
-if(!$user->isLoggedIn()){Redirect::to(404);}
-if(!$profile_user){
-	Redirect::to(404);//MAke 404
-}
-$db = DB::getInstance();
-$user_exists= $db->get('users', ['username','=', escape($profile_user)]);
-if(!$user_exists->first()){
-	Redirect::to(404);
-}
-if(strcasecmp($user_exists->first()->username, $profile_user)){
-	Redirect::to(404); // Make 404
-}
 $user2= new User(escape($profile_user));
+$token = Token::generate();
+
 if(!$user2->exists()){
 	Redirect::to(404);
 }
+
 if($user->data()->username !== $user2->data()->username){ // Users is not viewing their own page
+	if(!$user->isLoggedIn() && $user2->data()->private == 1){
+		Redirect::to(404);
+	}
 ?>
 <html>
 	<head>
 		<?php include 'assets/head.php';?>
+		<style>
+		.name{
+			display: inline;
+		}
+		</style>
 	</head>
 	<body>
 		<?php include 'assets/nav.php';?>
 		<div class="container">
-			<?php if(Session::exists('complete')){echo Session::flash('complete');}if(Session::exists('error')){echo Session::flash('error');}?>
+			<?php 
+				if(Session::exists('complete')){
+					echo Session::flash('complete');
+				}
+				if(Session::exists('error')){
+					echo Session::flash('error');
+				}
+			?>
 			<div class="row">
 				<div class="jumbotron">
-					<h1>
-						<img class="img-circle" src="<?php echo $user2->getAvatarURL('96')?>">
-						<?php echo $user2->data()->username?>
-						<?php if(!$user->isFollowing($user2->data()->id)):?>
-							<button id="follow" class="btn btn-primary btn-md" data-user="<?php echo $user2->data()->id;?>" data-token="<?php echo $token;?>">Follow</button>
-						<?php else:?>
-							<button id="unfollow" class="btn btn-primary btn-md" data-user="<?php echo $user2->data()->id;?>" data-token="<?php echo $token;?>">UnFollow</button>
-						<?php endif;?>
-					</h1>
+					<div class="media">
+							<div class="media-left">
+								<img class="media-object img-circle" alt="{user.img}" src="<?php echo $user2->getAvatarURL('96');?>">
+							</div>
+							<div class="media-body">
+								<div class="name">
+									<h1 class="name"><?php echo $user2->data()->username;?></h1>
+									<?php if($user2->data()->verified == 1){?><h4 class="name"><span class="label label-primary name"><span class="glyphicon glyphicon-ok"></span></span></h4><?php }?>
+								</div>
+								<br>
+									<?php if(!$user->isFollowing($user2->data()->id)):?>
+										<button id="follow" class="btn btn-primary btn-md" data-user="<?php echo $user2->data()->id;?>" data-token="<?php echo $token;?>">Follow</button>
+									<?php else:?>
+										<button id="unfollow" class="btn btn-primary btn-md" data-user="<?php echo $user2->data()->id;?>" data-token="<?php echo $token;?>">UnFollow</button>
+									<?php endif;?>
+							</div>
+						</div>
 				</div>
 			</div>
 			<div class="row">
@@ -95,7 +108,7 @@ if($user->data()->username !== $user2->data()->username){ // Users is not viewin
 									<div class="media-body">
 										<h4 class="media-heading"><a href="/u/<?php echo $commentUser->data()->username;?>"><?php echo $commentUser->data()->name;?></a></h4>
 										<?php 
-										echo escape($pComment->content);
+										echo $pComment->content;
 										?>
 									</div>
 								</div>
@@ -229,17 +242,29 @@ if($user->data()->username !== $user2->data()->username){ // Users is not viewin
 <html>
 	<head>
 		<?php include 'assets/head.php';?>
+		<style>
+		.name{
+			display: inline;
+		}
+		</style>
 	</head>
 	<body>
 		<?php include 'assets/nav.php';?>
 		<div class="container">
 			<div class="row">
 				<div class="jumbotron">
-					<h1>
-						<img class="img-circle" src="<?php echo $user->getAvatarURL('96')?>">
-						<?php echo $user->data()->username?>
-						<p>This is you</p>
-					</h1>
+					<div class="media">
+							<div class="media-left">
+								<img class="media-object img-circle" alt="{user.img}" src="<?php echo $user->getAvatarURL('96');?>">
+								<!--<p>This is you</p>-->
+							</div>
+							<div class="media-body">
+								<div class="name">
+									<h1 class="name"><?php echo $user->data()->username;?></h1>
+									<?php if($user->data()->verified == 1){?><h4 class="name"><span class="label label-primary name"><span class="glyphicon glyphicon-ok"></span></span></h4><?php }?>
+								</div>
+							</div>
+						</div>
 				</div>
 			</div>
 			<div class="row">
@@ -296,7 +321,7 @@ if($user->data()->username !== $user2->data()->username){ // Users is not viewin
 									<div class="media-body">
 										<h4 class="media-heading"><a href="/u/<?php echo $commentUser->data()->username;?>"><?php echo $commentUser->data()->name;?></a></h4>
 										<?php 
-										echo escape($pComment->content);
+										echo $pComment->content;
 										?>
 									</div>
 								</div>

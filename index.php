@@ -180,40 +180,40 @@ $router->add('/user/following(.*)', function(){
 	require 'pages/user/following.php';
 	return true;
 });
+
 /*
 Errors
  */
-
 $router->add('/404', function(){ // Not found
 	require 'pages/error/404.php';
 	return true;
 });
 $router->add('/301', function(){ // Moved Permanently
-	//TODO: make 301
+	require 'pages/error/301.php';
 	return true;
 });
 $router->add('/400', function(){ // Bad Request
-	//TODO: make 400
+	require 'pages/error/400.php';
 	return true;
 });
 $router->add('/401', function(){ // Unauthorized
-	//TODO: make 401
+	require 'pages/error/401.php';
 	return true;
 });
 $router->add('/402', function(){ // Payment Required
-	//TODO: make 402
+	require 'pages/error/402.php';
 	return true;
 });
 $router->add('/408', function(){ // Request Timed Out
-	//TODO: make 408
+	require 'pages/error/408.php';
 	return true;
 });
 $router->add('/410', function(){ // Gone
-	//TODO: make 410
+	require 'pages/error/410.php';
 	return true;
 });
 $router->add('/500', function(){ // Internal Server Error
-	//TODO: make 500
+	require 'pages/error/500.php';
 	return true;
 });
 /*
@@ -239,6 +239,7 @@ $router->add('/action/reply(.*)', function(){
 						'content' => escape(Input::get('post')),
 						'original_post' => escape(Input::get('original_post')),
 						'user_id'=> escape($user->data()->id),
+						'time' => date('U'),
 					]);
 					echo(json_encode(['success'=>true]));
 				}catch(Exception $e){

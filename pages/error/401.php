@@ -1,14 +1,14 @@
 <?php 
 $user = new User();
 include 'quotes.php';
-$n = rand(0,count($quote[404])-1);
+$n = rand(0,count($quote[401])-1);
 ?>
 <html>
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>404 &bull; Not Found</title> 
+		<title>401 &bull; Unauthorized</title> 
 		<meta name="author" content="Timothy Gibbons">
 		<meta name="copyright" content="Copyright (C) Timothy Gibbons 2015;">
 		<meta name="description" content="Social-Media">
@@ -29,8 +29,8 @@ $n = rand(0,count($quote[404])-1);
 			<div class="container">
 				<div class="row">
 					<div class="jumbotron">
-						<h1>404</h1>
-						<h3><?php echo $quote[404][$n]?></h3>
+						<h1>401</h1>
+						<h3><?php echo $quote[401][$n]?></h3>
 						<a onClick="window.history.back()" class="btn btn-primary btn-md">Go Back</a><a href="/" class="btn btn-md btn-default">Go Home</a>
 					</div>
 				</div>

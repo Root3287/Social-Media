@@ -18,6 +18,11 @@ if(!$user->isLoggedIn()){
 	<head>
 		<?php require 'assets/head.php';?>
 		<!--<script src="//cdn.ckeditor.com/4.5.6/standard/ckeditor.js"></script>-->
+		<style type="text/css">
+			.name{
+				display: inline;
+			}
+		</style>
 	</head>
 	<body>
 		<?php require 'assets/nav.php';?>
@@ -64,7 +69,9 @@ if(!$user->isLoggedIn()){
 						?>
 						<div class="well">
 							<div class="page-header">
-								<h1><?php echo "<a href='/u/{$timelineUser->data()->username}'>".$timelineUser->data()->username."</a>";?></h1>
+								<div class="name">
+								<h1 class="name"><?php echo "<a class=\"name\" href='/u/{$timelineUser->data()->username}'>".$timelineUser->data()->username."</a>";?></h1> <?php if($timelineUser->data()->verified == 1){?><h4 class="name"><span class="label label-primary name"><span class="glyphicon glyphicon-ok"></span></span></h4><?php }?>
+								</div>
 							</div>
 							<p><?php echo $timeline['content'];?></p>
 							<div class="row">
@@ -104,7 +111,7 @@ if(!$user->isLoggedIn()){
 						    <div class="modal-content">
 						      <div class="modal-header">
 						        <button type="button" class="close" data-dismiss="modal">&times;</button>
-						        <h4 class="modal-title"><?php echo "<a href='/u/{$timelineUser->data()->username}'>".$timelineUser->data()->username."</a>";?></h4>
+						        <h4 class="modal-title"><?php echo "<a href='/u/{$timelineUser->data()->username}'>".$timelineUser->data()->username."</a>";?> <?php if($timelineUser->data()->verified == 1){?><span class="label label-primary name"><span class="glyphicon glyphicon-ok"></span></span><?php }?></h4>
 						        <span class="pull-right">
 						        <div class="dropdown">
 						        	<button class="btn btn-xs btn-default dropdown-toggle" type="button" id="PostMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -132,11 +139,11 @@ if(!$user->isLoggedIn()){
 												  <li class="media">
 												    <div class="media-left">
 												      <a href="<?php echo "/u/{$timelineUser->data()->username}";?>">
-												        <img class="media-object img-circle" src="<?php echo $commentUser->getAvatarURL('48')?>" alt="<?php echo $commentUser->data()->username;?>">
+												        <img class="media-object img-circle" src="<?php echo $commentUser->getAvatarURL('48')?>" alt="<?php echo $commentUser->data()->username;?>"> 
 												      </a>
 												    </div>
 												    <div class="media-body">
-												      <h4 class="media-heading"><a href="<?php echo "/u/{$timelineUser->data()->username}";?>"><?php echo $commentUser->data()->username;?></h4></a>
+												      <h4 class="media-heading"><a href="<?php echo "/u/{$timelineUser->data()->username}";?>"><?php echo $commentUser->data()->username;?> <?php if($timelineUser->data()->verified == 1){?><span class="label label-primary name"><span class="glyphicon glyphicon-ok"></span></span><?php }?></h4></a>
 												      <p><?php echo $comment->content;?></p>
 												    </div>
 												  </li>
