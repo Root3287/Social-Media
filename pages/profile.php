@@ -23,6 +23,11 @@ if($user->data()->username !== $user2->data()->username){ // Users is not viewin
 			display: inline;
 		}
 		</style>
+		<script src="/assets/js/follow.js"></script>
+		<script src="/assets/js/unfollow.js"></script>
+		<script src="/assets/js/reply.js"></script>
+		<script src="/assets/js/like.js"></script>
+		<script src="/assets/js/dislike.js"></script>
 	</head>
 	<body>
 		<?php include 'assets/nav.php';?>
@@ -147,97 +152,6 @@ if($user->data()->username !== $user2->data()->username){ // Users is not viewin
 			</div>
 		</div>
 		<?php include 'assets/foot.php';?>
-		<script>
-			$().ready(function(){
-				$("button#follow").click(function(e){
-					e.preventDefault();
-					$.post(
-						"/action/follow",
-						{
-							"token": $(this).data('token'), 
-							"user": $(this).data('user'),
-							"action": 1,
-						},
-						function(data){
-							if(data["success"] == true){
-								location.reload();
-							}
-						}, 
-						"json"
-					);
-					return false;
-				});
-				$("button#unfollow").click(function(e){
-					e.preventDefault();
-					$.post(
-						"/action/follow",
-						{
-							"token": $(this).data('token'), 
-							"user": $(this).data('user'),
-							"action": 0,
-						},
-						function(data){
-							if(data["success"] == true){
-								location.reload();
-							}
-						}, 
-						"json"
-					);
-					return false;
-				});
-				$("form#reply").keypress(function(e){
-					if (e.which == 13) {
-						$(this).submit();
-						return false;
-					}
-				}).submit(function(e){
-					e.preventDefault();
-
-					$.post("/action/reply", $(this).serialize(), function(data){
-						if(data["success"]){
-							location.reload();
-						}
-					}, "json");
-					return false;
-				});
-				$("[id='like']").click(function(e){
-					e.preventDefault();	
-					$.post(
-						"/action/like",
-						{
-							"token": $(this).data('token'), 
-							"post": $(this).data('post'),
-						},
-						function(data){
-							if(data["success"]){
-								location.reload();
-							}
-						}, 
-						"json"
-					);
-					return false;
-				});
-
-				$("[id='dislike']").click(function(e){
-					e.preventDefault();
-
-					$.post(
-						"/action/dislike",
-						{
-							"token": $(this).data('token'), 
-							"post": $(this).data('post')
-						},
-						function(data){
-							if(data["success"] == true){
-								location.reload();
-							}
-						}, 
-						"json"
-					);
-					return false;
-				});
-			});
-		</script>
 	</body>
 </html>
 <?php }else{ // user is viewing their own page ?>
@@ -250,6 +164,10 @@ if($user->data()->username !== $user2->data()->username){ // Users is not viewin
 			display: inline;
 		}
 		</style>
+		<script src="/assets/js/status.js"></script>
+		<script src="/assets/js/reply.js"></script>
+		<script src="/assets/js/like.js"></script>
+		<script src="/assets/js/dislike.js"></script>
 	</head>
 	<body>
 		<?php include 'assets/nav.php';?>
@@ -361,71 +279,6 @@ if($user->data()->username !== $user2->data()->username){ // Users is not viewin
 			</div>
 		</div>
 		<?php include 'assets/foot.php';?>
-		<script>
-			$(document).ready(function(){
-				$("form#status").submit(function(e){
-					e.preventDefault();
-
-					$.post("/action/status", $(this).serialize(), function(data){
-						if(data["success"]){
-							location.reload();
-						}
-					}, "json");
-					return false;
-				});
-				$("form#reply").keypress(function(e){
-					if (e.which == 13) {
-						$(this).submit();
-						return false;
-					}
-				}).submit(function(e){
-					e.preventDefault();
-
-					$.post("/action/reply", $(this).serialize(), function(data){
-						if(data["success"]){
-							location.reload();
-						}
-					}, "json");
-					return false;
-				});
-				$("[id='like']").click(function(e){
-					e.preventDefault();	
-					$.post(
-						"/action/like",
-						{
-							"token": $(this).data('token'), 
-							"post": $(this).data('post'),
-						},
-						function(data){
-							if(data["success"]){
-								location.reload();
-							}
-						}, 
-						"json"
-					);
-					return false;
-				});
-
-				$("[id='dislike']").click(function(e){
-					e.preventDefault();
-
-					$.post(
-						"/action/dislike",
-						{
-							"token": $(this).data('token'), 
-							"post": $(this).data('post')
-						},
-						function(data){
-							if(data["success"] == true){
-								location.reload();
-							}
-						}, 
-						"json"
-					);
-					return false;
-				});
-			});
-		</script>
 	</body>
 </html>
 <?php } ?>

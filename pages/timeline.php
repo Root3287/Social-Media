@@ -23,6 +23,10 @@ if(!$user->isLoggedIn()){
 				display: inline;
 			}
 		</style>
+		<script src="assets/js/like.js"></script>
+		<script src="assets/js/dislike.js"></script>
+		<script src="assets/js/status.js"></script>
+		<script src="assets/js/reply.js"></script>
 	</head>
 	<body>
 		<?php require 'assets/nav.php';?>
@@ -211,70 +215,5 @@ if(!$user->isLoggedIn()){
 			</div>
 		</div>
 		<?php require 'assets/foot.php';?>
-		<script>
-			$(document).ready(function(){
-				$("[id='like']").click(function(e){
-					e.preventDefault();	
-					$.post(
-						"/action/like",
-						{
-							"token": $(this).data('token'), 
-							"post": $(this).data('post'),
-						},
-						function(data){
-							if(data["success"]){
-								location.reload();
-							}
-						}, 
-						"json"
-					);
-					return false;
-				});
-
-				$("[id='dislike']").click(function(e){
-					e.preventDefault();
-
-					$.post(
-						"/action/dislike",
-						{
-							"token": $(this).data('token'), 
-							"post": $(this).data('post')
-						},
-						function(data){
-							if(data["success"] == true){
-								location.reload();
-							}
-						}, 
-						"json"
-					);
-					return false;
-				});
-				$("form#status").submit(function(e){
-					e.preventDefault();
-
-					$.post("/action/status", $(this).serialize(), function(data){
-						if(data["success"]){
-							location.reload();
-						}
-					}, "json");
-					return false;
-				});
-				$("form#reply").keypress(function(e){
-					if (e.which == 13) {
-						$(this).submit();
-						return false;
-					}
-				}).submit(function(e){
-					e.preventDefault();
-
-					$.post("/action/reply", $(this).serialize(), function(data){
-						if(data["success"]){
-							location.reload();
-						}
-					}, "json");
-					return false;
-				});
-			});
-		</script>
 	</body>
 </html>

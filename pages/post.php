@@ -14,6 +14,9 @@ $token = Token::generate();
 <html>
 	<head>
 		<?php require 'assets/head.php';?>
+		<script src="/assets/js/like.js"></script>
+		<script src="/assets/js/dislike.js"></script>
+		<script src="/assets/js/reply.js"></script>
 	</head>
 	<body>
 		<?php require 'assets/nav.php';?>
@@ -33,11 +36,21 @@ $token = Token::generate();
 						<?php echo $original_post->content;?>
 						<hr>
 						<?php if($user->isLoggedIn()):?>
-						<form id="reply" action="/action/reply/" class="form-inline" method="post" autocomplete="off">
+						<form id="reply" action="" class="form-inline" method="post" autocomplete="off">
 							<div class="form-group">
 								<div class="input-group">
 									<span class="input-group-btn">
-										<?php if($like->hasLike($user->data()->id, $original_post->id) <= 0){?><a href="/action/like" id="like" class="btn btn-primary"><span class="glyphicon glyphicon-star-empty"></span> <?php echo $like->getLikesByPost($original_post->id)->count();?></a><?php }else{?><a href="/action/dislike/" id="dislike" class="btn btn-primary"><span class="glyphicon glyphicon-star"></span> <?php echo $like->getLikesByPost($original_post->id)->count();?></a><?php }?>
+										<?php if($like->hasLike($user->data()->id, $original_post->id) <= 0){?>
+											<a href="" id="like" class="btn btn-primary" data-token="<?php echo $token;?>" data-post="<?php echo $original_post->id;?>">
+												<span class="glyphicon glyphicon-star-empty"></span>
+												<?php echo $like->getLikesByPost($original_post->id)->count();?>
+											</a>
+										<?php }else{?>
+											<a href="" id="dislike" class="btn btn-primary" data-token="<?php echo $token;?>" data-post="<?php echo $original_post->id;?>">
+												<span class="glyphicon glyphicon-star"></span> 
+												<?php echo $like->getLikesByPost($original_post->id)->count();?>
+											</a>
+										<?php }?>
 									</span>
 									<input style="width: 100%" placeholder="comment" name="post" type="text" id="comment" class="form-control">
 									<span class="input-group-btn">
@@ -80,49 +93,5 @@ $token = Token::generate();
 			<div class="col-md-2"></div>
 		</div>
 		<?php require 'assets/foot.php';?>
-		<script>
-			$(function(){
-				$("#like").click(function(e){
-					e.preventDefault();
-					$.post(
-						"/action/like",
-						{
-							"token": $("input#token").val(), 
-							"post": $("input#post").val(),
-						},
-						function(data){
-							if(data["success"]){
-								location.reload();
-							}
-						}, 
-						"json"
-					);
-				});
-				$("#dislike").click(function(e){
-					e.preventDefault();
-					$.post(
-						"/action/dislike",
-						{
-							"token": $("input#token").val(), 
-							"post": $("input#post").val()
-						},
-						function(data){
-							if(data["success"]){
-								location.reload();
-							}
-						}, 
-						"json"
-					);
-				});
-				$("form#reply").submit(function (e) {
-					e.preventDefault();
-					$.post("/action/reply", $("form#reply").serialize(), function(data){
-						if(data["success"] == true){
-							location.reload();
-						}
-					}, "json");
-				});
-			});
-		</script>
 	</body>
 </html>

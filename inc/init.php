@@ -48,18 +48,18 @@ if(!file_exists('/pages/install/install.php')){
 	
 	//IP 
 	$ip = new IP();
-	if(!isBot()){ //Hopefully this logs the common bots... such as google bots
+	//if(!isBot()){ //Hopefully this logs the common bots... such as google bots
 		try {
 			$ip->insert(getClientIP());
 		} catch (Exception $e) {
 			
 		}
-	}else{
-		try {
-			$ip->insert("bot");
-		} catch (Exception $e) {
-			
-		}
-	}
+	//}else{
+	//	try {
+	//		$ip->insert("bot");
+	//	} catch (Exception $e) {
+	//		
+	//	}
+	//}
 	unset($ip);
 }

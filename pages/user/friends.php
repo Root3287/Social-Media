@@ -10,7 +10,10 @@ $timeAgo = new TimeAgo();
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		 <?php require 'assets/head.php';?>
+		<?php require 'assets/head.php';?>
+		<script src="/assets/js/declined.js"></script>
+		<script src="/assets/js/accept.js"></script>
+		<script src="/assets/js/request.js"></script>
 	</head>
 	<body>
 		<?php require 'assets/nav.php';?>
@@ -114,64 +117,5 @@ $timeAgo = new TimeAgo();
 			</div>
 		</div>
 		<?php require 'assets/foot.php';?>
-		<script>
-			$(document).ready(function(){
-				$("button#declined").click(function(e){
-					e.preventDefault();
-					$.post(
-						"/action/friend",
-						{
-							"token": $(this).data('token'), 
-							"user": $(this).data('user'),
-							"accept": 2, //Declined
-						},
-						function(data){
-							if(data["success"] == true){
-								location.reload();
-							}
-						}, 
-						"json"
-					);
-					return false;
-				});
-				$("button#accept").click(function(e){
-					e.preventDefault();
-					$.post(
-						"/action/friend",
-						{
-							"token": $(this).data('token'), 
-							"user": $(this).data('user'),
-							"accept": 1, //Accept
-						},
-						function(data){
-							if(data["success"] == true){
-								location.reload();
-							}
-						}, 
-						"json"
-					);
-					return false;
-				});
-				$("button#request").click(function(e){
-					e.preventDefault();
-					$.post(
-						"/action/request",
-						{
-							"token": $(this).data('token'), 
-							"user": $(this).data('user'),
-							'button': $(this).data('button'),
-						},
-						function(data){
-							if(data["success"] == true){
-								$("button[id='request'][data-button="+data["button"]+"]").text("Request Sent!");
-								$("button[id='request'][data-button="+data["button"]+"]").attr("id", "request-sent");
-							}
-						}, 
-						"json"
-					);
-					return false;
-				});
-			});
-		</script>
 	</body>
 </html>
