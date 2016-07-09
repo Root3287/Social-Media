@@ -28,10 +28,10 @@ if($version == "1.1.1" || $version=="1.1.0"){
 	]);
 	//Update version
 	Setting::update('version', '1.2.0');
-}
-if($version == "1.2.0"){
+}else if($version == "1.2.0"){
 	$data[] = $db->query("ALTER TABLE `users` ADD `verified` tinyint(4) NULL DEFAULT 0");
 	$data[] = $db->query("ALTER TABLE `users` ADD `score` bigint NULL DEFAULT 0");
+	$data[] = $db->query("CREATE TABLE `achievement` (`id` int(11) unsigned NOT NULL AUTO_INCREMENT,`user` int(11) DEFAULT NULL,`achievement` int(11) DEFAULT NULL,PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
 	Setting::update('version', '1.2.1');
 }
 foreach ($data as $d) {

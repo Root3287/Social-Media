@@ -156,12 +156,24 @@ CREATE TABLE `ip` (
   `ip_addr` text,
   `recurrence` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+)
+COLLATE='latin1_swedish_ci'
+ENGINE=InnoDB
+;
+CREATE TABLE `achievement` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user` int(11) DEFAULT NULL,
+  `achievement` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+)
+COLLATE='latin1_swedish_ci'
+ENGINE=InnoDB
+;
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (1, 'install', '1');
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (2, 'title', 'Socal-Media');
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (3, 'bootstrap-theme', '1');
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (4, 'motd', '');
-INSERT INTO `settings` (`id`, `name`, `value`) VALUES (5, 'debug', 'On');
+INSERT INTO `settings` (`id`, `name`, `value`) VALUES (5, 'debug', 'Off');
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (6, 'inverted-nav', '0');
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (7, 'unique_id', '');
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (8, 'version', '1.2.1');
