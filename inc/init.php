@@ -24,6 +24,7 @@ if(!file_exists('/pages/install/install.php')){
 
 	$user = new User();
 	$db = DB::getInstance();
+	
 	if($user->isLoggedIn()){
 		if($user->data()->banned == 1){
 			$user->logout();
@@ -50,8 +51,7 @@ if(!file_exists('/pages/install/install.php')){
 	try {
 		$ip->insert(getClientIP());
 	} catch (Exception $e) {
-		Redirect::to(500);
+		
 	}
 	unset($ip);
 }
-
