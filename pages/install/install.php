@@ -61,12 +61,12 @@ if(!isset($_GET['step'])){
 					PDO <?php if(!extension_loaded('PDO')): echo $error_message; $error = true; else: echo $success_message; endif;?>	
 				</li>
 				<li>
-					Writeable Install <?php if(decoct(fileperms('pages/install/install.php') & 0777) != 777): echo $error_message; $error = true; else: echo $success_message; endif;?>
+					Writeable Install <?php if(decoct(fileperms('pages/install/install.php') & 0666) != 666): echo $error_message; $error = true; else: echo $success_message; endif;?>
 				</li>
 				<li>
-					Writeable Init <?php if(decoct(fileperms('inc/init.php') & 0777) != 777):echo $error_message;  $error = true; else: echo $success_message;endif;?>
+					Writeable Init <?php if(decoct(fileperms('inc/init.php') & 0666) != 666):echo $error_message;  $error = true; else: echo $success_message;endif;?>
 					</li>
-				<li>Writeable Config <?php if(decoct(fileperms('inc/config.php') & 0777) != 777): echo $error_message; $error = true; else: echo $success_message; endif;?></li>
+				<li>Writeable Config <?php if(decoct(fileperms('inc/config.php') & 0666) != 666): echo $error_message; $error = true; else: echo $success_message; endif;?></li>
 			</ul>
 			<a href="/install?step=3" class="btn btn-default <?php if($error): echo "disabled"; endif;?>">Next</a>
 			<?php

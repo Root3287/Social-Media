@@ -45,13 +45,21 @@ if(!file_exists('/pages/install/install.php')){
 	if(Setting::get('unique_id') == null || Setting::get('unique_id') == ""){
 		Setting::update('unique_id', substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0,62));
 	}
-
+	
 	//IP 
 	$ip = new IP();
-	try {
-		$ip->insert(getClientIP());
-	} catch (Exception $e) {
-		
+	if(!isBot()){ //Hopefully this logs the common bots... such as google bots
+		try {
+			$ip->insert(getClientIP());
+		} catch (Exception $e) {
+			
+		}
+	}else{
+		try {
+			$ip->insert("bot");
+		} catch (Exception $e) {
+			
+		}
 	}
 	unset($ip);
 }

@@ -5,7 +5,8 @@ class IP{
 		$this->_db = DB::getInstance();
 	}
 	public function get($ip){
-		return $this->_db->query("SELECT * FROM `ip` WHERE `ip_addr` = ?", [$ip])->results()[0];
+		$r = $this->_db->query("SELECT * FROM `ip` WHERE `ip_addr` = ?", [$ip])->results();
+		return (isset($r[0]))? $r[0]: false;
 	}
 	public function getAll(){
 		return $this->_db->get('ip', ['1','=','1'])->results();
@@ -16,7 +17,7 @@ class IP{
 			if(!$this->_db->update('ip', $old->id, [
 				'ip_addr'=> $ip, 
 				'date' => date("Y-m-d H:i:s"), 
-				'recurrence'=>$old->recurrence+1
+				'recurrence'=>$old->recurrence+1,
 			])){
 				throw new Exception("Error with updating ip", 1);
 			}

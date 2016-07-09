@@ -29,6 +29,8 @@ CREATE TABLE `users` (
 	`banned` tinyint(4) NOT NULL DEFAULT '0',
   	`last_online` int(11) DEFAULT NULL,
   	`last_ip` text,
+  	`verified` TINYINT(4) NULL DEFAULT '0',
+  	`score` BIGINT NULL DEFAULT '0',
 	PRIMARY KEY (`id`)
 )
 COLLATE='latin1_swedish_ci'
@@ -151,18 +153,18 @@ ENGINE=InnoDB
 CREATE TABLE `ip` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `date` datetime DEFAULT NULL,
-  `ip` text,
+  `ip_addr` text,
   `recurrence` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (1, 'install', '1');
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (2, 'title', 'Socal-Media');
-INSERT INTO `settings` (`id`, `name`, `value`) VALUES (3, 'bootstrap-theme', '3');
+INSERT INTO `settings` (`id`, `name`, `value`) VALUES (3, 'bootstrap-theme', '1');
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (4, 'motd', '');
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (5, 'debug', 'On');
-INSERT INTO `settings` (`id`, `name`, `value`) VALUES (6, 'inverted-nav', '1');
+INSERT INTO `settings` (`id`, `name`, `value`) VALUES (6, 'inverted-nav', '0');
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES (7, 'unique_id', '');
-INSERT INTO `settings` (`id`, `name`, `value`) VALUES (8, 'version', '1.1.1');
+INSERT INTO `settings` (`id`, `name`, `value`) VALUES (8, 'version', '1.2.1');
 INSERT INTO `settings` (`name`, `value`) VALUES ('enable-recaptcha', '0');
 INSERT INTO `settings` (`name`, `value`) VALUES ('recaptcha-secret-key', NULL);
 INSERT INTO `settings` (`name`, `value`) VALUES ('recaptcha-site-key', NULL);

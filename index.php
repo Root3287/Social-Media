@@ -241,6 +241,9 @@ $router->add('/action/reply(.*)', function(){
 						'user_id'=> escape($user->data()->id),
 						'time' => date('U'),
 					]);
+					$user->update([
+						'score' => $user->data()->score+1,
+					]);
 					echo(json_encode(['success'=>true]));
 				}catch(Exception $e){
 					echo(json_encode(['success'=>false]));
@@ -260,6 +263,9 @@ $router->add('/action/like(.*)', function(){
 			if(Input::get('post') !== null){
 				try{
 					$like->likePost(['user_id'=>$user->data()->id, 'post_id'=>escape(Input::get('post')),]);
+					$user->update([
+						'score'=>$user->data()->score+1,
+					]);
 					echo(json_encode(["success"=>true]));
 				}catch(Exception $e){
 					echo(json_encode(["success"=>false]));
@@ -280,6 +286,9 @@ $router->add('/action/dislike(.*)', function(){
 				$post = $like->getLikesByPost(escape(Input::get('post')))->results();
 				try{
 					$like->dislikePost(['id', '=', escape($post[0]->id)]);
+					$user->update([
+						'score'=>$user->data()->score-1,
+					]);
 					echo(json_encode(['success'=> true]));
 				}catch(Exception $e){
 					echo(json_encode(['success'=>true]));
@@ -303,6 +312,9 @@ $router->add('/action/status(.*)', function(){
 			if($validate->passed()){
 				try{
 					$post->create(escape(Input::get('post_status')),$user);
+					$user->update([
+						'score'=> $user->data()->score+1,
+					]);
 					echo(json_encode(['success'=>true]));
 				}catch(Exception $e){
 					echo(json_encode(['success'=>false]));
@@ -395,6 +407,9 @@ $router->add('/action/request(.*)', function(){
 				if(!$user->hasFriendRequest(Input::get('user')) && !$user->isFriends(Input::get('user'))){
 					try{
 						$user->addFriend(Input::get('user'));
+						$user->update([
+							'score'=> $user->data()->score+1,
+						]);
 						echo (json_encode(['success'=>true, 'button'=>Input::get('button'),]));
 					}catch(Exception $e){
 						echo (json_encode(['success'=>false, 'button'=>Input::get('button'),]));

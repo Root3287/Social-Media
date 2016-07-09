@@ -31,6 +31,8 @@ if($version == "1.1.1" || $version=="1.1.0"){
 }
 if($version == "1.2.0"){
 	$data[] = $db->query("ALTER TABLE `users` ADD `verified` tinyint(4) NULL DEFAULT 0");
+	$data[] = $db->query("ALTER TABLE `users` ADD `score` bigint NULL DEFAULT 0");
+	Setting::update('version', '1.2.1');
 }
 foreach ($data as $d) {
 	var_dump($d);

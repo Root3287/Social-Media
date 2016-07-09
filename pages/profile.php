@@ -74,6 +74,8 @@ if($user->data()->username !== $user2->data()->username){ // Users is not viewin
 								<p><?php echo $user2->data()->joined?></p>
 								<h4><u>Number of posts</u></h4>
 								<p><?php echo $post->getPostByUser($user2->data()->id)->count();?></p>
+								<h4><u>Score</u></h4>
+								<p><?php echo $user2->data()->score;?></p>
 							<?php else:?>
 							<h3>This is a private profile</h3>
 							<?php endif;?>
@@ -238,7 +240,8 @@ if($user->data()->username !== $user2->data()->username){ // Users is not viewin
 		</script>
 	</body>
 </html>
-<?php }else{ // user is viewing their own page?>
+<?php }else{ // user is viewing their own page ?>
+
 <html>
 	<head>
 		<?php include 'assets/head.php';?>
@@ -284,6 +287,8 @@ if($user->data()->username !== $user2->data()->username){ // Users is not viewin
 							<p><?php echo $user->data()->joined?></p>
 							<h4><u>Number of posts</u></h4>
 							<p><?php echo $post->getPostByUser($user->data()->id)->count();?></p>
+							<h4><u>Score</u></h4>
+							<p><?php echo $user->data()->score;?></p>
 						</div>
 					</div>
 				</div>

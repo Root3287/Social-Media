@@ -190,12 +190,18 @@ class User{
 			"user_id"=>$this->_data->id,
 			"following_id"=>$user2,
 		])){
+			$this->update([
+				'score'=> $this->_data->score+1,
+			]);
 			return true;
 		}
 		return false;
 	}
 	public function unFollow($user2){
 		if($this->_db->query("DELETE FROM following WHERE following_id=? AND user_id=?", [$user2, $this->data()->id])->count()){
+			$this->update([
+				'score'=>$this->_data->score-1,
+			]);
 			return true;
 		}
 		return false;
@@ -233,9 +239,11 @@ class User{
 			if($response == 1){
 				Notification::createMessage($this->_data->username." has accepted your friend request!", $user2);
 				$this->_db->update('friends',$id[0]->id, ['accepted'=>$response]);
+				$this->update([
+					'score'=> $this->_data->score+1,
+				]);
 			}else if($response ==2){
 				Notification::createMessage($this->_data->username." has declined your friend request!", $user2);
-				
 				$this->_db->delete('friends', ['id', '=', $id[0]->id]);
 			}
 			return true;
@@ -244,6 +252,9 @@ class User{
 	}
 	public function deleteFriend($user2){
 		if($this->_db->query("DELETE FROM friends WHERE user_id=$user2 OR friend_id=$user2")){
+			$this->update([
+				'score'=>$this->_data->score-1,
+			]);
 			return true;
 		}
 		return false;

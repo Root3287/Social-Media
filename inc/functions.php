@@ -3,18 +3,19 @@ function escape($string){
 	return htmlentities($string, ENT_QUOTES, 'UTF-8');
 }
 
-function phrase($text, $hash = 0){
+function phrase($text, $hash = 0, $sender = null){
+    $sender = new User($sender);
     $db = DB::getInstance();
     //links
     $text = preg_replace(
             '@(https?://([-\w\.]+)+(/([\w/_\.]*(\?\S+)?(#\S+)?)?)?)@',
-             '<a href="$1">$1</a>',
+             '<a href="$1" target="_blank">$1</a>',
             $text);
 
     //hashtags
     $text = preg_replace(
             '/\s+#(\w+)/',
-            ' <a href="/search/$1">#$1</a>',
+            ' <a href="/search/$1" target="_blank">#$1</a>',
            $text);
 
     if(preg_match_all('/@(\w+)/', $text, $matches)){
@@ -34,6 +35,12 @@ function phrase($text, $hash = 0){
                     'user_id'=>$user->id,
                     'post_hash'=>$hash,
                 ]);
+                //Update their scores
+                $sender->update([
+                    'score'=> $sender->data()->score+1,
+                ], $sender->data()->id);
+                $db->update('users', $user->id, ['score'=>$user->score+1]);
+                //Replace the text with a link
                 $text = preg_replace('/@(\w+)/','<a href="/u/$1">@$1</a>',$text);
             }else{
                 continue;
@@ -67,4 +74,19 @@ function getSelfUrl(){
     }else{
         return false;
     }
+}
+function isBot(){
+    // THE BOTS WE WANT TO IGNORE
+    static
+    $bad_robots= [
+        'crawler', 'spider', 'robot', 'slurp', 'Atomz', 'googlebot', 'VoilaBot', 'msnbot', 'Gaisbot', 'Gigabot', 'SBIder', 'Zyborg', 'FunWebProducts', 'findlinks', 'ia_archiver', 'MJ12bot', 'Ask Jeeves', 'NG/2.0', 'voyager', 'Exabot', 'Nutch', 'Hercules', 'psbot', 'LocalcomBot'
+    ];
+
+    // COMPARE THE BOT STRINGS TO THE USER AGENT STRING
+    foreach ($bad_robots as $spider)
+    {
+        $spider = '#' . $spider . '#i';
+        if (preg_match($spider, $_SERVER["HTTP_USER_AGENT"])) return TRUE;
+    }
+    return FALSE;
 }
