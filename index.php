@@ -180,7 +180,11 @@ $router->add('/user/following(.*)', function(){
 	require 'pages/user/following.php';
 	return true;
 });
-
+$router->add('/user/achievements', function(){
+	return false;
+	require 'pages/user/achievements.php';
+	return true;
+});
 /*
 Errors
  */
@@ -420,7 +424,9 @@ $router->add('/action/request(.*)', function(){
 	}
 	return true;
 });
-
+$router->add('', function(){
+	require 'pages/error/404.php';
+});
 if(!$router->run()){
 	Redirect::to(404);
 }

@@ -69,82 +69,84 @@ $userData = $pagination->getArrayData($limit, $page);
 					</form>
 					</div>
 					<div class="row">
-					<table class="table">
-						<thead>
-							<tr>
-								<td>
-									ID
-								</td>
-								<td>
-									Name
-								</td>
-								<td>
-									Username
-								</td>
-								<td>
-									Email
-								</td>
-								<td>
-									Group
-								</td>
-								<td>
-									Joined
-								</td>
-								<td>
-									Action
-								</td>
-							</tr>
-						</thead>
-						<tbody>
-							<?php if($f == null):?>
-								<?php foreach($userData as $users):?>
-								<tr>
-									<td>
-										<?php echo $users->id?>
-									</td>
-									<td>
-										<?php echo $users->name?>
-									</td>
-									<td>
-										<?php echo $users->username?>
-									</td>
-									<td>
-										<?php echo $users->email?>
-									</td>
-									<td>
-										<?php echo $users->group?>
-									</td>
-									<td>
-										<?php echo $users->joined?>
-									</td>
-								</tr>
-								<?php endforeach;?>
-							<?php else:?>
-								<?php foreach ($userData as $users):?>
-								<tr>
-									<td>
-										<?php echo $users->id?>
-									</td>
-									<td>
-										<?php echo $users->name?>
-									</td>
-									<td>
-										<?php echo $users->username?>
-									</td>
-									<td>
-										<?php echo $users->email?>
-									</td>
-									<td>
-										<?php echo $users->group?>
-									</td>
-									<td>
-										<?php echo $users->joined?>
-									</td>
-								</tr>
-								<?php endforeach;?>
-							<?php endif;?>
-						</tbody>
-					</table>
+						<div class="table-responsive">
+							<table class="table">
+								<thead>
+									<tr>
+										<td>
+											ID
+										</td>
+										<td>
+											Name
+										</td>
+										<td>
+											Username
+										</td>
+										<td>
+											Email
+										</td>
+										<td>
+											Group
+										</td>
+										<td>
+											Joined
+										</td>
+										<td>
+											Action
+										</td>
+									</tr>
+								</thead>
+								<tbody>
+									<?php if($f == null):?>
+										<?php foreach($userData as $users):?>
+										<tr>
+											<td>
+												<?php echo $users->id?>
+											</td>
+											<td>
+												<?php echo $users->name?>
+											</td>
+											<td>
+												<?php echo $users->username?>
+											</td>
+											<td>
+												<?php echo $users->email?>
+											</td>
+											<td>
+												<?php echo $users->group?>
+											</td>
+											<td>
+												<?php echo $users->joined?>
+											</td>
+										</tr>
+										<?php endforeach;?>
+									<?php else:?>
+										<?php foreach ($userData as $users):?>
+										<tr>
+											<td>
+												<?php echo $users->id?>
+											</td>
+											<td>
+												<?php echo $users->name?>
+											</td>
+											<td>
+												<?php echo $users->username?>
+											</td>
+											<td>
+												<?php echo $users->email?>
+											</td>
+											<td>
+												<?php echo $users->group?>
+											</td>
+											<td>
+												<?php echo $users->joined?>
+											</td>
+										</tr>
+										<?php endforeach;?>
+									<?php endif;?>
+								</tbody>
+							</table>
+						</div>
 					</div>
 					<div class="row">
 					<ul class="pagination">

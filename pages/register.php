@@ -65,6 +65,7 @@ if(Input::exists()){
 							'joined'=> date('Y-m-d H:i:s'),
 							'group'=> 1,
 							'email'=> escape(Input::get('email')),
+							'score'=> 1,
 					));
 				}catch (Exception $e){
 					die($e->getMessage());

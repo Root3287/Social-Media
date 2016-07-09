@@ -21,7 +21,7 @@ if($user->isAdmLoggedIn()){
 				<?php require 'pages/admin/sidebar.php';?>
 			</div>
 			<div class="col-md-9">
-				<div class="table-reponsive">
+				<div class="table-responsive">
 					<table class="table table-striped table-bordered table-hover table-condensed">
 						<tr>
 							<th>ID</th>
