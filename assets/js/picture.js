@@ -1,9 +1,8 @@
 $(document).ready(function(){
-	$("form#status").submit(function(e){
-		console.log("status");
+	$("#media-upload").submit(function(e){
 		e.preventDefault();
 
-		$.post("/action/status", $(this).serialize(), function(data){
+		$.post("/action/spic", $(this).serialize(), function(data){
 			if(data["success"]){
 				location.reload();
 			}

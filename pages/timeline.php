@@ -23,10 +23,11 @@ if(!$user->isLoggedIn()){
 				display: inline;
 			}
 		</style>
-		<script src="assets/js/like.js"></script>
-		<script src="assets/js/dislike.js"></script>
-		<script src="assets/js/status.js"></script>
-		<script src="assets/js/reply.js"></script>
+		<script src="assets/js/like.js" async></script>
+		<script src="assets/js/dislike.js" async></script>
+		<script src="assets/js/status.js" async></script>
+		<script src="assets/js/reply.js" async></script>
+		<script src="assets/js/picture.js" async></script>
 	</head>
 	<body>
 		<?php require 'assets/nav.php';?>
@@ -41,6 +42,16 @@ if(!$user->isLoggedIn()){
 			}
 			?>
 			<div class="col-sm-6 col-md-6 col-sm-push-3">
+				<?php
+				if(Setting::get('enable-uploadcare') == 1):
+				?>
+				<div class="row">
+					<ul class="nav nav-tabs">
+  						<li role="presentation" id="tb" class="active"><a href="">TextBox</a></li>
+ 						<li role="presentation" id="mm"><a href="">Multi-Media</a></li>
+					</ul>
+				</div>
+				<?php endif;?>
 				<div class="row"><!-- Posts a status -->
 					<form id="status" action="/timeline" method="post">
 						<div class="form-group">
@@ -51,6 +62,15 @@ if(!$user->isLoggedIn()){
 							<span class="pull-right"><button id="submit" class="btn btn-sm btn-primary">Post!</button></span>
 						</div>
 					</form>
+					<?php if(Setting::get('enable-uploadcare')):?>
+					<form id="media-upload" action="/timeline" method="post">
+						<input type="hidden" name="picture_link" role="uploadcare-uploader">
+						<div class="form-group">
+							<input name="token" type="hidden" id="token" value="<?php echo $token;?>">
+							<span class="pull-right"><button id="submit" class="btn btn-sm btn-primary">Post!</button></span>
+						</div>
+					</form>
+					<?php endif;?>
 				</div>
 				<br>
 				<div class="row"><!-- Posted Status -->
@@ -77,7 +97,7 @@ if(!$user->isLoggedIn()){
 								<h1 class="name"><?php echo "<a class=\"name\" href='/u/{$timelineUser->data()->username}'>".$timelineUser->data()->username."</a>";?></h1> <?php if($timelineUser->data()->verified == 1){?><h4 class="name"><span class="label label-primary name"><span class="glyphicon glyphicon-ok"></span></span></h4><?php }?>
 								</div>
 							</div>
-							<p><?php echo $timeline['content'];?></p>
+							<?php echo $timeline['content'];?>
 							<div class="row">
 								<form id="reply" action="" class="form-inline" method="post" autocomplete="off">
 									<div class="form-group">
@@ -215,5 +235,14 @@ if(!$user->isLoggedIn()){
 			</div>
 		</div>
 		<?php require 'assets/foot.php';?>
+		<?php if(Setting::get('enable-uploadcare') == 1):?>
+			<script src="assets/js/timeline.js"></script>
+			<script src="//ucarecdn.com/widget/2.9.0/uploadcare/uploadcare.full.min.js"></script>
+			<script>
+				UPLOADCARE_LOCALE = "en";
+				UPLOADCARE_LIVE = false;
+				UPLOADCARE_PUBLIC_KEY = "<?php echo Setting::get('uploadcare-public-key');?>";
+			</script>
+		<?php endif;?>
 	</body>
 </html>

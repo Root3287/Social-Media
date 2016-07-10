@@ -169,16 +169,19 @@ CREATE TABLE `achievement` (
 COLLATE='latin1_swedish_ci'
 ENGINE=InnoDB
 ;
-INSERT INTO `settings` (`id`, `name`, `value`) VALUES (1, 'install', '1');
-INSERT INTO `settings` (`id`, `name`, `value`) VALUES (2, 'title', 'Socal-Media');
-INSERT INTO `settings` (`id`, `name`, `value`) VALUES (3, 'bootstrap-theme', '1');
-INSERT INTO `settings` (`id`, `name`, `value`) VALUES (4, 'motd', '');
-INSERT INTO `settings` (`id`, `name`, `value`) VALUES (5, 'debug', 'Off');
-INSERT INTO `settings` (`id`, `name`, `value`) VALUES (6, 'inverted-nav', '0');
-INSERT INTO `settings` (`id`, `name`, `value`) VALUES (7, 'unique_id', '');
-INSERT INTO `settings` (`id`, `name`, `value`) VALUES (8, 'version', '1.2.1');
+INSERT INTO `settings` (`name`, `value`) VALUES ('install', '1');
+INSERT INTO `settings` (`name`, `value`) VALUES ('title', 'Socal-Media');
+INSERT INTO `settings` (`name`, `value`) VALUES ('bootstrap-theme', '1');
+INSERT INTO `settings` (`name`, `value`) VALUES ('motd', '');
+INSERT INTO `settings` (`name`, `value`) VALUES ('debug', 'Off');
+INSERT INTO `settings` (`name`, `value`) VALUES ('inverted-nav', '0');
+INSERT INTO `settings` (`name`, `value`) VALUES ('unique_id', '');
+INSERT INTO `settings` (`name`, `value`) VALUES ('version', '1.2.1');
 INSERT INTO `settings` (`name`, `value`) VALUES ('enable-recaptcha', '0');
 INSERT INTO `settings` (`name`, `value`) VALUES ('recaptcha-secret-key', NULL);
 INSERT INTO `settings` (`name`, `value`) VALUES ('recaptcha-site-key', NULL);
+INSERT INTO `settings` (`name`, `value`) VALUES ('enable-uploadcare', '0');
+INSERT INTO `settings` (`name`) VALUES ('uploadcare-public-key');
+INSERT INTO `settings` (`name`) VALUES ('uploadcare-secret-key');
 INSERT INTO `groups` (`id`, `group_name`, `permissions`) VALUES (1, 'Standard', '');
 INSERT INTO `groups` (`id`, `group_name`, `permissions`) VALUES (2, 'Admin', '{"Admin":"1"}');

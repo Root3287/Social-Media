@@ -43,8 +43,9 @@ $router->add('/u/(.*)', function($profile_user){
 });
 
 $router->add('/test',function(){
-	//require 'pages/test.php';
-	return false;
+	//return false;
+	require 'pages/test.php';
+	return true;
 });
 $router->add('/logout', function(){
 	require 'pages/logout.php';
@@ -181,7 +182,7 @@ $router->add('/user/following(.*)', function(){
 	return true;
 });
 $router->add('/user/achievements', function(){
-	return false;
+	//return false;
 	require 'pages/user/achievements.php';
 	return true;
 });
@@ -315,7 +316,7 @@ $router->add('/action/status(.*)', function(){
 			]);
 			if($validate->passed()){
 				try{
-					$post->create(escape(Input::get('post_status')),$user);
+					$post->create(escape(Input::get('post_status')),$user->data()->id);
 					$user->update([
 						'score'=> $user->data()->score+1,
 					]);
@@ -324,6 +325,40 @@ $router->add('/action/status(.*)', function(){
 					echo(json_encode(['success'=>false]));
 				}
 			}
+		}
+	}else{
+		echo(json_encode(['success'=>false]));
+	}
+	return true;
+});
+$router->add('/action/spic', function(){
+	$user = new User();
+	$post = new Post();
+	$db = DB::getInstance();
+	if(Input::exists()){
+		if(Token::check(Input::get('token'))){
+			$val = new Validation();
+			$validate = $val->check($_POST, [
+				'picture_link'=>[
+					'required'=>true,
+				],
+			]);
+			if($validate->passed()){
+				try{
+					$hash = Hash::unique_length(16);
+					$db->insert("posts", ["content"=>"<img class='img-responsive' src='".Input::get('picture_link')."' alt='upload_care_picture.png'>", "user_id"=>$user->data()->id, "hash"=>$hash,'time'=>date('Y-m-d H:i:s')]);
+					$user->update([
+						'score'=> $user->data()->score+1,
+					]);
+					echo(json_encode(['success'=>true]));
+				}catch(Exception $e){
+					echo(json_encode(['success'=>false]));
+				}
+			}else{
+				echo json_encode(['success'=>false,'message'=>'Validation failed']);
+			}
+		}else{
+			echo json_encode(['success'=>false, 'message'=>'token failed']);
 		}
 	}else{
 		echo(json_encode(['success'=>false]));

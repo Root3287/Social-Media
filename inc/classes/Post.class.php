@@ -24,7 +24,7 @@ class Post{
 			$count++;
 		}
 		if(!$this->_db->insert('posts', [
-				'user_id'=> $user->data()->id,
+				'user_id'=> $user,
 				'content'=> phrase($message,$hash),
 				'hash'=>$hash,
 				'time'=>date('Y-m-d H:i:s'),
