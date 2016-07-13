@@ -346,7 +346,7 @@ $router->add('/action/spic', function(){
 			if($validate->passed()){
 				try{
 					$hash = Hash::unique_length(16);
-					$db->insert("posts", ["content"=>"<img class='img-responsive' src='".Input::get('picture_link')."' alt='upload_care_picture.png'>", "user_id"=>$user->data()->id, "hash"=>$hash,'time'=>date('Y-m-d H:i:s')]);
+					$db->insert("posts", ["content"=>"<img class='img-responsive' src='".Input::get('picture_link')."' alt='".Input::get('picture_link')."'><br>", "user_id"=>$user->data()->id, "hash"=>$hash,'time'=>date('Y-m-d H:i:s')]);
 					$user->update([
 						'score'=> $user->data()->score+1,
 					]);

@@ -39,6 +39,7 @@
           </ul>
           <?php }else{?>
           <ul class="dropdown-menu">
+            <li><a href="/u/<?php echo $user->data()->username;?>">Profile</a></li>
             <li><a href="/user">UserCP</a></li>
             <?php if($user->hasPermission("Admin")){?><li><a href="/admin">AdminCP</a></li><?php }?>
             <li role="separator" class="divider"></li>

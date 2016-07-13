@@ -52,11 +52,13 @@ if($user->data()->username !== $user2->data()->username){ // Users is not viewin
 									<?php if($user2->data()->verified == 1){?><h4 class="name"><span class="label label-primary name"><span class="glyphicon glyphicon-ok"></span></span></h4><?php }?>
 								</div>
 								<br>
-									<?php if(!$user->isFollowing($user2->data()->id)):?>
+									<?php 
+									if($user->isLoggedIn()){
+									if(!$user->isFollowing($user2->data()->id)):?>
 										<button id="follow" class="btn btn-primary btn-md" data-user="<?php echo $user2->data()->id;?>" data-token="<?php echo $token;?>">Follow</button>
 									<?php else:?>
 										<button id="unfollow" class="btn btn-primary btn-md" data-user="<?php echo $user2->data()->id;?>" data-token="<?php echo $token;?>">UnFollow</button>
-									<?php endif;?>
+									<?php endif;}?>
 							</div>
 						</div>
 				</div>
@@ -131,10 +133,11 @@ if($user->data()->username !== $user2->data()->username){ // Users is not viewin
 										   		<a href="" id="dislike" data-token="<?php echo $token;?>" data-post="<?php echo $uPost['id'];?>" class="btn btn-primary"><span class="glyphicon glyphicon-star"></span> <?php echo $like->getLikesByPost($uPost['id'])->count();?></a>
 										   		<?php }?>
 										   </span>
-										   <input name="post" type="text" class="form-control">
+										   <?php if($user->isLoggedin()):?><input name="post" type="text" class="form-control">
 										   <span class="input-group-btn">
 										        <button type="submit" value="Post Comment" class="btn btn-default"><span class="glyphicon glyphicon-send"></span></button>
 										   </span>
+										   <?php endif;?>
 										</div>
 									</div>
 									<input type="hidden" name="original_post" value="<?php echo $uPost['id'];?>"></input>

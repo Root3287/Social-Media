@@ -64,6 +64,7 @@ if(!$user->isLoggedIn()){
 					</form>
 					<?php if(Setting::get('enable-uploadcare')):?>
 					<form id="media-upload" action="/timeline" method="post">
+					<br>
 						<input type="hidden" name="picture_link" role="uploadcare-uploader">
 						<div class="form-group">
 							<input name="token" type="hidden" id="token" value="<?php echo $token;?>">
@@ -237,7 +238,7 @@ if(!$user->isLoggedIn()){
 		<?php require 'assets/foot.php';?>
 		<?php if(Setting::get('enable-uploadcare') == 1):?>
 			<script src="assets/js/timeline.js"></script>
-			<script src="//ucarecdn.com/widget/2.9.0/uploadcare/uploadcare.full.min.js"></script>
+			<script src="https://ucarecdn.com/widget/2.9.0/uploadcare/uploadcare.full.min.js"></script>
 			<script>
 				UPLOADCARE_LOCALE = "en";
 				UPLOADCARE_LIVE = false;
