@@ -18,4 +18,5 @@ $(document).ready(function(){
 		$("div#mobileBottom").html("<a class=\"btn btn-info\" href=\"#bottom\">Bottom</a>");
 		$("div#mobileTop").html("<a class=\"btn btn-info\" href=\"#top\">Top</a>");
 	}
+	$("p #content").fitText();
 });

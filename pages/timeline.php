@@ -29,6 +29,7 @@ if(!$user->isLoggedIn()){
 		<script src="assets/js/reply.js" async></script>
 		<script src="assets/js/picture.js" async></script>
 		<script src="assets/js/jQuery.browser.mobile.js" async></script>
+		<script src="assets/js/jQuery.fittext.js" async></script>
 	</head>
 	<body>
 		<?php require 'assets/nav.php';?>
@@ -115,7 +116,7 @@ if(!$user->isLoggedIn()){
 							</div>
 							
 							<div class="row">
-							<?php echo $timeline['content'];?>
+								<p id="content" style="word-wrap:break-word";><?php echo $timeline['content'];?></p>
 							</div>
 
 							<div class="row">
@@ -233,7 +234,7 @@ if(!$user->isLoggedIn()){
 					</ul>
 				</div>
 			</div>
-			<div id="bottom" class="col-sm-3 col-md-3 col-sm-pull-6">
+			<div class="col-sm-3 col-md-3 col-sm-pull-6">
 				<div class="list-group">
 					<a href="/user" class="list-group-item active">
 						<img src="<?php echo $user->getAvatarURL(16);?>" alt="{userimg.png}">

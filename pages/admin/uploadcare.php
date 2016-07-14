@@ -71,21 +71,21 @@ if(Input::exists()){
 					</div>
 					<div class="checkbox">
 				    	<label>
-				      		<input id="ucClearable" type="checkbox" name="clearable" <?php if(Setting::get('uploadcare-clearable') == true){echo "checked='checked'";}?>> Clearable
+				      		<input id="ucClearable" type="checkbox" name="clearable" <?php if(Setting::get('uploadcare-clearable') == "true"){echo "checked='checked'";}?>> Clearable
 				    	</label>
-				    	<button data-placement="right" data-toggle="tooltip" title="The user can remove their photo before they submit the form"><span class="glyphicon glyphicon-question-sign"></span></button>
+				    	<a data-placement="right" data-toggle="tooltip" title="The user can remove their photo before they submit the form"><span class="glyphicon glyphicon-question-sign"></span></a>
 				  	</div>
 				  	<div class="checkbox">
 				    	<label>
-				      		<input id="ucImageOnly" type="checkbox" name="image-only" <?php if(Setting::get('uploadcare-image-only') == true){echo "checked='checked'";}?>> Image only
+				      		<input id="ucImageOnly" type="checkbox" name="image-only" <?php if(Setting::get('uploadcare-image-only') == "true"){echo "checked='checked'";}?>> Image only
 				    	</label>
-				    	<button data-placement="right" data-toggle="tooltip" title="Force the user to use photos only"><span class="glyphicon glyphicon-question-sign"></span></button>
+				    	<a data-placement="right" data-toggle="tooltip" title="Force the user to use photos only"><span class="glyphicon glyphicon-question-sign"></span></a>
 				  	</div>
 				  	<div class="checkbox">
 				    	<label>
-				      		<input id="ucMultiple" type="checkbox" name="multiple" <?php if(Setting::get('uploadcare-multiple') == true){echo "checked='checked'";}?>> Multiple Uploads
+				      		<input id="ucMultiple" type="checkbox" name="multiple" <?php if(Setting::get('uploadcare-multiple') == "true"){echo "checked='checked'";}?>> Multiple Uploads
 				    	</label>
-				    	<button data-placement="right" data-toggle="tooltip" title="Allow multiple files to be uploaded"><span class="glyphicon glyphicon-question-sign"></span></button>
+				    	<a data-placement="right" data-toggle="tooltip" title="Allow multiple files to be uploaded"><span class="glyphicon glyphicon-question-sign"></span></a>
 				  	</div>
 				  	<div class="form-group">
 				  		<label for="multiple-min">Minimum File Upload:</label>
