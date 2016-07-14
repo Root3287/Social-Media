@@ -17,6 +17,11 @@ if($user->isAdmLoggedIn()){
 	<body>
 		<?php require 'assets/nav.php';?>
 		<div class="container">
+			<h1>AdminCP</h1>
+			<ol class="breadcrumb">
+			  <li><a href="/admin">AdminCP</a></li>
+			  <li><a class="active" href="/admin/reports">Reports</a></li>
+			</ol>
 			<div class="col-md-3">
 				<?php require 'pages/admin/sidebar.php';?>
 			</div>

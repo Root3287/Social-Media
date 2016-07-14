@@ -5,7 +5,7 @@ $pokes= new Pokes();
 $like = new Like();
 $pagination = new PaginateArray($post->getPostForTimeline($user->data()->id));
 $page = (Input::get('p') !=null)?Input::get('p'):1;
-$limit = (Input::get('l') !=null)? Input::get('l'):10;
+$limit = (Input::get('l') !=null)? Input::get('l'):100;
 $timelineData = $pagination->getArrayData($limit, $page);
 $token = Token::generate();
 
@@ -28,6 +28,7 @@ if(!$user->isLoggedIn()){
 		<script src="assets/js/status.js" async></script>
 		<script src="assets/js/reply.js" async></script>
 		<script src="assets/js/picture.js" async></script>
+		<script src="assets/js/jQuery.browser.mobile.js" async></script>
 	</head>
 	<body>
 		<?php require 'assets/nav.php';?>
@@ -48,7 +49,7 @@ if(!$user->isLoggedIn()){
 				<div class="row">
 					<ul class="nav nav-tabs">
   						<li role="presentation" id="tb" class="active"><a href="">TextBox</a></li>
- 						<li role="presentation" id="mm"><a href="">Multi-Media</a></li>
+ 						<li role="presentation" id="mm"><a href="">Photos</a></li>
 					</ul>
 				</div>
 				<?php endif;?>
@@ -59,19 +60,33 @@ if(!$user->isLoggedIn()){
 						</div>
 						<div class="form-group">
 							<input name="token" type="hidden" id="token" value="<?php echo $token;?>">
-							<span class="pull-right"><button id="submit" class="btn btn-sm btn-primary">Post!</button></span>
+							<span class="pull-right"><button id="submit" class="btn btn-primary">Post!</button></span>
 						</div>
 					</form>
 					<?php if(Setting::get('enable-uploadcare')):?>
 					<form id="media-upload" action="/timeline" method="post">
 					<br>
-						<input type="hidden" name="picture_link" role="uploadcare-uploader">
+						<input 
+							type="hidden" 
+							name="picture_link" 
+							role="uploadcare-uploader"
+							data-tabs="<?php echo Setting::get('uploadcare-tabs');?>" 
+							data-clearable="<?php echo Setting::get('uploadcare-clearable');?>" 
+							data-images-only="<?php echo Setting::get('uploadcare-image-only');?>"
+							data-crop="<?php echo Setting::get('uploadcare-crop');?>"
+							<?php if(Setting::get('uploadcare-multiple') == "true") { ?>
+							data-multiple="true"
+							data-multiple-min="<?php echo Setting::get('uploadcare-multiple-min');?>"
+							data-multiple-max="<?php echo Setting::get('uploadcare-multiple-max');?>"
+							<?php }?>
+						>
 						<div class="form-group">
 							<input name="token" type="hidden" id="token" value="<?php echo $token;?>">
-							<span class="pull-right"><button id="submit" class="btn btn-sm btn-primary">Post!</button></span>
+							<span class="pull-right"><button id="submit" class="btn btn-primary">Post!</button></span>
 						</div>
 					</form>
 					<?php endif;?>
+					<div id="mobileBottom"></div>
 				</div>
 				<br>
 				<div class="row"><!-- Posted Status -->
@@ -95,10 +110,14 @@ if(!$user->isLoggedIn()){
 						<div class="well">
 							<div class="page-header">
 								<div class="name">
-								<h1 class="name"><?php echo "<a class=\"name\" href='/u/{$timelineUser->data()->username}'>".$timelineUser->data()->username."</a>";?></h1> <?php if($timelineUser->data()->verified == 1){?><h4 class="name"><span class="label label-primary name"><span class="glyphicon glyphicon-ok"></span></span></h4><?php }?>
+								<h1 class="name"><?php echo "<a class=\"name\" href='/u/{$timelineUser->data()->username}/'>".$timelineUser->data()->username."</a>";?></h1> <?php if($timelineUser->data()->verified == 1){?><h4 class="name"><span class="label label-primary name"><span class="glyphicon glyphicon-ok"></span></span></h4><?php }?>
 								</div>
 							</div>
+							
+							<div class="row">
 							<?php echo $timeline['content'];?>
+							</div>
+
 							<div class="row">
 								<form id="reply" action="" class="form-inline" method="post" autocomplete="off">
 									<div class="form-group">
@@ -136,7 +155,7 @@ if(!$user->isLoggedIn()){
 						    <div class="modal-content">
 						      <div class="modal-header">
 						        <button type="button" class="close" data-dismiss="modal">&times;</button>
-						        <h4 class="modal-title"><?php echo "<a href='/u/{$timelineUser->data()->username}'>".$timelineUser->data()->username."</a>";?> <?php if($timelineUser->data()->verified == 1){?><span class="label label-primary name"><span class="glyphicon glyphicon-ok"></span></span><?php }?></h4>
+						        <h4 class="modal-title"><?php echo "<a href='/u/{$timelineUser->data()->username}/'>".$timelineUser->data()->username."</a>";?> <?php if($timelineUser->data()->verified == 1){?><span class="label label-primary name"><span class="glyphicon glyphicon-ok"></span></span><?php }?></h4>
 						        <span class="pull-right">
 						        <div class="dropdown">
 						        	<button class="btn btn-xs btn-default dropdown-toggle" type="button" id="PostMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -163,12 +182,15 @@ if(!$user->isLoggedIn()){
 							      				<ul class="media-list">
 												  <li class="media">
 												    <div class="media-left">
-												      <a href="<?php echo "/u/{$timelineUser->data()->username}";?>">
+												      <a href="<?php echo "/u/{$timelineUser->data()->username}/";?>">
 												        <img class="media-object img-circle" src="<?php echo $commentUser->getAvatarURL('48')?>" alt="<?php echo $commentUser->data()->username;?>"> 
 												      </a>
 												    </div>
 												    <div class="media-body">
-												      <h4 class="media-heading"><a href="<?php echo "/u/{$timelineUser->data()->username}";?>"><?php echo $commentUser->data()->username;?> <?php if($timelineUser->data()->verified == 1){?><span class="label label-primary name"><span class="glyphicon glyphicon-ok"></span></span><?php }?></h4></a>
+												      <h4 class="media-heading">
+												      	<a href="<?php echo "/u/{$timelineUser->data()->username}/";?>"><?php echo $commentUser->data()->username;?> <?php if($timelineUser->data()->verified == 1){?><span class="label label-primary name"><span class="glyphicon glyphicon-ok"></span></span><?php }?>
+												      	</a>
+												      </h4>
 												      <p><?php echo $comment->content;?></p>
 												    </div>
 												  </li>
@@ -206,18 +228,18 @@ if(!$user->isLoggedIn()){
 					<?php }}else{} endforeach;?>
 					<ul class="pagination">
 						<?php for($i = 1; $i<=$pagination->getTotalPages(); $i++):?>
-							<li><a href="?p=<?php echo $i?>"><?php echo $i;?></a></li>
+							<li><a href="?p=<?php echo $i?>&l=<?php echo $limit;?>"><?php echo $i;?></a></li>
 						<?php endfor; ?>
 					</ul>
 				</div>
 			</div>
-			<div class="col-sm-3 col-md-3 col-sm-pull-6">
+			<div id="bottom" class="col-sm-3 col-md-3 col-sm-pull-6">
 				<div class="list-group">
 					<a href="/user" class="list-group-item active">
 						<img src="<?php echo $user->getAvatarURL(16);?>" alt="{userimg.png}">
 						<?php echo $user->data()->name;?>
 					</a>
-					<a href="/u/<?php echo $user->data()->username;?>" class="list-group-item">Profile</a>
+					<a href="/u/<?php echo $user->data()->username;?>/" class="list-group-item">Profile</a>
 					<a href="/pokes" class="list-group-item"><span class="glyphicon glyphicon-hand-right"></span> Pokes <?php if($pcount = $pokes->getPendingPokesCount($user->data()->id) >=1){?><span class="badge"><?php echo $pcount;?></span></a><?php }?>
 					<a href="/user/friends/" class="list-group-item"><span class="glyphicon glyphicon-heart"></span> Friends <?php if($user->hasFriendRequest()){if(count($user->getFriendRequest()) >= 1){?><span class="badge"><?php echo count($user->getFriendRequest()); ?></span><?php }}?></a>
 					<a href="/user/following/" class="list-group-item"><span class="glyphicon glyphicon-user"></span> People</a>
@@ -230,9 +252,10 @@ if(!$user->isLoggedIn()){
 						$following_user = new User($following->following_id);
 						$following_user_online =($following_user->data()->last_online <= strtotime("-10 minutes"))? false: true;
 					?>
-					<a href="/u/<?php echo $following_user->data()->username;?>" class="list-group-item"><img src="<?php echo $following_user->getAvatarURL();?>" alt="friend_user"> <?php echo $following_user->data()->username;?> <?php if($following_user_online){echo "<span class=\"pull-right\"><span class=\"label label-success\">Online!</span></span>";}else{echo "<span class=\"pull-right\"><span class=\"label label-danger\">Offline!</span></span>";}?></a>
+					<a href="/u/<?php echo $following_user->data()->username;?>/" class="list-group-item"><img src="<?php echo $following_user->getAvatarURL();?>" alt="friend_user"> <?php echo $following_user->data()->username;?> <?php if($following_user_online){echo "<span class=\"pull-right\"><span class=\"label label-success\">Online!</span></span>";}else{echo "<span class=\"pull-right\"><span class=\"label label-danger\">Offline!</span></span>";}?></a>
 					<?php }?>
-				</div>		
+				</div>
+				<div id="mobileTop"></div>	
 			</div>
 		</div>
 		<?php require 'assets/foot.php';?>
@@ -241,7 +264,7 @@ if(!$user->isLoggedIn()){
 			<script src="https://ucarecdn.com/widget/2.9.0/uploadcare/uploadcare.full.min.js"></script>
 			<script>
 				UPLOADCARE_LOCALE = "en";
-				UPLOADCARE_LIVE = false;
+				UPLOADCARE_LIVE = true;
 				UPLOADCARE_PUBLIC_KEY = "<?php echo Setting::get('uploadcare-public-key');?>";
 			</script>
 		<?php endif;?>

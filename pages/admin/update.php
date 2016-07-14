@@ -19,6 +19,11 @@ $update = json_decode($api->getUpdate());
 	<body>
 		<?php require 'assets/nav.php';?>
 		<div class="container">
+			<h1>AdminCP</h1>
+			<ol class="breadcrumb">
+			  <li><a href="/admin">AdminCP</a></li>
+			  <li><a class="active" href="/admin/update/">Update</a></li>
+			</ol>
 			<div class="col-md-3"><?php require 'pages/admin/sidebar.php';?></div>
 			<div class="col-md-9">
 				<div class="well">

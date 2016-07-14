@@ -1,5 +1,5 @@
 <?php $user = new User();?>
-<nav class="navbar navbar-default <?php if(Setting::get('inverted-nav') == 1){ echo 'navbar-inverse';}?>">
+<nav id="top" class="navbar navbar-default <?php if(Setting::get('inverted-nav') == 1){ echo 'navbar-inverse';}?>">
   <div class="container">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -39,7 +39,7 @@
           </ul>
           <?php }else{?>
           <ul class="dropdown-menu">
-            <li><a href="/u/<?php echo $user->data()->username;?>">Profile</a></li>
+            <li><a href="/u/<?php echo $user->data()->username;?>/">Profile</a></li>
             <li><a href="/user">UserCP</a></li>
             <?php if($user->hasPermission("Admin")){?><li><a href="/admin">AdminCP</a></li><?php }?>
             <li role="separator" class="divider"></li>

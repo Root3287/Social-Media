@@ -14,4 +14,8 @@ $(document).ready(function(){
 		$("#status").show();
 		$("#media-upload").hide();
 	});
+	if(jQuery.browser.mobile){
+		$("div#mobileBottom").html("<a class=\"btn btn-info\" href=\"#bottom\">Bottom</a>");
+		$("div#mobileTop").html("<a class=\"btn btn-info\" href=\"#top\">Top</a>");
+	}
 });

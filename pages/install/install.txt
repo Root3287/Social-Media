@@ -183,5 +183,14 @@ INSERT INTO `settings` (`name`, `value`) VALUES ('recaptcha-site-key', NULL);
 INSERT INTO `settings` (`name`, `value`) VALUES ('enable-uploadcare', '0');
 INSERT INTO `settings` (`name`) VALUES ('uploadcare-public-key');
 INSERT INTO `settings` (`name`) VALUES ('uploadcare-secret-key');
+INSERT INTO `settings` (`id`, `name`, `value`) VALUES ('uploadcare-clearable', 'true');
+INSERT INTO `settings` (`id`, `name`, `value`) VALUES ('uploadcare-crop', 'free');
+INSERT INTO `settings` (`id`, `name`, `value`) VALUES ('uploadcare-image-only', 'true');
+INSERT INTO `settings` (`id`, `name`, `value`) VALUES ('uploadcare-multiple', 'false');
+INSERT INTO `settings` (`id`, `name`, `value`) VALUES ('uploadcare-multiple-min', '0');
+INSERT INTO `settings` (`id`, `name`, `value`) VALUES ('uploadcare-multiple-max', '10');
+INSERT INTO `settings` (`id`, `name`, `value`) VALUES ('uploadcare-image-shrink', 'false');
+INSERT INTO `settings` (`id`, `name`, `value`) VALUES ('uploadcare-tabs', NULL);
+
 INSERT INTO `groups` (`id`, `group_name`, `permissions`) VALUES (1, 'Standard', '');
 INSERT INTO `groups` (`id`, `group_name`, `permissions`) VALUES (2, 'Admin', '{"Admin":"1"}');

@@ -38,6 +38,11 @@ $userData = $pagination->getArrayData($limit, $page);
 	<body>
 		<?php require 'assets/nav.php';?>
 		<div class="container">
+			<h1>AdminCP</h1>
+			<ol class="breadcrumb">
+			  <li><a href="/admin">AdminCP</a></li>
+			  <li><a class="active" href="/admin/user/">Users</a></li>
+			</ol>
 			<div class="row">
 				<div class="col-md-3"><?php require 'pages/admin/sidebar.php';?></div>
 				<div class="col-md-9">
@@ -149,12 +154,12 @@ $userData = $pagination->getArrayData($limit, $page);
 						</div>
 					</div>
 					<div class="row">
-					<ul class="pagination">
-						<?php for($i = 1; $i<=$pagination->getTotalPages(); $i++):?>
-							<li><a href="?p=<?php echo $i?>"><?php echo $i;?></a></li>
-						<?php endfor; ?>
-					</ul>
-				</div>	
+						<ul class="pagination">
+							<?php for($i = 1; $i<=$pagination->getTotalPages(); $i++):?>
+								<li><a href="?p=<?php echo $i?>"><?php echo $i;?></a></li>
+							<?php endfor; ?>
+						</ul>
+					</div>	
 				</div>
 			</div>
 		</div>

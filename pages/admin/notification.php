@@ -37,6 +37,11 @@ if(Input::exists()){
 			echo Session::flash('complete');
 		}
 		?>
+		<h1>AdminCP</h1>
+		<ol class="breadcrumb">
+		  <li><a href="/admin">AdminCP</a></li>
+		  <li><a class="active" href="/admin/notification/">Notification</a></li>
+		</ol>
 		<div class="col-md-3"><?php require 'pages/admin/sidebar.php';?></div>
 		<div class="col-md-9"><div class="row">
 			<h1>Send Mass Message</h1>

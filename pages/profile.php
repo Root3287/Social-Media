@@ -6,11 +6,18 @@ $like = new Like();
 $user2= new User(escape($profile_user));
 $token = Token::generate();
 
+$page = (Input::get('p') !=null)?Input::get('p'):1;
+$limit = (Input::get('l') !=null)? Input::get('l'):10;
+
 if(!$user2->exists()){
 	Redirect::to(404);
 }
 
 if($user->data()->username !== $user2->data()->username){ // Users is not viewing their own page
+	$post_for_user = $post->getPostForUser($user2->data()->id);
+	$pagination = new PaginateArray($post_for_user);
+	$postData = $pagination->getArrayData($limit, $page);
+
 	if(!$user->isLoggedIn() && $user2->data()->private == 1){
 		Redirect::to(404);
 	}
@@ -100,7 +107,7 @@ if($user->data()->username !== $user2->data()->username){ // Users is not viewin
 					<h1>Timeline</h1>
 					<?php
 					if($user2->data()->private == 0 || $user->isFriends($user2->data()->id)) {
-						foreach($post->getPostForUser($user2->data()->id) as $uPost){
+						foreach($postData as $uPost){
 							$userPost = new User($uPost['user_id']);
 					?>
 							<div class='well'>
@@ -112,10 +119,10 @@ if($user->data()->username !== $user2->data()->username){ // Users is not viewin
 								<?php foreach($post->getComments($uPost['id']) as $pComment): 
 								$commentUser = new User($pComment->user_id);?>
 								<div class="media">
-									<div class="media-left"><a href="/u/<?php echo $commentUser->data()->username;?>"><img src="<?php echo $commentUser->getAvatarURL(48);?>" alt="{user.png}" class="media-object"></a>
+									<div class="media-left"><a href="/u/<?php echo $commentUser->data()->username;?>/"><img src="<?php echo $commentUser->getAvatarURL(48);?>" alt="{user.png}" class="media-object"></a>
 									</div>
 									<div class="media-body">
-										<h4 class="media-heading"><a href="/u/<?php echo $commentUser->data()->username;?>"><?php echo $commentUser->data()->name;?></a></h4>
+										<h4 class="media-heading"><a href="/u/<?php echo $commentUser->data()->username;?>/"><?php echo $commentUser->data()->name;?></a></h4>
 										<?php 
 										echo $pComment->content;
 										?>
@@ -151,13 +158,25 @@ if($user->data()->username !== $user2->data()->username){ // Users is not viewin
 							echo "<h2>This user is private! You need to follow or friend them to get their info.</h2>";
 						}
 					?>
+					<div class="row">
+						<ul class="pagination">
+							<?php for($i = 1; $i<=$pagination->getTotalPages(); $i++):?>
+								<li><a href="?p=<?php echo $i?>&l=<?php echo $limit;?>"><?php echo $i;?></a></li>
+							<?php endfor; ?>
+						</ul>
+					</div>	
 				</div>
 			</div>
 		</div>
 		<?php include 'assets/foot.php';?>
 	</body>
 </html>
-<?php }else{ // user is viewing their own page ?>
+<?php 
+}else{ // user is viewing their own page 
+	$post_for_user = $post->getPostForUser($user->data()->id);
+	$pagination = new PaginateArray($post_for_user);
+	$postData = $pagination->getArrayData($limit, $page);
+?>
 
 <html>
 	<head>
@@ -228,12 +247,12 @@ if($user->data()->username !== $user2->data()->username){ // Users is not viewin
 					<div class="row">
 						<h1>Timeline</h1>
 						<?php
-						foreach($post->getPostForUser($user2->data()->id) as $uPost){
+						foreach($postData as $uPost){
 							$userPost = new User($uPost['user_id']);
 						?>
 							<div class='well'>
 								<div class='post-header'>
-									<a href='/u/<?php echo $userPost->data()->username;?>'>
+									<a href='/u/<?php echo $userPost->data()->username;?>/'>
 										<h2><?php echo $userPost->data()->username;?></h2>
 									</a>
 								</div>
@@ -242,10 +261,10 @@ if($user->data()->username !== $user2->data()->username){ // Users is not viewin
 								<?php foreach($post->getComments($uPost['id']) as $pComment): 
 								$commentUser = new User($pComment->user_id);?>
 								<div class="media">
-									<div class="media-left"><a href="/u/<?php echo $commentUser->data()->username;?>"><img src="<?php echo $commentUser->getAvatarURL(48);?>" alt="{user.png}" class="media-object"></a>
+									<div class="media-left"><a href="/u/<?php echo $commentUser->data()->username;?>/"><img src="<?php echo $commentUser->getAvatarURL(48);?>" alt="{user.png}" class="media-object"></a>
 									</div>
 									<div class="media-body">
-										<h4 class="media-heading"><a href="/u/<?php echo $commentUser->data()->username;?>"><?php echo $commentUser->data()->name;?></a></h4>
+										<h4 class="media-heading"><a href="/u/<?php echo $commentUser->data()->username;?>/"><?php echo $commentUser->data()->name;?></a></h4>
 										<?php 
 										echo $pComment->content;
 										?>
@@ -277,6 +296,13 @@ if($user->data()->username !== $user2->data()->username){ // Users is not viewin
 						<?php
 						}
 						?>
+					</div>
+					<div class="row">
+						<ul class="pagination">
+							<?php for($i = 1; $i<=$pagination->getTotalPages(); $i++):?>
+								<li><a href="?p=<?php echo $i?>&l=<?php echo $limit;?>"><?php echo $i;?></a></li>
+							<?php endfor; ?>
+						</ul>
 					</div>
 				</div>
 			</div>

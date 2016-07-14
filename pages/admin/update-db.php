@@ -36,7 +36,7 @@ if($version == "1.1.1" || $version=="1.1.0"){
 }else if($version == "1.3.0"){
 	Setting::add([
 		'name' => "enable-uploadcare",
-		'value'=> 0,
+		'value'=> '0',
 	]);
 	Setting::add([
 		'name' => "uploadcare-public-key"
@@ -46,6 +46,39 @@ if($version == "1.1.1" || $version=="1.1.0"){
 		'name' => "uploadcare-secret-key",
 		'value'=> NULL,
 	]);
+	Setting::add([
+		'name' => "uploadcare-clearable",
+		'value'=> 'true',
+	]);
+	Setting::add([
+		'name' => "uploadcare-crop",
+		'value'=> 'true',
+	]);
+	Setting::add([
+		'name' => "uploadcare-image-only",
+		'value'=> 'true',
+	]);
+	Setting::add([
+		'name' => "uploadcare-multiple",
+		'value'=> 'false',
+	]);
+	Setting::add([
+		'name' => "uploadcare-multiple-min",
+		'value'=> '0',
+	]);
+	Setting::add([
+		'name' => "uploadcare-multiple-max",
+		'value'=> '10',
+	]);
+	Setting::add([
+		'name' => "uploadcare-image-shrink",
+		'value'=> 'false',
+	]);
+	Setting::add([
+		'name' => "uploadcare-tabs",
+		'value'=> NULL,
+	]);
+
 	Setting::update('version', '1.3.0');
 }
 foreach ($data as $d) {

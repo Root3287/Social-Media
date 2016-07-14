@@ -1,6 +1,5 @@
 $(document).ready(function(){
 	$("form#status").submit(function(e){
-		console.log("status");
 		e.preventDefault();
 
 		$.post("/action/status", $(this).serialize(), function(data){

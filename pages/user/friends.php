@@ -32,10 +32,10 @@ $timeAgo = new TimeAgo();
 				?>
 				<div class="user">
 					<div class="media">
-						<div class="media-left"><a href="/u/<?php echo $f->data()->username;?>"><img src="<?php echo $f->getAvatarURL(70);?>" alt="{user.png}" class="media-object"></a>
+						<div class="media-left"><a href="/u/<?php echo $f->data()->username;?>/"><img src="<?php echo $f->getAvatarURL(70);?>" alt="{user.png}" class="media-object"></a>
 						</div>
 						<div class="media-body">
-							<h3 class="media-heading"><a href="/u/<?php echo $f->data()->username;?>"><?php echo $f->data()->name;?></a></h3>
+							<h3 class="media-heading"><a href="/u/<?php echo $f->data()->username;?>/"><?php echo $f->data()->name;?></a></h3>
 							<?php
 								$last = $f->data()->last_online;
 								$dt = new DateTime("@$last");
@@ -96,7 +96,7 @@ $timeAgo = new TimeAgo();
 					?>
 					<div class="user">
 						<div class="media">
-							<div class="media-left"><a href="/u/<?php ?>"><img src="<?php echo $pf_user->getAvatarURL(70);?>" alt="{user.png}" class="media-object"></a>
+							<div class="media-left"><a href="/u/<?php echo $pf_user->data()->username;?>/"><img src="<?php echo $pf_user->getAvatarURL(70);?>" alt="{user.png}" class="media-object"></a>
 							</div>
 							<div class="media-body">
 								<h3 class="media-heading"><?php echo $pf_user->data()->name;?></h3>

@@ -27,11 +27,11 @@ if(!$user->isLoggedIn()){
 					<div class="user">
 						<div class="media">
 							<div class="media-left">
-								<a href="/u/<?php echo $following_user->data()->username;?>"><img src="<?php echo $following_user->getAvatarURL(70);?>" alt="{user.png}" class="media-object"></a>
+								<a href="/u/<?php echo $following_user->data()->username;?>/"><img src="<?php echo $following_user->getAvatarURL(70);?>" alt="{user.png}" class="media-object"></a>
 							</div>
 							<div class="media-body">
 								<h3 class="media-heading">
-									<a href="/u/<?php echo $following_user->data()->username;?>"><?php echo $following_user->data()->name;?></a>
+									<a href="/u/<?php echo $following_user->data()->username;?>/"><?php echo $following_user->data()->name;?></a>
 								</h3>
 								<?php
 									$last = $following_user->data()->last_online;
@@ -57,11 +57,11 @@ if(!$user->isLoggedIn()){
 					<div class="user">
 						<div class="media">
 							<div class="media-left">
-								<a href="/u/<?php echo $followers_user->data()->username;?>"><img src="<?php echo $following_user->getAvatarURL(70);?>" alt="{user.png}" class="media-object"></a>
+								<a href="/u/<?php echo $followers_user->data()->username;?>/"><img src="<?php echo $following_user->getAvatarURL(70);?>" alt="{user.png}" class="media-object"></a>
 							</div>
 							<div class="media-body">
 								<h3 class="media-heading">
-									<a href="/u/<?php echo $followers_user->data()->username;?>"><?php echo $followers_user->data()->name;?></a>
+									<a href="/u/<?php echo $followers_user->data()->username;?>/"><?php echo $followers_user->data()->name;?></a>
 									</h3>
 									<?php 
 										$last = $followers_user->data()->last_online;

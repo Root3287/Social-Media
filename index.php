@@ -29,7 +29,7 @@ $router->add('/install(.*)', function(){
 	}
 	return true;
 });
-$router->add('/login', function(){
+$router->add('/login(.*)', function(){
 	require 'pages/login.php';
 	return true;
 });
@@ -37,7 +37,7 @@ $router->add('/register', function(){
 	require 'pages/register.php';
 	return true;
 });
-$router->add('/u/(.*)', function($profile_user){
+$router->add('/u/(.*)/(.*)', function($profile_user){
 	require 'pages/profile.php';
 	return true;
 });
@@ -112,6 +112,10 @@ $router->add('/admin/recaptcha', function(){
 	require 'pages/admin/recaptcha.php';
 	return true;
 });
+$router->add('/admin/uploadcare', function(){
+	require 'pages/admin/uploadcare.php';
+	return true;
+});
 $router->add('/admin', function(){
 	Redirect::to('/admin/');
 	return true;
@@ -131,11 +135,9 @@ $router->add('/admin/update/database', function(){
 /*
 API
 */
-$router->add('/api/(.*)', function(){
-return false;
-});
-$router->add('/api/post(.*)', function(){
-	return false;
+$router->add('/api/post/(.*)', function(){
+	require 'pages/api/post.php';
+	return true;
 });
 
 /*
@@ -320,6 +322,7 @@ $router->add('/action/status(.*)', function(){
 					$user->update([
 						'score'=> $user->data()->score+1,
 					]);
+					Session::flash('completed', '<div class="alert alert-success">You have submitted a post!</div>');
 					echo(json_encode(['success'=>true]));
 				}catch(Exception $e){
 					echo(json_encode(['success'=>false]));
@@ -344,15 +347,49 @@ $router->add('/action/spic', function(){
 				],
 			]);
 			if($validate->passed()){
-				try{
-					$hash = Hash::unique_length(16);
-					$db->insert("posts", ["content"=>"<img class='img-responsive' src='".Input::get('picture_link')."' alt='".Input::get('picture_link')."'><br>", "user_id"=>$user->data()->id, "hash"=>$hash,'time'=>date('Y-m-d H:i:s')]);
-					$user->update([
-						'score'=> $user->data()->score+1,
-					]);
-					echo(json_encode(['success'=>true]));
-				}catch(Exception $e){
-					echo(json_encode(['success'=>false]));
+				if(Setting::get('uploadcare-multiple') == "true"){
+					$link = Input::get('picture_link');
+					$link = explode('/', $link);
+					$pic_long = $link[3];
+					$pic_long = explode('~', $pic_long);
+					
+					$pic_uuid = $pic_long[0];
+					$pic_group_size = $pic_long[1];
+
+					$content = "";
+					for ($i=0; $i <= $pic_group_size-1; $i++) { 
+						$content .= '<img class="img-responsive" src="'.Input::get('picture_link').'nth/'.$i.'/" alt="'.Input::get('picture_link').'nth/'.$i.'">';
+					}
+					try{
+						$hash = Hash::unique_length(16);
+					
+						$db->insert("posts", [
+							"content"=>$content, 
+							"user_id"=>$user->data()->id, 
+							"hash"=>$hash,'time'=>date('Y-m-d H:i:s')
+						]);
+						$user->update([
+							'score'=> $user->data()->score+1,
+						]);
+						echo(json_encode(['success'=>true]));
+					}catch(Exception $e){
+						echo(json_encode(['success'=>false]));
+					}
+				}else{
+					try{
+						$hash = Hash::unique_length(16);
+						$db->insert("posts", [
+							"content"=>"<img class='img-responsive' src='".Input::get('picture_link')."' alt='".Input::get('picture_link')."'><br>", 
+							"user_id"=>$user->data()->id, 
+							"hash"=>$hash,'time'=>date('Y-m-d H:i:s')
+						]);
+						$user->update([
+							'score'=> $user->data()->score+1,
+						]);
+						echo(json_encode(['success'=>true]));
+					}catch(Exception $e){
+						echo(json_encode(['success'=>false]));
+					}
 				}
 			}else{
 				echo json_encode(['success'=>false,'message'=>'Validation failed']);

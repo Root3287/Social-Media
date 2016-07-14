@@ -1,8 +1,19 @@
 <?php 
 $user = new User();
+$redirect = false;
+$text = "";
+$page = "";
 if($user->isLoggedIn()){
 	Redirect::to('/timeline');
 }
+if(Input::exists('get')){
+	if(Input::get('p') !== null && Input::get('t') !== null){
+		$redirect = true;
+		$text = Input::get('t');
+		$page= Input::get('p');
+	}
+}
+$login = false;
 if(Input::exists()){
 	if(Token::check(Input::get('token'))){
 		$val = new Validation();
@@ -18,9 +29,15 @@ if(Input::exists()){
 			$remember = (Input::get('remember') == 'on')? true:false;
 			$user2 = new User();
 			$login = $user2->login(escape(Input::get('username')), Input::get('password'), $remember);
-			if($login){
-				Session::flash('complete', '<div class="alert alert-success">You have been logged in!</div>');
-				Redirect::to('/');
+			if($redirect){
+				if($login){
+					Redirect::to('/'.$page.'/?t='.$text);
+				}
+			}else{
+				if($login){
+					Session::flash('complete', '<div class="alert alert-success">You have been logged in!</div>');
+					Redirect::to('/');
+				}
 			}
 		}else{
 			
@@ -38,6 +55,9 @@ if(Input::exists()){
 			<?php if(Input::exists()): if(Token::check(Input::get('token'))): if(!$val->passed()):?>
 			<div class="alert alert-danger"><?php foreach ($val->errors() as $error){echo $error.'<br/>';}?></div>
 			<?php endif;endif;endif;?>
+			<?php if(Input::exists()): if(!$login):?>
+			<div class="alert alert-danger">Invalid Credentials!</div>
+			<?php endif;endif;?>
 			<div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
 				<h1>Login</h1>
 				<form action="" method="post" autocomplete="off">

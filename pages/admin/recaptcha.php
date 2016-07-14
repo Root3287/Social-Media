@@ -23,6 +23,11 @@ if(Input::exists()){
 				echo Session::flash('complete');
 			}
 			?>
+			<h1>AdminCP</h1>
+			<ol class="breadcrumb">
+			  <li><a href="/admin">AdminCP</a></li>
+			  <li><a class="active" href="/admin/recaptcha/">Recaptcha</a></li>
+			</ol>
 			<div class="col-md-3"><?php require 'sidebar.php';?></div>
 			<div class="col-md-9">
 				<h1>Recatcha Settings</h1>

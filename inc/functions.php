@@ -41,7 +41,7 @@ function phrase($text, $hash = 0, $sender = null){
                 ], $sender->data()->id);
                 $db->update('users', $user->id, ['score'=>$user->score+1]);
                 //Replace the text with a link
-                $text = preg_replace('/@(\w+)/','<a href="/u/$1">@$1</a>',$text);
+                $text = preg_replace('/@(\w+)/','<a href="/u/$1/">@$1</a>',$text);
             }else{
                 continue;
             }
