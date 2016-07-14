@@ -15,6 +15,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
+      <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
        <?php if($user->isLoggedIn()):?><li><a href="/search"><span class="glyphicon glyphicon-search"></span></a></li><?php endif;?>
       </ul>
       <ul class="nav navbar-nav navbar-right">
