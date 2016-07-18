@@ -8,7 +8,7 @@ class Api{
 		return file_get_contents($this->getUrl().$link);
 	}
 	public function getUpdate(){
-		return $this->get("version/?uid=".Setting::get('unique_id')."&version=".Setting::get('version'));
+		return $this->get("version/?uid=".Setting::get('unique-id')."&version=".Setting::get('version'));
 	}
 	public function getUrl(){
 		return $this->_url;

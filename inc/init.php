@@ -8,7 +8,8 @@ spl_autoload_register(function($class){
 });
 require_once 'functions.php';
 
-if(!file_exists('/pages/install/install.php')){
+if(!is_dir('pages/install') && isset($GLOBALS['config'])){
+	define('INSTALLED', true);
 	$db = DB::getInstance();
 	if(Cookies::exists(Config::get('session/cookie_name')) && !Session::exists(Config::get('session/session_name'))){
 		$hash = Cookies::get(Config::get('session/cookie_name'));
@@ -38,28 +39,13 @@ if(!file_exists('/pages/install/install.php')){
 			}
 		}
 	}
-
-/**
- * Check if we have a unique_id
- */
-	if(Setting::get('unique_id') == null || Setting::get('unique_id') == ""){
-		Setting::update('unique_id', substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0,62));
-	}
 	
 	//IP 
 	$ip = new IP();
-	//if(!isBot()){ //Hopefully this logs the common bots... such as google bots
 		try {
 			$ip->insert(getClientIP());
 		} catch (Exception $e) {
 			
 		}
-	//}else{
-	//	try {
-	//		$ip->insert("bot");
-	//	} catch (Exception $e) {
-	//		
-	//	}
-	//}
 	unset($ip);
 }

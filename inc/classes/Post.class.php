@@ -1,8 +1,9 @@
 <?php
 class Post{
-	private $_db;
+	private $_db, $_prefix;
 	public function __construct(){
 		$this->_db = DB::getInstance();
+		$this->_prefix = Config::get('mysql/prefix');
 	}
 	/**
 	 * Create a post
@@ -16,7 +17,7 @@ class Post{
 		while($count <= 10 && !$success){
 			$hash = Hash::unique_length(16);
 			
-			$posts = $this->_db->query("SELECT * FROM posts WHERE hash=$hash");
+			$posts = $this->_db->query("SELECT * FROM `".$this->_prefix."posts` WHERE hash=$hash");
 			
 			if(!$posts->count()){
 				$success = true;

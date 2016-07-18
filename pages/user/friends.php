@@ -90,7 +90,7 @@ $timeAgo = new TimeAgo();
 						shuffle($sfq_following);
 						foreach($sfq_following as $pf){
 							$pf_user = new User($pf['following_id']);
-							$sfq_sent_request = $db->query("SELECT * FROM friends WHERE user_id=? AND friend_id=? OR user_id=? AND friend_id=?", [$user->data()->id, $pf_user->data()->id, $pf_user->data()->id, $user->data()->id])->count();
+							$sfq_sent_request = $db->query("SELECT * FROM `".Config::get('mysql/prefix')."friends` WHERE user_id=? AND friend_id=? OR user_id=? AND friend_id=?", [$user->data()->id, $pf_user->data()->id, $pf_user->data()->id, $user->data()->id])->count();
 							if($sfq_count<=5){
 								if(!$sfq_sent_request >= 1){
 					?>

@@ -48,7 +48,7 @@ if(Input::exists()){
 				if(Input::exists()){
 					if($validate->passed()){
 						if(escape(Input::get('table')) == "name"){
-							$q = $db->query("SELECT * FROM `users` WHERE `name` LIKE '%".escape(Input::get('search'))."%'");
+							$q = $db->query("SELECT * FROM `".Config::get('mysql/prefix')."users` WHERE `name` LIKE '%".escape(Input::get('search'))."%'");
 							if($q->results()){
 								foreach ($q->results() as $result) {
 									$searchUser = new User($result->id);
@@ -57,7 +57,7 @@ if(Input::exists()){
 							}
 						}
 						if(escape(Input::get('table')) == "users"){
-							$q = $db->query("SELECT * FROM users WHERE username LIKE '%".escape(Input::get('search'))."%'");
+							$q = $db->query("SELECT * FROM `".Config::get('mysql/prefix')."users` WHERE username LIKE '%".escape(Input::get('search'))."%'");
 							if($q->results()){
 								foreach ($q->results() as $result) {
 									$searchUser = new User($result->id);

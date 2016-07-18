@@ -4,8 +4,8 @@ $db = db::getInstance();
 if(Input::exists('get')){
 	if(Input::get('id') !=null && Input::get('a') !=null){
 		if(Input::get('a')=='read'  && Input::get('val') !=null){
-			if(!$db->query('UPDATE `notification` SET `read` ='.Input::get('val').' WHERE id ='.Input::get('id'))->error()){
-				Session::flash('complete', '<div class="alert-success">You marked it as read!</div>');
+			if(!$db->query('UPDATE `'.Config::get("mysql/prefix").'notification` SET `read` ='.Input::get('val').' WHERE id ='.Input::get('id'))->error()){
+				Session::flash('complete', '<div class="alert alert-success">You marked it as read!</div>');
 				Redirect::to('?page=notification');
 			}else{
 				session::flash('error', '<div class="alert alert-danger">There been an error marking this as read!</div>');

@@ -135,11 +135,14 @@ $router->add('/admin/update/database', function(){
 /*
 API
 */
-$router->add('/api/post/(.*)', function(){
-	require 'pages/api/post.php';
+$router->add('/api/v1/post/(.*)', function(){
+	require 'pages/api/v1/post.php';
 	return true;
 });
-
+$router->add('/api/v1/user/(.*)', function($user){
+	require 'pages/api/v1/user.php';
+	return true;
+});
 /*
 User
 */
@@ -495,6 +498,9 @@ $router->add('/action/request(.*)', function(){
 		}
 	}
 	return true;
+});
+$router->add('/robots.txt', function(){
+	require 'robots.txt';
 });
 $router->add('', function(){
 	require 'pages/error/404.php';

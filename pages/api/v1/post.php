@@ -2,7 +2,7 @@
 $user = new User();
 
 if(!$user->isLoggedIn()){
-	Redirect::to('/login/?p=api/post&t='.Input::get('t'));
+	Redirect::to('/login/?p=api/v1/post&t='.Input::get('t'));
 }
 $token = Token::generate();
 ?>
@@ -36,6 +36,9 @@ $token = Token::generate();
 			$(document).ready(function(){
 				var inner = $(".alert").text();
 				$(".alert").html(inner+" <strong><a href=\"/\">Go home</a></strong>");
+				if ($(".alert").length === 1){
+    				window.location.href = "/";
+				}
 			});
 		</script>
 	</body>

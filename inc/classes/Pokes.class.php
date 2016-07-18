@@ -1,13 +1,14 @@
 <?php
 class Pokes{
-	private $_pokes, $_db;
+	private $_pokes, $_db, $_prefix;
 	public function __construct(){
 		$this->_db = DB::getInstance();
+		$this->_prefix = Config::get('mysql/prefix');
 	}
 	public function poke($user1, $user2){
-		$this->_db->query("DELETE FROM `pokes_pending` WHERE `user2`=? AND `user1`=?", [escape($user1), escape($user2)]);
+		$this->_db->query("DELETE FROM `".$this->_prefix."pokes_pending` WHERE `user2`=? AND `user1`=?", [escape($user1), escape($user2)]);
 		if($this->_db->insert('pokes_pending', ['user1' => escape($user1),'user2' => escape($user2),])){ // Recreate pending poke 
-			if(!$count_table = $this->_db->query('SELECT * FROM `pokes_count` WHERE user1=? AND user2=?', [escape($user1), escape($user2)])->results()){ //This is there first poke
+			if(!$count_table = $this->_db->query('SELECT * FROM `'.$this->_prefix.'pokes_count` WHERE user1=? AND user2=?', [escape($user1), escape($user2)])->results()){ //This is there first poke
 				if($this->_db->insert('pokes_count', [
 					'user1' => escape($user1),
 					'user2' => escape($user2),'count' => 1,])){return true;
@@ -38,7 +39,7 @@ class Pokes{
 		return $return;
 	}
 	public function getCount($user1, $user2){
-		$return = $this->_db->query("SELECT * FROM `pokes_count` WHERE `user1`=? AND `user2`=?", [$user2, $user1]);
+		$return = $this->_db->query("SELECT * FROM `".$this->_prefix."pokes_count` WHERE `user1`=? AND `user2`=?", [$user2, $user1]);
 		return $return->results()[0]->count;
 	}
 	public function sentPendingPoke($user2){
@@ -48,7 +49,7 @@ class Pokes{
 		return $this->_db->get('pokes_pending', ['user2','=', $user2])->results();
 	}
 	public function hasNoPokesPending($user1, $user2){
-		$d1= $this->_db->query("SELECT * FROM `pokes_pending` WHERE user1=? AND user2=?", [$user1, $user2]);
+		$d1= $this->_db->query("SELECT * FROM `".$this->_prefix."pokes_pending` WHERE user1=? AND user2=?", [$user1, $user2]);
 		//$d2= $this->_db->query("SELECT * FROM `pokes_pending` WHERE user2=? AND user1=?", [$user1, $user2]);
 		if($d1->count() ==0 /*|| $d2->count() ==0*/){
 			return true;

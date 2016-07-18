@@ -8,6 +8,7 @@ $GLOBALS['config'] = array(
 		"user" => "root", //root
 		"password" => "", //password
 		"db" => "social-media", //social-media
+		"prefix" => "sm_" //sm_
 		"port" => "3306", //3306
 	),
 	"remember" => array(

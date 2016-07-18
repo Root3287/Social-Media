@@ -1,10 +1,11 @@
 <?php
 class User{
-	private $_db, $_data, $_isLogin, $_sessionName, $_cookieName, $_admLoggedIn;
+	private $_db, $_data, $_isLogin, $_sessionName, $_cookieName, $_admLoggedIn, $_prefix;
 	public function __construct($user = null){
 		$this->_db = DB::getInstance();
 		$this->_sessionName = Config::get('session/session_name');
 		$this->_cookieName = Config::get('session/cookie_name');
+		$this->_prefix = Config::get('mysql/prefix');
 		if(!$user){
 			if(Session::exists($this->_sessionName)){
 				$user = Session::get($this->_sessionName);
@@ -163,8 +164,8 @@ class User{
 	/* END OF ORIGNAL FILE */
 
 	public function isFriends($user){
-		$f1= $this->_db->query("SELECT * FROM `friends` WHERE user_id=? AND friend_id=? AND accepted=?", [$user, $this->data()->id, 1,])->results();
-		$f2= $this->_db->query("SELECT * FROM `friends` WHERE friend_id=? AND user_id=? AND accepted=?", [$user, $this->data()->id, 1,])->results();
+		$f1= $this->_db->query("SELECT * FROM `".$this->_prefix."friends` WHERE user_id=? AND friend_id=? AND accepted=?", [$user, $this->data()->id, 1,])->results();
+		$f2= $this->_db->query("SELECT * FROM `".$this->_prefix."friends` WHERE friend_id=? AND user_id=? AND accepted=?", [$user, $this->data()->id, 1,])->results();
 		if(!empty($f1) || !empty($f2)){
 			return true;
 		}else{
@@ -198,7 +199,7 @@ class User{
 		return false;
 	}
 	public function unFollow($user2){
-		if($this->_db->query("DELETE FROM following WHERE following_id=? AND user_id=?", [$user2, $this->data()->id])->count()){
+		if($this->_db->query("DELETE FROM `".$this->_prefix."following` WHERE following_id=? AND user_id=?", [$user2, $this->data()->id])->count()){
 			$this->update([
 				'score'=>$this->_data->score-1,
 			]);
@@ -207,7 +208,7 @@ class User{
 		return false;
 	}
 	public function getFriends(){
-		return $this->_db->query("SELECT * FROM `friends` WHERE user_id=? OR friend_id=? AND accepted=?", [$this->data()->id, $this->data()->id, 1])->results();
+		return $this->_db->query("SELECT * FROM `".$this->_prefix."friends` WHERE user_id=? OR friend_id=? AND accepted=?", [$this->data()->id, $this->data()->id, 1])->results();
 	}
 	public function addFriend($user2){
 		if($this->isFollowing($user2)){
@@ -217,16 +218,16 @@ class User{
 		}
 	}
 	public function getFriendRequest(){
-		 return $this->_db->query("SELECT * FROM `friends` WHERE friend_id=? AND accepted=?", [$this->data()->id, 0])->results();
+		 return $this->_db->query("SELECT * FROM `".$this->_prefix."friends` WHERE friend_id=? AND accepted=?", [$this->data()->id, 0])->results();
 	}
 	public function hasFriendRequest($user=null){
 		if($user){
-			$q = $this->_db->query("SELECT * FROM `friends` WHERE friend_id=$user OR user_id=$user AND accepted=0");
+			$q = $this->_db->query("SELECT * FROM `".$this->_prefix."friends` WHERE friend_id=$user OR user_id=$user AND accepted=0");
 			if($q->count()){
 				return true;
 			}
 		}else{
-			$q = $this->_db->query("SELECT * FROM `friends` WHERE user_id=? OR friend_id=? AND accepted=?",[$this->data()->id, $this->data()->id, 0]);
+			$q = $this->_db->query("SELECT * FROM `".$this->_prefix."friends` WHERE user_id=? OR friend_id=? AND accepted=?",[$this->data()->id, $this->data()->id, 0]);
 			if($q->count()){
 				return true;
 			}
@@ -235,7 +236,7 @@ class User{
 	}
 	public function respondFriendRequest($user2, $response=0){
 		if($this->hasFriendRequest($user2)){
-			$id = $this->_db->query("SELECT id WHERE friend_id=$user2")->results();
+			$id = $this->_db->query("SELECT id FROM `".$this->_prefix."users` WHERE friend_id=$user2")->results();
 			if($response == 1){
 				Notification::createMessage($this->_data->username." has accepted your friend request!", $user2);
 				$this->_db->update('friends',$id[0]->id, ['accepted'=>$response]);
@@ -251,7 +252,7 @@ class User{
 		return false;
 	}
 	public function deleteFriend($user2){
-		if($this->_db->query("DELETE FROM friends WHERE user_id=$user2 OR friend_id=$user2")){
+		if($this->_db->query("DELETE FROM `".$this->_prefix."friends` WHERE user_id=$user2 OR friend_id=$user2")){
 			$this->update([
 				'score'=>$this->_data->score-1,
 			]);

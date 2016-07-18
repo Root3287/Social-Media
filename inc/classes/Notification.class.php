@@ -7,15 +7,15 @@
 class Notification{
 	public static function get($user){
 		$db = DB::getInstance();
-		return $db->query("SELECT * FROM `notification` WHERE `user`=?",array($user))->results();
+		return $db->query("SELECT * FROM `".Config::get('mysql/prefix')."notification` WHERE `user`=?",array($user))->results();
 	}
 	public static function getUnreadCount($user){
 		$db = DB::getInstance();
-		return $db->query("SELECT * FROM `notification` WHERE `user`=? AND `read`=0",array($user))->count();
+		return $db->query("SELECT * FROM `".Config::get('mysql/prefix')."notification` WHERE `user`=? AND `read`=0",array($user))->count();
 	}
 	public static function getAll($user){
 		$db=DB::getInstance();
-		return ($user)? $db->query("SELECT * FROM `notification` WHERE user=? AND read=0",array($user)):$db->query("SELECT * FROM `notifacation`");
+		return ($user)? $db->query("SELECT * FROM `".Config::get('mysql/prefix')."notification` WHERE user=? AND read=0",array($user)):$db->query("SELECT * FROM `notifacation`");
 	}
 	public static function markMessage($message_id, $read_value = true){
 		$db = DB::getInstance();

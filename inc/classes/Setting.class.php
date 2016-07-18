@@ -16,7 +16,7 @@ class Setting{
 			$db = DB::getInstance();
 			if($key){
 				$return = $db->get('settings',array('name', '=', $key))->results();
-				$return = htmlspecialchars($return[0]->value);
+				$return = escape($return[0]->value);
 				return $return;
 			}
 		}

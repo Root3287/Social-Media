@@ -1,11 +1,12 @@
 <?php
 class DB{
 	private static $_instance = null;
-	private $_pdo, $_query, $_error = false, $_results, $_count = 0;
+	private $_pdo, $_query, $_error = false, $_results, $_count = 0, $_prefix;
 	
 	private function __construct() {
 		try {
 			$this->_pdo = new PDO('mysql:host='.Config::get('mysql/host').';dbname='.Config::get('mysql/db'),Config::get('mysql/user'),Config::get('mysql/password'));
+			$this->_prefix = Config::get('mysql/prefix');
 		} catch(PDOException $e) {
 			die($e->getMessage());
 		}
@@ -39,6 +40,7 @@ class DB{
 			$field    = $where[0]; 
 			$operator = $where[1];
 			$value    = $where[2];
+			$table = $this->_prefix.$table;
 			//check that operator is valid then contstruct the query
 			if (in_array($operator, $operators)){
 				$sql = "{$action} FROM {$table} WHERE {$field} {$operator} ?";
@@ -63,6 +65,7 @@ class DB{
 			if ($i < count($fields)) {$values .= ", ";}
 			$i++;
 		}
+		$table = $this->_prefix.$table;
 		$sql = "INSERT INTO {$table} (`".implode('`, `', $keys)."`) VALUES ({$values}) ";
 		if (!$this->query($sql, $fields)->error()) {return true;}
 	
@@ -76,8 +79,28 @@ class DB{
 			if ($i < count($fields)) {$set .= ', ';}
 			$i++;
 		}
+		$table = $this->_prefix . $table;
 		$sql = "UPDATE {$table} SET {$set} WHERE id = {$id}";
 		if(!$this->query($sql, $fields)->_error) {return true;}
+		return false;
+	}
+	public function createTable($name, $table_data = array(), $other){
+		$name = $this->_prefix . $name;
+		$table_col = "";
+		$i = 1;
+		foreach ($table_data as $col => $data) {
+			$table_col .= "{$col}";
+			foreach ($data as $d) {
+				$table_col .= " $d ";
+			}
+			if($i < count($table_data)){$table_col.=", ";}
+			$i++;
+		}
+
+		$sql = "CREATE TABLE `{$name}` ({$table_col}) {$other}";
+			if(!$this->query($sql)->error()) {
+				return $this;
+			}
 		return false;
 	}
 	public function results(){

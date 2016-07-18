@@ -1,11 +1,12 @@
 <?php
 class IP{
-	private $_db; 
+	private $_db,$_prefix; 
 	public function __construct(){
 		$this->_db = DB::getInstance();
+		$this->_prefix = Config::get('mysql/prefix');
 	}
 	public function get($ip){
-		$r = $this->_db->query("SELECT * FROM `ip` WHERE `ip_addr` = ?", [$ip])->results();
+		$r = $this->_db->query("SELECT * FROM `".$this->_prefix."ip` WHERE `ip_addr` = ?", [$ip])->results();
 		return (isset($r[0]))? $r[0]: false;
 	}
 	public function getAll(){

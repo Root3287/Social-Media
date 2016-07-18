@@ -1,7 +1,8 @@
 <?php
 class Like{
-	private $_db, $_count, $_results;
+	private $_db, $_count, $_results, $_prefix;
 	public function __construct(){
+		$this->_prefix = Config::get('mysql/prefix');
 		$this->_db = DB::getInstance();
 	}
 	public function likePost($fields= []){
@@ -33,7 +34,7 @@ class Like{
 		return $this;
 	}
 	public function hasLike($user, $post){
-		return $this->_db->query("SELECT * FROM `likes` WHERE `user_id`=? AND `post_id` = ?", [$user, $post])->count();
+		return $this->_db->query("SELECT * FROM `".$this->_prefix."likes` WHERE `user_id`=? AND `post_id` = ?", [$user, $post])->count();
 	}
 	public function results(){
 		return $this->_results;
