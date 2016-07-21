@@ -139,8 +139,12 @@ $router->add('/api/v1/post/(.*)', function(){
 	require 'pages/api/v1/post.php';
 	return true;
 });
-$router->add('/api/v1/user/(.*)', function($user){
+$router->add('/api/v1/user/(.*)/(.*)', function($user){
 	require 'pages/api/v1/user.php';
+	return true;
+});
+$router->add('/api/v1/getPost/(.*)/', function($hash){
+	require 'pages/api/v1/getPost.php';
 	return true;
 });
 /*
@@ -254,9 +258,9 @@ $router->add('/action/reply(.*)', function(){
 					$user->update([
 						'score' => $user->data()->score+1,
 					]);
-					echo(json_encode(['success'=>true]));
+					echo(json_encode(['success'=>true], JSON_PRETTY_PRINT));
 				}catch(Exception $e){
-					echo(json_encode(['success'=>false]));
+					echo(json_encode(['success'=>false], JSON_PRETTY_PRINT));
 				}
 			}
 		}
@@ -276,9 +280,9 @@ $router->add('/action/like(.*)', function(){
 					$user->update([
 						'score'=>$user->data()->score+1,
 					]);
-					echo(json_encode(["success"=>true]));
+					echo(json_encode(["success"=>true],JSON_PRETTY_PRINT));
 				}catch(Exception $e){
-					echo(json_encode(["success"=>false]));
+					echo(json_encode(["success"=>false],JSON_PRETTY_PRINT));
 				}
 			}
 		}
@@ -299,9 +303,9 @@ $router->add('/action/dislike(.*)', function(){
 					$user->update([
 						'score'=>$user->data()->score-1,
 					]);
-					echo(json_encode(['success'=> true]));
+					echo(json_encode(['success'=> true],JSON_PRETTY_PRINT));
 				}catch(Exception $e){
-					echo(json_encode(['success'=>true]));
+					echo(json_encode(['success'=>true],JSON_PRETTY_PRINT));
 				}
 			}
 		}	
@@ -326,14 +330,14 @@ $router->add('/action/status(.*)', function(){
 						'score'=> $user->data()->score+1,
 					]);
 					Session::flash('completed', '<div class="alert alert-success">You have submitted a post!</div>');
-					echo(json_encode(['success'=>true]));
+					echo(json_encode(['success'=>true],JSON_PRETTY_PRINT));
 				}catch(Exception $e){
-					echo(json_encode(['success'=>false]));
+					echo(json_encode(['success'=>false],JSON_PRETTY_PRINT));
 				}
 			}
 		}
 	}else{
-		echo(json_encode(['success'=>false]));
+		echo(json_encode(['success'=>false],JSON_PRETTY_PRINT));
 	}
 	return true;
 });
@@ -374,9 +378,9 @@ $router->add('/action/spic', function(){
 						$user->update([
 							'score'=> $user->data()->score+1,
 						]);
-						echo(json_encode(['success'=>true]));
+						echo(json_encode(['success'=>true],JSON_PRETTY_PRINT));
 					}catch(Exception $e){
-						echo(json_encode(['success'=>false]));
+						echo(json_encode(['success'=>false],JSON_PRETTY_PRINT));
 					}
 				}else{
 					try{
@@ -389,19 +393,19 @@ $router->add('/action/spic', function(){
 						$user->update([
 							'score'=> $user->data()->score+1,
 						]);
-						echo(json_encode(['success'=>true]));
+						echo(json_encode(['success'=>true],JSON_PRETTY_PRINT));
 					}catch(Exception $e){
-						echo(json_encode(['success'=>false]));
+						echo(json_encode(['success'=>false],JSON_PRETTY_PRINT));
 					}
 				}
 			}else{
-				echo json_encode(['success'=>false,'message'=>'Validation failed']);
+				echo json_encode(['success'=>false,'message'=>'Validation failed'],JSON_PRETTY_PRINT);
 			}
 		}else{
-			echo json_encode(['success'=>false, 'message'=>'token failed']);
+			echo json_encode(['success'=>false, 'message'=>'token failed'],JSON_PRETTY_PRINT);
 		}
 	}else{
-		echo(json_encode(['success'=>false]));
+		echo(json_encode(['success'=>false],JSON_PRETTY_PRINT));
 	}
 	return true;
 });
@@ -425,9 +429,9 @@ $router->add('/action/follow(.*)', function(){
 				}else if(Input::get('action') == 0){ // unfollow
 					if($user->isFollowing(Input::get('user'))){
 						if($user->unFollow(Input::get('user'))){
-							echo(json_encode(['success'=>true]));
+							echo(json_encode(['success'=>true],JSON_PRETTY_PRINT));
 						}else{
-							echo(json_encode(['success'=>false]));
+							echo(json_encode(['success'=>false],JSON_PRETTY_PRINT));
 						}
 					}
 				}
@@ -457,24 +461,24 @@ $router->add('/action/friend(.*)', function(){
 					//Check if the user still have the friend request
 					if($user->hasFriendRequest(escape(Input::get('user')))){
 						if($user->respondFriendRequest(escape(Input::get('user')), escape(Input::get('accept')))){
-							echo json_encode(['success'=>true]); //{"success"=true}
+							echo json_encode(['success'=>true],JSON_PRETTY_PRINT); //{"success"=true}
 						}else{
-							echo json_encode(['success'=>false]); //{"success"=false}
+							echo json_encode(['success'=>false],JSON_PRETTY_PRINT); //{"success"=false}
 						}
 					}else{
-						echo json_encode(['success'=>false]); //{"success"=false}
+						echo json_encode(['success'=>false],JSON_PRETTY_PRINT); //{"success"=false}
 					}
 				}else{
-					echo json_encode(['success'=>false]); //{"success"=false}
+					echo json_encode(['success'=>false],JSON_PRETTY_PRINT); //{"success"=false}
 				}
 			}else{
-				echo json_encode(['success'=>false]); //{"success"=false}
+				echo json_encode(['success'=>false],JSON_PRETTY_PRINT); //{"success"=false}
 			}
 		}else{
-			echo json_encode(['success'=>false]); //{"success"=false}
+			echo json_encode(['success'=>false],JSON_PRETTY_PRINT); //{"success"=false}
 		}
 	}else{
-		echo json_encode(['success'=>false]); //{"success"=false}
+		echo json_encode(['success'=>false],JSON_PRETTY_PRINT); //{"success"=false}
 	}
 	return true;
 });
@@ -489,9 +493,9 @@ $router->add('/action/request(.*)', function(){
 						$user->update([
 							'score'=> $user->data()->score+1,
 						]);
-						echo (json_encode(['success'=>true, 'button'=>Input::get('button'),]));
+						echo (json_encode(['success'=>true, 'button'=>Input::get('button'),],JSON_PRETTY_PRINT));
 					}catch(Exception $e){
-						echo (json_encode(['success'=>false, 'button'=>Input::get('button'),]));
+						echo (json_encode(['success'=>false, 'button'=>Input::get('button'),],JSON_PRETTY_PRINT));
 					}
 				}
 			}

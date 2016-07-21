@@ -34,6 +34,12 @@ if($version == "1.1.1" || $version=="1.1.0"){
 	$data[] = $db->query("CREATE TABLE `achievement` (`id` int(11) unsigned NOT NULL AUTO_INCREMENT,`user` int(11) DEFAULT NULL,`achievement` int(11) DEFAULT NULL,PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
 	Setting::update('version', '1.2.1');
 }else if($version == "1.3.0"){
+	$prefix = "";
+	if(Config::get('mysql/prefix') !==null){
+		$prefix = "sm_";
+	}else{
+		$prefix = "";
+	}
 	Setting::add([
 		'name' => "enable-uploadcare",
 		'value'=> '0',
@@ -78,7 +84,18 @@ if($version == "1.1.1" || $version=="1.1.0"){
 		'name' => "uploadcare-tabs",
 		'value'=> NULL,
 	]);
-
+	Setting::add([
+		'name' => "enable-email",
+		'value'=> '0',
+	]);
+	Setting::add([
+		'name' => "enable-api",
+		'value'=> '0',
+	]);
+	Setting::add([
+		'name' => "api-key",
+		'value'=> substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 32),
+	]);
 	Setting::update('version', '1.3.0');
 }
 foreach ($data as $d) {

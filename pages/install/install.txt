@@ -191,6 +191,8 @@ INSERT INTO `settings` (`name`, `value`) VALUES ('uploadcare-multiple-min', '0')
 INSERT INTO `settings` (`name`, `value`) VALUES ('uploadcare-multiple-max', '10');
 INSERT INTO `settings` (`name`, `value`) VALUES ('uploadcare-image-shrink', 'false');
 INSERT INTO `settings` (`name`, `value`) VALUES ('uploadcare-tabs', NULL);
+INSERT INTO `settings` (`name`, `value`) VALUES ('enable-api', '0');
+INSERT INTO `settings` (`name`, `value`) VALUES ('api-key', '');
 
 INSERT INTO `groups` (`id`, `group_name`, `permissions`) VALUES (1, 'Standard', '');
 INSERT INTO `groups` (`id`, `group_name`, `permissions`) VALUES (2, 'Admin', '{"Admin":"1"}');
