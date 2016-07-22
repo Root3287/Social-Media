@@ -73,6 +73,7 @@ if(Input::exists()){
 							'score'=> 1,
 							'confirmed' => $email_confirmed,
 							'confirm_hash'=> $email_hash,
+							'mfa' => json_encode(['enable'=>0, 'code'=>'']),
 					));
 
 					if($email_confirmed == 0){

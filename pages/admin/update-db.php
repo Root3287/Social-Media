@@ -96,6 +96,30 @@ if($version == "1.1.1" || $version=="1.1.0"){
 		'name' => "api-key",
 		'value'=> substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 32),
 	]);
+	Setting::add([
+		'name' => "enable-email",
+		'value'=> 0,
+	]);
+	Setting::add([
+		'name' => "enable-email-confirm",
+		'value'=> 0,
+	]);
+	Setting::add([
+		'name' => "enable-email-recover-password",
+		'value'=> 0,
+	]);
+	Setting::add([
+		'name' => "enable-mfa",
+		'value'=> 0,
+	]);
+	Setting::add([
+		'name' => "enable-mfa-email",
+		'value'=> 0,
+	]);
+	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `confirmed` tinyint(4) NULL DEFAULT 0");
+	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `confirm_hash` text");
+	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `recover_hash` text");
+	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `mfa` text");
 	Setting::update('version', '1.3.0');
 }
 foreach ($data as $d) {

@@ -42,7 +42,8 @@ if(Input::exists()){
 						'email'=> escape(Input::get('email')),
 						'verified'=> 1,
 						'score' => 999,
-						'confimed'=>1,
+						'confirmed'=>1,
+						'mfa'=>json_encode(['enable'=>1, "code"=>""]),
 				));
 			}catch (Exception $e){
 				die($e->getMessage());

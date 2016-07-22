@@ -44,6 +44,7 @@ $data[] = $db->createTable(
 		"`confirmed`"=>["int(11)", "DEFAULT '0'",],
 		"`confirm_hash`"=>["text",],
 		"`recover_hash`"=>["text",],
+		"`mfa`"=>["text",],
 		"PRIMARY KEY" => ['(`id`)',],
 	], 
 	"COLLATE='latin1_swedish_ci' ENGINE=InnoDB"
@@ -243,6 +244,8 @@ $data[] = $db->insert('settings', ['name'=>'api-key', 'value'=>substr(str_shuffl
 $data[] = $db->insert('settings', ['name'=>'enable-email', 'value'=>"0"]);
 $data[] = $db->insert('settings', ['name'=>'enable-email-confirm', 'value'=>"0"]);
 $data[] = $db->insert('settings', ['name'=>'enable-email-recover-password', 'value'=>"0"]);
+$data[] = $db->insert('settings', ['name'=>'enable-mfa', 'value'=>"0"]);
+$data[] = $db->insert('settings', ['name'=>'enable-mfa-email', 'value'=>"0"]);
 
 $data[] = $db->insert('groups', ['group_name'=>'standard', 'permissions'=>'']);
 $data[] = $db->insert('groups', ['group_name'=>'administrator', 'permissions'=>'{"Admin":1}']);

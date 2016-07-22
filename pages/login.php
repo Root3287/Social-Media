@@ -51,7 +51,7 @@ if(Input::exists()){
 										$user2->logout();
 									}else{
 										Session::flash('complete', '<div class="alert alert-success">You have been logged in!</div>');
-										Redirect::to('/login/multi-factor/email/');
+										Redirect::to('/');
 									}
 								}
 							}
@@ -97,7 +97,8 @@ if(Input::exists()){
 						die();
 					}
 				}else{
-					$login = $user2->login(escape(Input::get('username')), Input::get('password'), $remember);
+					$user3 = new User();
+					$login = $user3->login(escape(Input::get('username')), Input::get('password'), $remember);
 				
 					if($redirect){
 						if($login){
@@ -105,28 +106,29 @@ if(Input::exists()){
 						}
 					}else{
 						if($login){
-							if($user2->data()->confirmed !=1){
-								$user2->logout();
+							if($user3->data()->confirmed !=1){
+								$user3->logout();
 							}else{
 								Session::flash('complete', '<div class="alert alert-success">You have been logged in!</div>');
-								Redirect::to('/login/multi-factor/email/');
+								Redirect::to('/');
 							}
 						}
 					}
 				}
 			}else{
-				$login = $user2->login(escape(Input::get('username')), Input::get('password'), $remember);
+				$user3 = new User();
+				$login = $user3->login(escape(Input::get('username')), Input::get('password'), $remember);
 				if($redirect){
 					if($login){
 						Redirect::to('/'.$page.'/?t='.$text);
 					}
 				}else{
 					if($login){
-						if($user2->data()->confirmed !=1){
-							$user2->logout();
+						if($user3->data()->confirmed !=1){
+							$user3->logout();
 						}else{
 							Session::flash('complete', '<div class="alert alert-success">You have been logged in!</div>');
-							Redirect::to('/login/multi-factor/email/');
+							Redirect::to('/');
 						}
 					}
 				}
