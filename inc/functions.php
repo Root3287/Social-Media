@@ -67,26 +67,16 @@ function getClientIP(){
 function getSelfUrl(){
     if($_SERVER['SERVER_ADDR'] !== "127.0.0.1"){
         if($_SERVER['SERVER_PORT'] == 80){
-            return $_SERVER['REQUEST_SCHEME']."://".$_SERVER['SERVER_NAME'];
-        }else{
-            return $_SERVER['REQUEST_SCHEME']."://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT'];
+            $url = $_SERVER['REQUEST_SCHEME']."://".$_SERVER['SERVER_NAME'];
+        } else {
+            $url = $_SERVER['REQUEST_SCHEME']."://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT'];
         }
-    }else{
+        
+        if(substr($url, -1) !== '/') $url .= '/';
+        
+        return $url;
+        
+    } else {
         return false;
     }
-}
-function isBot(){
-    // THE BOTS WE WANT TO IGNORE
-    static
-    $bad_robots= [
-        'crawler', 'spider', 'robot', 'slurp', 'Atomz', 'googlebot', 'VoilaBot', 'msnbot', 'Gaisbot', 'Gigabot', 'SBIder', 'Zyborg', 'FunWebProducts', 'findlinks', 'ia_archiver', 'MJ12bot', 'Ask Jeeves', 'NG/2.0', 'voyager', 'Exabot', 'Nutch', 'Hercules', 'psbot', 'LocalcomBot'
-    ];
-
-    // COMPARE THE BOT STRINGS TO THE USER AGENT STRING
-    foreach ($bad_robots as $spider)
-    {
-        $spider = '#' . $spider . '#i';
-        if (preg_match($spider, $_SERVER["HTTP_USER_AGENT"])) return TRUE;
-    }
-    return FALSE;
 }

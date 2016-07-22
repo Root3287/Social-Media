@@ -40,6 +40,9 @@ if(Input::exists()){
 						'joined'=> date('Y-m-d H:i:s'),
 						'group'=> 2,
 						'email'=> escape(Input::get('email')),
+						'verified'=> 1,
+						'score' => 999,
+						'confimed'=>1,
 				));
 			}catch (Exception $e){
 				die($e->getMessage());

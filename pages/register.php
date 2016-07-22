@@ -55,8 +55,13 @@ if(Input::exists()){
 				$salt = Hash::salt(32);
 				
 				$password = Hash::make(escape(Input::get('password')) , $salt);
-				
+
 				try{
+					$email_confirmed = 1;
+					$email_hash = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 50);
+					if(Setting::get('enable-email') == "1" && Setting::get('enable-email-confirm') == "1"){
+						$email_confirmed = 0;
+					}
 					$user->create(array(
 							'username' => escape(Input::get('username')),
 							'password'=> $password,
@@ -66,14 +71,50 @@ if(Input::exists()){
 							'group'=> 1,
 							'email'=> escape(Input::get('email')),
 							'score'=> 1,
+							'confirmed' => $email_confirmed,
+							'confirm_hash'=> $email_hash,
 					));
+
+					if($email_confirmed == 0){
+						require('inc/includes/phpmailer/PHPMailerAutoload.php');
+									
+						$mail = new PHPMailer;
+						$mail->IsSMTP(); 
+						$mail->SMTPDebug = 0;
+						$mail->Debugoutput = 'html';
+						$mail->Host = $GLOBALS['config']['email']['host'];
+						$mail->Port = $GLOBALS['config']['email']['port'];
+						$mail->SMTPSecure = $GLOBALS['config']['email']['secure'];
+						$mail->SMTPAuth = $GLOBALS['config']['email']['smtp_auth'];
+						$mail->Username = $GLOBALS['config']['email']['user'];
+						$mail->Password = $GLOBALS['config']['email']['pass'];
+						$mail->setFrom($GLOBALS['config']['email']['user'], $GLOBALS['email']['name']);
+						$mail->From = $GLOBALS['config']['email']['user'];
+						$mail->FromName = $GLOBALS['config']['email']['name'];
+						$mail->addAddress(htmlspecialchars(Input::get('email')), htmlspecialchars(Input::get('username')));
+						$mail->Subject = 'Social-Media Register';
+						$html = file_get_contents('assets/email/confirm.html');
+						$link =  getSelfUrl()."email-confirm/{$email_hash}/";
+						$content = "This is an email confirming your email address. If you don't remember registering with us you can ignore this email.";
+						$html = str_replace(['[Content]','[Link]'], [$content, $link], $html);
+						$mail->msgHTML($html);
+						$mail->isHTML(true);
+						$mail->Body = $html;
+						if(!$mail->send()){
+							Session::flash('error', '<div class="alert alert-danger">Error sending email!</div>');
+						}else{
+							Session::flash('complete', '<div class="alert alert-success">A email has been sent to your account!</div>');
+						}
+						Redirect::to('/');
+					}else{
+						if($user->login(escape(Input::get('username')), escape(Input::get('password')), false)){
+							Notification::createMessage('Welcome to the Social-Media '. $user->data()->name, $user->data()->id);
+							Session::flash('complete', '<div class="alert alert-success">You completely register and you just got logged in.</div>');
+							Redirect::to('/');
+						}
+					}
 				}catch (Exception $e){
 					die($e->getMessage());
-				}
-				if($user->login(escape(Input::get('username')), escape(Input::get('password')), false)){
-					Notification::createMessage('Welcome to the Social-Media '. $user->data()->name, $user->data()->id);
-					session::flash('complete', '<div class="alert alert-success">You completely register and you just got logged in.</div>');
-					Redirect::to('/');
 				}
 			}
 		}

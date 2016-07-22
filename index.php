@@ -71,6 +71,25 @@ $router->add('/report/(.*)/(.*)', function($type, $id){
 $router->add('/appeal', function(){
 	return false;
 });
+$router->add('/forgot-password/', function(){
+	require 'pages/forgot-password.php';
+	return true;
+});
+$router->add('/password-reset/(.*)', function(){
+	require 'pages/password-reset.php';
+	return true;
+});
+$router->add('/email-confirm/(.*)/', function($hash){
+	$db = DB::getInstance();
+	$hash_db = $db->get('users', ['confirm_hash', '=', $hash]);
+	if($hash_db->count()){
+		if($db->update('users', $hash_db->first()->id, ['confirm_hash'=> "", 'confirmed' => 1,])){
+			Session::flash('complete', '<div class="alert alert-success">You have confirmed your email!</div>');
+			Redirect::to('/');
+		}
+	}
+	return true;
+});
 /*
 Admin Stuff
 */

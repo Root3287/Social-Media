@@ -1,15 +1,16 @@
 <?php
 require 'config.php';
-
+require 'email.php';
 session_start();
 
 spl_autoload_register(function($class){
-	require 'inc/classes/'.$class.'.class.php';
+	if(is_file('inc/classes/'.$class.'.class.php')){
+		require 'inc/classes/'.$class.'.class.php';
+	}
 });
 require_once 'functions.php';
 
 if(!is_dir('pages/install') && isset($GLOBALS['config'])){
-	define('INSTALLED', true);
 	$db = DB::getInstance();
 	if(Cookies::exists(Config::get('session/cookie_name')) && !Session::exists(Config::get('session/session_name'))){
 		$hash = Cookies::get(Config::get('session/cookie_name'));

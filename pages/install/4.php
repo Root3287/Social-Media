@@ -41,6 +41,8 @@ $data[] = $db->createTable(
 		"`last_ip`"=>["text",],
 		"`verified`"=>["int(11)", "DEFAULT '0'",],
 		"`score`"=>["BIGINT", "DEFAULT '0'",],
+		"`confirmed`"=>["int(11)", "DEFAULT '0'",],
+		"`confirm_hash`"=>["text",],
 		"`recover_hash`"=>["text",],
 		"PRIMARY KEY" => ['(`id`)',],
 	], 
@@ -238,6 +240,10 @@ $data[] = $db->insert('settings', ['name'=>'uploadcare-image-shrink', 'value'=>'
 $data[] = $db->insert('settings', ['name'=>'uploadcare-tabs', 'value'=>'']);
 $data[] = $db->insert('settings', ['name'=>'enable-api', 'value'=>'0']);
 $data[] = $db->insert('settings', ['name'=>'api-key', 'value'=>substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 32)]);
+$data[] = $db->insert('settings', ['name'=>'enable-email', 'value'=>"0"]);
+$data[] = $db->insert('settings', ['name'=>'enable-email-confirm', 'value'=>"0"]);
+$data[] = $db->insert('settings', ['name'=>'enable-email-recover-password', 'value'=>"0"]);
+
 $data[] = $db->insert('groups', ['group_name'=>'standard', 'permissions'=>'']);
 $data[] = $db->insert('groups', ['group_name'=>'administrator', 'permissions'=>'{"Admin":1}']);
 //output

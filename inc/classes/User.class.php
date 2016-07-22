@@ -62,7 +62,6 @@ class User{
 			if($user){
 				if($this->_data->password === Hash::make($pass, $this->_data->salt)){
 					Session::put($this->_sessionName, $this->_data->id);
-					
 					if($remember){
 						$hash = Hash::unique();
 						$hashCheck = $this->_db->get('user_session', array('user_id','=',$this->data()->id));

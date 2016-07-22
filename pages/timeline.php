@@ -251,9 +251,17 @@ if(!$user->isLoggedIn()){
 					<a href="/user/friends" class="list-group-item active">People</a>
 					<?php foreach ($user->getFollowing() as $following){
 						$following_user = new User($following->following_id);
-						$following_user_online =($following_user->data()->last_online <= strtotime("-10 minutes"))? false: true;
+						$following_user_online=($following_user->data()->last_online <= strtotime("-10 minutes"))? false: true;
 					?>
-					<a href="/u/<?php echo $following_user->data()->username;?>/" class="list-group-item"><img src="<?php echo $following_user->getAvatarURL();?>" alt="friend_user"> <?php echo $following_user->data()->username;?> <?php if($following_user_online){echo "<span class=\"pull-right\"><span class=\"label label-success\">Online!</span></span>";}else{echo "<span class=\"pull-right\"><span class=\"label label-danger\">Offline!</span></span>";}?></a>
+						<a href="/u/<?php echo $following_user->data()->username;?>/" class="list-group-item">
+							<img src="<?php echo $following_user->getAvatarURL();?>" alt="friend_user">
+							<?php echo $following_user->data()->username;?> 
+							<?php if($following_user_online){
+								echo "<span class=\"pull-right\"><span class=\"label label-success\">Online!</span></span>";
+							}else{
+								echo "<span class=\"pull-right\"><span class=\"label label-danger\">Offline!</span></span>";
+							}?>
+						</a>
 					<?php }?>
 				</div>
 				<div id="mobileTop"></div>	

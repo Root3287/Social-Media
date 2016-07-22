@@ -193,6 +193,9 @@ INSERT INTO `settings` (`name`, `value`) VALUES ('uploadcare-image-shrink', 'fal
 INSERT INTO `settings` (`name`, `value`) VALUES ('uploadcare-tabs', NULL);
 INSERT INTO `settings` (`name`, `value`) VALUES ('enable-api', '0');
 INSERT INTO `settings` (`name`, `value`) VALUES ('api-key', '');
+INSERT INTO `settings` (`name`, `value`) VALUES ('enable-email', '0');
+INSERT INTO `settings` (`name`, `value`) VALUES ('enable-email-confirm', '0');
+INSERT INTO `settings` (`name`, `value`) VALUES ('enable-email-recover-password', '0');
 
 INSERT INTO `groups` (`id`, `group_name`, `permissions`) VALUES (1, 'Standard', '');
 INSERT INTO `groups` (`id`, `group_name`, `permissions`) VALUES (2, 'Admin', '{"Admin":"1"}');

@@ -52,24 +52,24 @@ if(Input::exists()){
 			Session::flash('error', "<div class=\"alert alert-danger\">".$mysqli->connect_error."</div>");
 		}else{
 			$insert = 	'<?php'.PHP_EOL.
-						'$GLOBALS[\'config\'] = array('.PHP_EOL.
-						'		"config"=>array("name" => "Social-Media"),'.PHP_EOL.
-						'		"mysql" => array('.PHP_EOL.
-						'		"host" => "'.escape(Input::get("dbAddr")).'", //127.0.0.1.'.PHP_EOL.
-						'		"user" => "'.escape(Input::get("dbUser")).'", //root'.PHP_EOL.
-						'		"password" => "'.escape(Input::get("dbPass")).'", //password'.PHP_EOL.
-						'		"db" => "'.escape(Input::get("dbDatabase")).'", //social-media'.PHP_EOL.
-						'		"prefix" =>"'.escape(Input::get("dbPrefix")).'", //sm_'.PHP_EOL.
-						'		"port" => "'.escape(Input::get("dbPort")).'", //3306'.PHP_EOL.
-						'	),'.PHP_EOL.
-						'	"remember" => array('.PHP_EOL.
-						'		"expiry" => 604800,'.PHP_EOL.
-						'	),'.PHP_EOL.
-						'	"session" => array ('.PHP_EOL.
-						'		"token_name" => "'.escape(Input::get("token_val")).'",'.PHP_EOL.
-						'		"cookie_name"=>"'.escape(Input::get("cookie")).'",'.PHP_EOL.
-						'		"session_name"=>"'.escape(Input::get("session")).'"'.PHP_EOL.
-						'	),'.PHP_EOL.
+						'$GLOBALS[\'config\'] = array('											.PHP_EOL.
+						'		"config"=>array("name" => "Social-Media"),'						.PHP_EOL.
+						'		"mysql" => array('												.PHP_EOL.
+						'		"host" => "'.escape(Input::get("dbAddr")).'", //127.0.0.1.'		.PHP_EOL.
+						'		"user" => "'.escape(Input::get("dbUser")).'", //root'			.PHP_EOL.
+						'		"password" => "'.escape(Input::get("dbPass")).'", //password'	.PHP_EOL.
+						'		"db" => "'.escape(Input::get("dbDatabase")).'", //social-media'	.PHP_EOL.
+						'		"prefix" =>"'.escape(Input::get("dbPrefix")).'", //sm_'			.PHP_EOL.
+						'		"port" => "'.escape(Input::get("dbPort")).'", //3306'			.PHP_EOL.
+						'	),'																	.PHP_EOL.
+						'	"remember" => array('												.PHP_EOL.
+						'		"expiry" => 604800,'											.PHP_EOL.
+						'	),'																	.PHP_EOL.
+						'	"session" => array ('												.PHP_EOL.
+						'		"token_name" => "'.escape(Input::get("token_val")).'",'			.PHP_EOL.
+						'		"cookie_name"=>"'.escape(Input::get("cookie")).'",'				.PHP_EOL.
+						'		"session_name"=>"'.escape(Input::get("session")).'"'			.PHP_EOL.
+						'	),'																	.PHP_EOL.
 						');';
 				if(is_writable('inc/config.php')){
 					$config = file_get_contents('inc/config.php');

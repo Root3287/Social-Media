@@ -1,5 +1,6 @@
 <?php 
 $user = new User();
+$db = DB::getInstance();
 $redirect = false;
 $text = "";
 $page = "";
@@ -27,20 +28,109 @@ if(Input::exists()){
 		));
 		if($val->passed()){
 			$remember = (Input::get('remember') == 'on')? true:false;
-			$user2 = new User();
-			$login = $user2->login(escape(Input::get('username')), Input::get('password'), $remember);
-			if($redirect){
-				if($login){
-					Redirect::to('/'.$page.'/?t='.$text);
+			$user2 = $db->get('users', ['username', '=', escape(Input::get('username'))])->first();
+			$mfa = json_decode($user2->mfa);
+			if(Setting::get('enable-mfa') == 1 && Setting::get('enable-mfa-email')){
+				if($mfa->enable == 1){
+					if(Input::get('tfaEmail') !==null){
+						if(Input::get('tfaEmail') == $mfa->code){
+							$user3 = new User();
+							$login = $user3->login(escape(Input::get('username')), Input::get('password'), $remember);
+							
+							$mfa = json_decode($user3->data()->mfa, true);
+							$mfa['code'] = "";
+							$db->update('users', $user3->data()->id, ['mfa'=>json_encode($mfa)]);
+
+							if($redirect){
+								if($login){
+									Redirect::to('/'.$page.'/?t='.$text);
+								}
+							}else{
+								if($login){
+									if($user2->confirmed !=1){
+										$user2->logout();
+									}else{
+										Session::flash('complete', '<div class="alert alert-success">You have been logged in!</div>');
+										Redirect::to('/login/multi-factor/email/');
+									}
+								}
+							}
+						}
+					}else{
+						$mfa_array = json_decode($user2->mfa, true);
+						$mfa_code = Hash::unique_length(5);
+						$mfa_array['code'] = $mfa_code;
+
+						if($db->update('users', $user2->id, ["mfa"=>json_encode($mfa_array)])){
+							require_once 'inc/includes/phpmailer/PHPMailerAutoload.php';
+							$mail = new PHPMailer;
+							
+							$mail->IsSMTP(); 
+							
+							$mail->SMTPDebug = 0;
+							$mail->Debugoutput = 'html';
+							
+							$mail->Host = $GLOBALS['config']['email']['host'];
+							$mail->Port = $GLOBALS['config']['email']['port'];
+							$mail->SMTPSecure = $GLOBALS['config']['email']['secure'];
+							$mail->SMTPAuth = $GLOBALS['config']['email']['smtp_auth'];
+							$mail->Username = $GLOBALS['config']['email']['user'];
+							$mail->Password = $GLOBALS['config']['email']['pass'];
+							
+							$mail->setFrom($GLOBALS['config']['email']['user'], $GLOBALS['config']['email']['name']);
+							$mail->From = $GLOBALS['config']['email']['user'];
+							$mail->FromName = $GLOBALS['config']['email']['name'];
+							$mail->addAddress($user2->email, escape($user2->name));
+							
+							$mail->Subject = 'Social-Media Multi-Factor Code';
+							$html = file_get_contents('assets/email/emailMFA.html');
+							$content = "This is one of your multi-factor authication code!";
+							$html = str_replace(['[Name]','[Content]','[Code]'], [$user2->username ,$content, $mfa_code], $html);
+							
+							$mail->msgHTML($html);
+							$mail->isHTML(true);
+							$mail->Body = $html;
+
+							$mail->send();
+						}
+						require 'inc/includes/email2FA.php';
+						die();
+					}
+				}else{
+					$login = $user2->login(escape(Input::get('username')), Input::get('password'), $remember);
+				
+					if($redirect){
+						if($login){
+							Redirect::to('/'.$page.'/?t='.$text);
+						}
+					}else{
+						if($login){
+							if($user2->data()->confirmed !=1){
+								$user2->logout();
+							}else{
+								Session::flash('complete', '<div class="alert alert-success">You have been logged in!</div>');
+								Redirect::to('/login/multi-factor/email/');
+							}
+						}
+					}
 				}
 			}else{
-				if($login){
-					Session::flash('complete', '<div class="alert alert-success">You have been logged in!</div>');
-					Redirect::to('/');
+				$login = $user2->login(escape(Input::get('username')), Input::get('password'), $remember);
+				if($redirect){
+					if($login){
+						Redirect::to('/'.$page.'/?t='.$text);
+					}
+				}else{
+					if($login){
+						if($user2->data()->confirmed !=1){
+							$user2->logout();
+						}else{
+							Session::flash('complete', '<div class="alert alert-success">You have been logged in!</div>');
+							Redirect::to('/login/multi-factor/email/');
+						}
+					}
 				}
 			}
-		}else{
-			
 		}
 	}
 }
