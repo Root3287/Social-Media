@@ -122,7 +122,7 @@ if($version == "1.1.1" || $version=="1.1.0"){
 	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `mfa` text");
 	$data[] = $db->query("ALETR TABLE `".$prefix."comments` CHANGE COLUMN `time` `time` bigint(128)");
 	
-	$users = $db->get('users', '1','=','1')->results();
+	$users = $db->get('users', ['1','=','1'])->results();
 	foreach ($users as $u) {
 		$data[] = $db->update('users', $u->id, ['confirmed'=>1]);
 	}
