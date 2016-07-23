@@ -117,15 +117,13 @@ $router->add('/admin/login/', function(){
 	require 'pages/admin/login.php';
 	return true;
 });
-$router->add('/admin/user(.*)', function(){
+$router->add('/admin/users/(.*)', function(){
 	require 'pages/admin/users.php';
 	return true;
 });
-$router->add('/admin/users/delete/', function(){
-return false;
-});
-$router->add('/admin/users/edit/', function(){
-return false;
+$router->add('/admin/user/edit/(.*)/', function($u2){
+	require 'pages/admin/edit_user.php';
+	return true;
 });
 $router->add('/admin/recaptcha', function(){
 	require 'pages/admin/recaptcha.php';

@@ -9,24 +9,25 @@ if($user->isAdmLoggedIn()){
 	Redirect::to('/admin/login/');
 }
 $f = null;
-if(Input::exists()){
-	If(Token::check(Input::get('token'))){
-		$val= new Validation();
-		$validation = $val->check($_POST, array(
-			'search'=> array('required'=>true),
-		));
-		if($validation->passed()){
-			$q = escape(Input::get('search'));
-			$t = escape(Input::get('option'));
-			$f= $db->query("SELECT * FROM `users` WHERE {$t} LIKE '%{$q}%'")->results();
-		}
+if(Input::exists('get')){
+	$val= new Validation();
+	$validation = $val->check($_GET, array(
+		//'s'=> array('required'=>true),
+	));
+	if($validation->passed()){
+		$s = (Input::get('s') !=null)? Input::get('s'):"";
+		$q = escape($s);
+		$t = escape(Input::get('o'));
+		$f= $db->query("SELECT * FROM `".Config::get('mysql/prefix')."users` WHERE {$t} LIKE '%{$q}%'")->results();
 	}
 }else{
-	$f = $db->query("SELECT * FROM `users` WHERE 1=1")->results();
+	$f = $db->get('users', ['1','=','1'])->results();
 }
 $page = (Input::get('p') !=null)?Input::get('p'):1;
 $limit = (Input::get('l') !=null)? Input::get('l'):10;
-
+if($f == null){
+	$f = [];
+}
 $pagination = new PaginateArray($f);
 $userData = $pagination->getArrayData($limit, $page);
 ?>
@@ -42,17 +43,24 @@ $userData = $pagination->getArrayData($limit, $page);
 			<ol class="breadcrumb">
 			  <li><a href="/admin">AdminCP</a></li>
 			  <li><a class="active" href="/admin/user/">Users</a></li>
+			  <?php if(Input::get('o') !=null):?>
+			  <li><a href="/admin/user/?o=<?php echo escape(Input::get('o'));?>"><?php echo escape(Input::get('o'));?></a></li>
+			  <?php if(Input::get('s') !=null): ?>
+			  	<li><a href="/admin/user/?o=<?php echo escape(Input::get('o'));?>&s=<?php echo escape(Input::get('s'));?>"><?php echo escape(Input::get('s'));?></a></li>
+			  	<?php if($page !=null): ?>
+			  	<li><a href="/admin/user/?o=<?php echo escape(Input::get('o'));?>&p=<?php echo $page;?>&s=<?php echo escape(Input::get('s'));?>"><?php echo $page;?></a></li>
+			  <?php endif; endif; endif;?>
 			</ol>
 			<div class="row">
 				<div class="col-md-3"><?php require 'pages/admin/sidebar.php';?></div>
 				<div class="col-md-9">
 					<div class="row">
-					<form class="form-inline" method="post" action="/admin/users/">
+					<form class="form-inline" method="get" action="">
 						<div class="form-group">
-							<input name="search" type="text" class="form-control input-md" placeholder="Search">
+							<input name="s" type="text" class="form-control input-md" placeholder="Search">
 						</div>
 						<div class="form-group">
-							<select name="option">
+							<select name="o">
 								<option value="id">
 									ID
 								</option>
@@ -68,8 +76,7 @@ $userData = $pagination->getArrayData($limit, $page);
 							</select>
 						</div>
 						<div class="form-group">
-							<input type="hidden" name="token" value="<?php echo Token::generate()?>">
-							<input class="btn btn-md btn-primary" type="submit" value="find">
+							<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
 						</div>
 					</form>
 					</div>
@@ -156,7 +163,7 @@ $userData = $pagination->getArrayData($limit, $page);
 					<div class="row">
 						<ul class="pagination">
 							<?php for($i = 1; $i<=$pagination->getTotalPages(); $i++):?>
-								<li><a href="?p=<?php echo $i?>"><?php echo $i;?></a></li>
+								<li><a href="?p=<?php echo $i?>&l=<?php echo Input::get('l');?>&o=<?php echo Input::get('o');?>&s=<?php echo Input::get('s');?>"><?php echo $i;?></a></li>
 							<?php endfor; ?>
 						</ul>
 					</div>	

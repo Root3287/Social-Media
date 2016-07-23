@@ -1,0 +1,45 @@
+<?php
+$user = new User();
+$u = new User($u2);
+$db = DB::getInstance();
+if($user->isAdmLoggedIn()){
+	if($user->data()->group != 2){
+		Redirect::to('/admin/login/');
+	}
+}else{
+	Redirect::to('/admin/login/');
+}
+
+if(!$u->exists()){
+	Redirect::to(404);
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<?php require 'assets/head.php';?>
+	</head>
+	<body>
+		<?php require 'assets/nav.php';?>
+		<div class="container">
+			<h1>AdminCP</h1>
+			<ol class="breadcrumb">
+			  <li><a href="/admin">AdminCP</a></li>
+			  <li><a href="/admin/users/">Users</a></li>
+			  <li><a href="/admin/users/?s=<?php echo $u->data()->username;?>"><?php echo $u->data()->username;?></a></li>
+			  <li><a class="active" href="/admin/user/edit/<?php echo $u->data()->username;?>/">Edit</a></li>
+			</ol>
+			<div class="col-md-3"><?php require 'sidebar.php';?></div>
+			<div class="col-md-9">
+				<h1>Editing: <?php echo $u->data()->name;?></h1>
+				<form action="" autocomplete="off">
+					<div class="form-group"><label for="name">Name:</label><input type="text" class="form-control" value="<?php echo $u->data()->name;?>"></div>
+					<div class="form-group"><label for="username">Username:</label><input type="text" class="form-control" value="<?php echo $u->data()->username;?>"></div>
+					<div class="form-group"><label for="email">Email: </label><input type="email" class="form-control" value="<?php echo $u->data()->email;?>"></div>
+					<div class="row"></div>
+				</form>
+			</div>
+		</div>
+		<?php require 'assets/foot.php';?>
+	</body>
+</html>

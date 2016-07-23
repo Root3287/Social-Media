@@ -14,22 +14,28 @@ if(Input::exists()){
 		$val = new Validation();
 		$validate = $val->check($_POST, [
 			"host"=>[
-				"required"=> true,
+				//"required"=> true,
 			],
 			"port"=>[
-				"required"=> true,
+				//"required"=> true,
 			],
 			"name"=>[
-				"required"=> true,
+				//"required"=> true,
 			],
 			"user"=>[
-				"required"=> true,
+				//"required"=> true,
 			],
 			"pass"=>[
-				"required"=> true,
+				//"required"=> true,
 			],
 		]);
 		if($validate->passed()){
+			$email = (Input::get('en-email') == "on")? "1":"0"; 
+			$email_confirm = (Input::get('en-email-confirm') == "on")? "1":"0"; 
+			$email_rec_pass = (Input::get('en-email-recover-pass') == "on")? "1":"0"; 
+			Setting::update('enable-email', $email);
+			Setting::update('enable-email-confirm', $email_confirm);
+			Setting::update('enable-email-recover-password', $email_rec_pass);
 			if(is_writable('inc/email.php')){
 				$config = 	'<?php'.PHP_EOL.
 							'$GLOBALS[\'config\'][\'email\'] = ['			.PHP_EOL.
@@ -47,12 +53,6 @@ if(Input::exists()){
 			}else{
 				$not_write = true;
 			}
-			$email = (Input::get('en-email') == "on")? "1":"0"; 
-			$email_confirm = (Input::get('en-email-confirm') == "on")? "1":"0"; 
-			$email_rec_pass = (Input::get('en-email-recover-pass') == "on")? "1":"0"; 
-			Setting::update('enable-email', $email);
-			Setting::update('enable-email-confirm', $email_confirm);
-			Setting::update('enable-email-recover-password', $email_rec_pass);
 			Session::flash('complete', '<div class="alert alert-success">Saved! Some of the settings will take a short while to update!</div>');
 			Redirect::to('');
 		}

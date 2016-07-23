@@ -12,7 +12,7 @@
 				<?php else:?>
 					<div class="alert alert-danger">There was an error sending an email!</div>
 				<?php endif;?>
-				<form action="" method="post">
+				<form action="" method="post" autocomplete="off">
 					<h1>Login</h1>
 					<div class="form-group">
 						<input type="text" name="username" placeholder="Username" value="<?php echo Input::get('username')?>" class="form-control input-lg">

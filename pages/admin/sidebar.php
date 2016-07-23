@@ -1,6 +1,6 @@
 <div class="well">
 	<strong>AdminCP</strong><br>
-	<a href="/admin/user/">Users</a><br>
+	<a href="/admin/users/">Users</a><br>
 	<a href="/admin/settings/">General Settings</a><br>
 	<a href="/admin/recaptcha">Recatcha Settings</a><br>
 	<a href="/admin/uploadcare">Uploadcare Settings</a><br>
