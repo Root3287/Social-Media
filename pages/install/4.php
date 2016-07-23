@@ -173,7 +173,7 @@ $data[] = $db->createTable(
 		"`user_id`"=>['int(255)', 'NOT NULL'],
 		"`original_post`"=>['bigint(255)', 'NOT NULL'],
 		"`content`" => ['LONGTEXT', 'NOT NULL'],
-		"`time`" => ["DATETIME", "DEFAULT NULL"],
+		"`time`" => ["BIGINT(128)", "DEFAULT NULL"],
 		"PRIMARY KEY"=>['(`id`)'],
 	],
 	"COLLATE='latin1_swedish_ci' ENGINE=InnoDB"
@@ -198,7 +198,7 @@ $data[] = $db->createTable(
 	'ip', 
 	[
 		"`id`"=>['int(11)','NOT NULL','AUTO_INCREMENT',],
-		"`data`"=>["DATETIME", "DEFAULT NULL"],
+		"`date`"=>["DATETIME", "DEFAULT NULL"],
 		"`ip_addr`"=>["text"],
 		"`recurrence`"=>["int(11)", "DEFAULT 1"],
 		"PRIMARY KEY" => ['(`id`)',],

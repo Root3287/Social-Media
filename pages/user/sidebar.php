@@ -5,4 +5,5 @@
 	<a href="/user/update/">Update</a><br>
 	<a href="/user/friends/">Friends</a><br>
 	<a href="/user/following/">People</a><br>
+	<a href="/user/mfa/">Multi-Factor Authication</a>
 </div>

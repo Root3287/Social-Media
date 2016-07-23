@@ -33,10 +33,10 @@ if($version == "1.1.1" || $version=="1.1.0"){
 	$data[] = $db->query("ALTER TABLE `users` ADD `score` bigint NULL DEFAULT 0");
 	$data[] = $db->query("CREATE TABLE `achievement` (`id` int(11) unsigned NOT NULL AUTO_INCREMENT,`user` int(11) DEFAULT NULL,`achievement` int(11) DEFAULT NULL,PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
 	Setting::update('version', '1.2.1');
-}else if($version == "1.3.0"){
+}else if($version == "1.2.1"){
 	$prefix = "";
-	if(Config::get('mysql/prefix') !==null){
-		$prefix = "sm_";
+	if(isset($GLOBALS['config']['mysql']['prefix'])){
+		$prefix = Config::get('mysql/prefix');
 	}else{
 		$prefix = "";
 	}
@@ -45,7 +45,7 @@ if($version == "1.1.1" || $version=="1.1.0"){
 		'value'=> '0',
 	]);
 	Setting::add([
-		'name' => "uploadcare-public-key"
+		'name' => "uploadcare-public-key",
 		'value'=> NULL,
 	]);
 	Setting::add([
@@ -120,6 +120,13 @@ if($version == "1.1.1" || $version=="1.1.0"){
 	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `confirm_hash` text");
 	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `recover_hash` text");
 	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `mfa` text");
+	$data[] = $db->query("ALETR TABLE `".$prefix."comments` CHANGE COLUMN `time` `time` bigint(128)");
+	
+	$users = $db->get('users', '1','=','1')->results();
+	foreach ($users as $u) {
+		$data[] = $db->update('users', $u->id, ['confirmed'=>1]);
+	}
+
 	Setting::update('version', '1.3.0');
 }
 foreach ($data as $d) {

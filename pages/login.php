@@ -30,7 +30,7 @@ if(Input::exists()){
 			$remember = (Input::get('remember') == 'on')? true:false;
 			$user2 = $db->get('users', ['username', '=', escape(Input::get('username'))])->first();
 			$mfa = json_decode($user2->mfa);
-			if(Setting::get('enable-mfa') == 1 && Setting::get('enable-mfa-email')){
+			if(Setting::get('enable-mfa') == 1 && Setting::get('enable-mfa-email') == 1 && Setting::get('enable-email') == 1){
 				if($mfa->enable == 1){
 					if(Input::get('tfaEmail') !==null){
 						if(Input::get('tfaEmail') == $mfa->code){
@@ -90,8 +90,10 @@ if(Input::exists()){
 							$mail->msgHTML($html);
 							$mail->isHTML(true);
 							$mail->Body = $html;
-
-							$mail->send();
+							$send_error = false;
+							if(!$mail->send()){
+								$send_error = true;
+							}
 						}
 						require 'inc/includes/email2FA.php';
 						die();
@@ -124,11 +126,11 @@ if(Input::exists()){
 					}
 				}else{
 					if($login){
-						if($user3->data()->confirmed !=1){
-							$user3->logout();
-						}else{
+						if($user3->data()->confirmed == 1){
 							Session::flash('complete', '<div class="alert alert-success">You have been logged in!</div>');
 							Redirect::to('/');
+						}else{
+							$user3->logout();
 						}
 					}
 				}
@@ -144,13 +146,13 @@ if(Input::exists()){
 	<body>
 		<?php include 'assets/nav.php';?>
 		<div class="container">
-			<?php if(Input::exists()): if(Token::check(Input::get('token'))): if(!$val->passed()):?>
-			<div class="alert alert-danger"><?php foreach ($val->errors() as $error){echo $error.'<br/>';}?></div>
-			<?php endif;endif;endif;?>
-			<?php if(Input::exists()): if(!$login):?>
-			<div class="alert alert-danger">Invalid Credentials!</div>
-			<?php endif;endif;?>
 			<div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+				<?php if(Input::exists()): if(Token::check(Input::get('token'))): if(!$val->passed()):?>
+				<div class="alert alert-danger"><?php foreach ($val->errors() as $error){echo $error.'<br/>';}?></div>
+				<?php endif;endif;endif;?>
+				<?php if(Input::exists()): if(!$login):?>
+				<div class="alert alert-danger">Invalid Credentials!</div>
+				<?php endif;endif;?>
 				<h1>Login</h1>
 				<form action="" method="post" autocomplete="off">
 					<div class="form-group">

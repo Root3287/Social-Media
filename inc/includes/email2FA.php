@@ -7,6 +7,11 @@
 		<?php require 'assets/nav.php';?>
 		<div class="container">
 			<div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+				<?php if(!$send_error): ?>
+					<div class="alert alert-success">A email has been sent to you!</div>
+				<?php else:?>
+					<div class="alert alert-danger">There was an error sending an email!</div>
+				<?php endif;?>
 				<form action="" method="post">
 					<h1>Login</h1>
 					<div class="form-group">

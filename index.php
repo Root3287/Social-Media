@@ -151,6 +151,14 @@ $router->add('/admin/update/database', function(){
 	require 'pages/admin/update-db.php';
 	return true;
 });
+$router->add('/admin/email/', function(){
+	require 'pages/admin/email.php';
+	return true;
+});
+$router->add('/admin/mfa/', function(){
+	require 'pages/admin/mfa.php';
+	return true;
+});
 /*
 API
 */
@@ -212,6 +220,10 @@ $router->add('/user/following(.*)', function(){
 $router->add('/user/achievements', function(){
 	//return false;
 	require 'pages/user/achievements.php';
+	return false;
+});
+$router->add('/user/mfa/', function(){
+	require 'pages/user/mfa.php';
 	return true;
 });
 /*

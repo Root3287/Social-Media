@@ -40,13 +40,12 @@ if(!is_dir('pages/install') && isset($GLOBALS['config'])){
 			}
 		}
 	}
-	
-	//IP 
 	$ip = new IP();
-		try {
-			$ip->insert(getClientIP());
-		} catch (Exception $e) {
-			
-		}
+	try{
+		$ip->insert(getClientIP());
+	}catch(Exception $e){
+		
+	}
+	//die(print_r(getSelfURL()));
 	unset($ip);
 }

@@ -22,7 +22,7 @@ $token = Token::generate();
 ?>
 <html lang="en">
 	<head>
-		<?php require 'assets/head.php';?>
+	<?php require 'assets/head.php';?>
 	</head>
 	<body>
 		<?php require 'assets/nav.php';?>

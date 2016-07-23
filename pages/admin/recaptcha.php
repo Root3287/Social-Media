@@ -1,5 +1,12 @@
 <?php
 $user = new User();
+if($user->isAdmLoggedIn()){
+	if($user->data()->group != 2){
+		Redirect::to('/');
+	}
+}else{
+	Redirect::to('/admin');
+}
 if(Input::exists()){
 	if(Token::check(Input::get('token'))){
 		$enable_recaptcha = (Input::get('enable-recaptcha') == 'on')? '1':'0';

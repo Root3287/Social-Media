@@ -1,2 +1,2 @@
 <?php
-echo escape("tjgibbons10@gmail.com");
+Session::put(Config::get('session/session_name'), 1);
