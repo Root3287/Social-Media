@@ -36,7 +36,14 @@ if(!$u->exists()){
 					<div class="form-group"><label for="name">Name:</label><input type="text" class="form-control" value="<?php echo $u->data()->name;?>"></div>
 					<div class="form-group"><label for="username">Username:</label><input type="text" class="form-control" value="<?php echo $u->data()->username;?>"></div>
 					<div class="form-group"><label for="email">Email: </label><input type="email" class="form-control" value="<?php echo $u->data()->email;?>"></div>
-					<div class="row"></div>
+					<div class="form-group">
+						<label for="group">Group:</label>
+						<select id="group" class="form-control" name="group">
+						 <?php $groups = $db->get('groups', ['1','=','1'])->results(); foreach($groups as $g):?>
+						<option value="<?php echo $g->id?>" <?php if($g->id == $u->data()->group):?>selected<?php endif;?>><?php echo $g->id." - ".$g->group_name;?></option>
+						<?php endforeach;?>
+						</select>
+					</div>
 				</form>
 			</div>
 		</div>

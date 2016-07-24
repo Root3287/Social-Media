@@ -42,13 +42,13 @@ $userData = $pagination->getArrayData($limit, $page);
 			<h1>AdminCP</h1>
 			<ol class="breadcrumb">
 			  <li><a href="/admin">AdminCP</a></li>
-			  <li><a class="active" href="/admin/user/">Users</a></li>
+			  <li><a class="active" href="/admin/users/">Users</a></li>
 			  <?php if(Input::get('o') !=null):?>
-			  <li><a href="/admin/user/?o=<?php echo escape(Input::get('o'));?>"><?php echo escape(Input::get('o'));?></a></li>
+			  <li><a href="/admin/users/?o=<?php echo escape(Input::get('o'));?>"><?php echo escape(Input::get('o'));?></a></li>
 			  <?php if(Input::get('s') !=null): ?>
-			  	<li><a href="/admin/user/?o=<?php echo escape(Input::get('o'));?>&s=<?php echo escape(Input::get('s'));?>"><?php echo escape(Input::get('s'));?></a></li>
+			  	<li><a href="/admin/users/?o=<?php echo escape(Input::get('o'));?>&s=<?php echo escape(Input::get('s'));?>"><?php echo escape(Input::get('s'));?></a></li>
 			  	<?php if($page !=null): ?>
-			  	<li><a href="/admin/user/?o=<?php echo escape(Input::get('o'));?>&p=<?php echo $page;?>&s=<?php echo escape(Input::get('s'));?>"><?php echo $page;?></a></li>
+			  	<li><a href="/admin/users/?o=<?php echo escape(Input::get('o'));?>&p=<?php echo $page;?>&s=<?php echo escape(Input::get('s'));?>"><?php echo $page;?></a></li>
 			  <?php endif; endif; endif;?>
 			</ol>
 			<div class="row">
@@ -103,6 +103,13 @@ $userData = $pagination->getArrayData($limit, $page);
 										<td>
 											Joined
 										</td>
+										<td>Private</td>
+										<td>Banned</td>
+										<td>Last On</td>
+										<td>Last IP</td>
+										<td>Verified</td>
+										<td>Score</td>
+										<td>Email Confirm</td>
 										<td>
 											Action
 										</td>
@@ -130,6 +137,14 @@ $userData = $pagination->getArrayData($limit, $page);
 											<td>
 												<?php echo $users->joined?>
 											</td>
+											<td><?php echo $users->private?></td>
+											<td><?php echo $users->banned?></td>
+											<td><?php echo $users->last_online?></td>
+											<td><?php echo $users->last_ip?></td>
+											<td><?php echo $users->verified?></td>
+											<td><?php echo $users->score?></td>
+											<td><?php echo $users->confirmed?></td>
+											<td><a href="/admin/user/edit/<?php echo $users->username;?>/"><span class="glyphicon glyphicon-pencil"></span></a></td>
 										</tr>
 										<?php endforeach;?>
 									<?php else:?>
@@ -153,6 +168,14 @@ $userData = $pagination->getArrayData($limit, $page);
 											<td>
 												<?php echo $users->joined?>
 											</td>
+											<td><?php echo $users->private?></td>
+											<td><?php echo $users->banned?></td>
+											<td><?php echo $users->last_online?></td>
+											<td><?php echo $users->last_ip?></td>
+											<td><?php echo $users->verified?></td>
+											<td><?php echo $users->score?></td>
+											<td><?php echo $users->confirmed?></td>
+											<td><a class="btn btn-warning" href="/admin/user/edit/<?php echo $users->username;?>/"><span class="glyphicon glyphicon-pencil"></span></a></td>
 										</tr>
 										<?php endforeach;?>
 									<?php endif;?>

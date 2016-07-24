@@ -155,7 +155,7 @@ $data[] = $db->createTable(
 );
 //Pokes Count
 $data[] = $db->createTable(
-	'pokes_pending',
+	'pokes_count',
 	[
 		"`id`"=>['bigint(11)', 'NOT NULL', 'AUTO_INCREMENT'],
 		"`user1`"=>['int(255)', 'NOT NULL'],

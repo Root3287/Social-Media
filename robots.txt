@@ -1,3 +1,12 @@
 # hello ^.^
 User-agent: *
-Disallow: /
+Allow: /
+Disallow: /admin
+Disallow: /user
+Disallow: /assets
+Disallow: /install
+Disallow: /api/
+Disallow: /multi-factor
+Disallow: /pokes
+Disallow: /report
+Disallow: /test
