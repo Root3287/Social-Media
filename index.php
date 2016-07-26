@@ -43,7 +43,7 @@ $router->add('/u/(.*)/(.*)', function($profile_user){
 });
 
 $router->add('/test',function(){
-	//return false;
+	return false;
 	require 'pages/test.php';
 	return true;
 });
@@ -97,10 +97,6 @@ $router->add('/admin/', function(){
 	require 'pages/admin/index.php';
 	return true;
 });
-$router->add('/admin/', function(){
-	require 'pages/admin/reports.php';
-	return true;
-});
 $router->add('/admin/update/', function(){
 	require 'pages/admin/update.php';
 	return true;
@@ -122,8 +118,8 @@ $router->add('/admin/users/(.*)', function(){
 	return true;
 });
 $router->add('/admin/user/edit/(.*)/', function($u2){
-	require 'pages/admin/edit_user.php';
-	return true;
+	//require 'pages/admin/edit_user.php';
+	return false;
 });
 $router->add('/admin/recaptcha', function(){
 	require 'pages/admin/recaptcha.php';

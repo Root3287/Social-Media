@@ -139,7 +139,7 @@ if($version == "1.3.0"){ // 1.3.0 -> 1.3.1
 			$data[] = $db->update('users', $u->id, ['mfa'=>json_encode(['enable'=>0, 'code'=>''])]);
 		}
 	}
-
+	Setting::update('version', '1.3.1');
 }
 foreach ($data as $d) {
 	echo "<pre>".var_export($d, true)."</pre>";
