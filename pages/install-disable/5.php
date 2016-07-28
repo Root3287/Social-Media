@@ -49,9 +49,11 @@ if(Input::exists()){
 				die($e->getMessage());
 			}
 			if($user->login(escape(Input::get('username')), escape(Input::get('password')), false)){
-				Notification::createMessage('Welcome to the Social-Media '. $user->data()->name, $user->data()->id);
-				Session::flash('complete', '<div class="alert alert-info">You need to delete install-disable.php! Hacker could use this to their advantage!</div>');
-				Redirect::to('?step=6');
+				if($user->admLogin(escape(Input::get('username')), escape(Input::get('password')), false)){
+					Notification::createMessage('Welcome to the Social-Media '. $user->data()->name, $user->data()->id);
+					Session::flash('complete', '<div class="alert alert-info">You need to delete install-disable.php! Hacker could use this to their advantage!</div>');
+					Redirect::to('?step=6');
+				}
 			} 
 		}
 	}

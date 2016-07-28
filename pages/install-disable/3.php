@@ -25,17 +25,24 @@ if(Input::exists()){
 		],
 	]);
 	if($validate->passed()){
+		$dbAddr = Input::get('dbAddr');
+		$dbUser = Input::get('dbUser');
 		$dbPass = Input::get('dbPass');
 		$dbPrefix = Input::get('dbPrefix');
+		$dbPort = Input::get('dbPort');
+		$dbDatabase = Input::get('dbDatabase');
 		$input_session = Input::get('session');
 		$input_cookie = Input::get('cookie');
 		$input_token_val = Input::get('token_val');
 
-		if(empty($dbPass)){
+		if(empty($dbPass) || $dbPass == null){
 			$dbPass = "";
 		}
-		if(empty($dbPrefix)){
-			$dbPrefix = "";
+		if(empty($dbPrefix) || $dbPrefix == null){
+			$dbPrefix = "sm_";
+		}
+		if(empty($dbPort) || $dbPort == null){
+			$dbPort = 3306;
 		}
 		if(empty($input_session)){
 			$input_session = "session_sm";
@@ -44,7 +51,7 @@ if(Input::exists()){
 			$input_session = "cookie_sm";
 		}
 		if(empty($input_token_val)){
-			$input_session = "token_sm";
+			$input_token_val = "token_sm";
 		}
 
 		$mysqli = new mysqli(escape(Input::get('dbAddr').":".Input::get('dbPort')), escape(Input::get('dbUser')), escape(Input::get('dbPass')), escape(Input::get('dbDatabase')));
@@ -52,44 +59,36 @@ if(Input::exists()){
 			Session::flash('error', "<div class=\"alert alert-danger\">".$mysqli->connect_error."</div>");
 		}else{
 			$insert = 	'<?php'.PHP_EOL.
-						'$GLOBALS[\'config\'] = array('											.PHP_EOL.
-						'		"config"=>array("name" => "Social-Media"),'						.PHP_EOL.
-						'		"mysql" => array('												.PHP_EOL.
-						'		"host" => "'.escape(Input::get("dbAddr")).'", //127.0.0.1.'		.PHP_EOL.
-						'		"user" => "'.escape(Input::get("dbUser")).'", //root'			.PHP_EOL.
-						'		"password" => "'.escape(Input::get("dbPass")).'", //password'	.PHP_EOL.
-						'		"db" => "'.escape(Input::get("dbDatabase")).'", //social-media'	.PHP_EOL.
-						'		"prefix" =>"'.escape(Input::get("dbPrefix")).'", //sm_'			.PHP_EOL.
-						'		"port" => "'.escape(Input::get("dbPort")).'", //3306'			.PHP_EOL.
-						'	),'																	.PHP_EOL.
-						'	"remember" => array('												.PHP_EOL.
-						'		"expiry" => 604800,'											.PHP_EOL.
-						'	),'																	.PHP_EOL.
-						'	"session" => array ('												.PHP_EOL.
-						'		"token_name" => "'.escape(Input::get("token_val")).'",'			.PHP_EOL.
-						'		"cookie_name"=>"'.escape(Input::get("cookie")).'",'				.PHP_EOL.
-						'		"session_name"=>"'.escape(Input::get("session")).'"'			.PHP_EOL.
-						'	),'																	.PHP_EOL.
+						'$GLOBALS[\'config\'] = array('								.PHP_EOL.
+						'		"config"=>array("name" => "Social-Media"),'			.PHP_EOL.
+						'		"mysql" => array('									.PHP_EOL.
+						'		"host" => "'.escape($dbAddr).'", //127.0.0.1.'		.PHP_EOL.
+						'		"user" => "'.escape($dbUser).'", //root'			.PHP_EOL.
+						'		"password" => "'.escape($dbPass).'", //password'	.PHP_EOL.
+						'		"db" => "'.escape($dbDatabase).'", //social-media'	.PHP_EOL.
+						'		"prefix" =>"'.escape($dbPrefix).'", //sm_'			.PHP_EOL.
+						'		"port" => "'.escape($dbPort).'", //3306'			.PHP_EOL.
+						'	),'														.PHP_EOL.
+						'	"remember" => array('									.PHP_EOL.
+						'		"expiry" => 604800,'								.PHP_EOL.
+						'	),'														.PHP_EOL.
+						'	"session" => array ('									.PHP_EOL.
+						'		"token_name" => "'.escape($input_token_val).'",'	.PHP_EOL.
+						'		"cookie_name"=>"'.escape($input_cookie).'",'		.PHP_EOL.
+						'		"session_name"=>"'.escape($input_session).'"'		.PHP_EOL.
+						'	),'														.PHP_EOL.
 						');';
 				if(is_writable('inc/config.php')){
-					$config = file_get_contents('inc/config.php');
-					$config = substr($config, 5);
+					if(!isset($GLOBALS['config'])){
+						$config = file_get_contents('inc/config.php');
+						$config = substr($config, 5);
 
-					$file = fopen('inc/config.php', 'w');
-					fwrite($file, $insert.$config);
-					fclose($file);
-					/*
-					$db = DB::getInstance();
-
-					$dbInsert = file_get_contents('pages/install/install.txt');
-
-					if(!$db->query($dbInsert)->error()){
-						echo "<div class=\"alert alert-success\">Databases Installed!</div><br/><a class=\"btn btn-primary\" href=\"?step=5\">Next</a>";
-					}else{
-						echo "<div class=\"alert alert-danger\">Error Installing databases!</div><br/><div class=\"well\">{$dbInsert}</div><a class=\"btn btn-primary\" href=\"?step=5\">Next</a>";
+						$file = fopen('inc/config.php', 'w');
+						fwrite($file, $insert.$config);
+						fclose($file);
 					}
-					*/
-					//echo '<script>window.location.replace("/install?step=5");</script>';
+					echo "<div class='alert alert-success'>Config file write success!</div>";
+					echo "<a class='btn btn-primary' href='?step=4'>Next</a>";
 					die();
 				}else{
 					$config = file_get_contents('inc/config.php');
