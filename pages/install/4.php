@@ -224,7 +224,7 @@ $data[] = $db->insert('settings', ['name'=>'motd', 'value'=>'']);
 $data[] = $db->insert('settings', ['name'=>'debug', 'value'=>'Off']);
 $data[] = $db->insert('settings', ['name'=>'inverted-nav', 'value'=>'0']);
 $data[] = $db->insert('settings', ['name'=>'unique-id', 'value'=>substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0,62)]);
-$data[] = $db->insert('settings', ['name'=>'version', 'value'=>'1.3.1']);
+$data[] = $db->insert('settings', ['name'=>'version', 'value'=>'1.3.0']);
 $data[] = $db->insert('settings', ['name'=>'enable-recaptcha', 'value'=>'0']);
 $data[] = $db->insert('settings', ['name'=>'recaptcha-site-key', 'value'=>'']);
 $data[] = $db->insert('settings', ['name'=>'recaptcha-secret-key', 'value'=>'']);
