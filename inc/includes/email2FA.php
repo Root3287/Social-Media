@@ -22,7 +22,7 @@
 					</div>
 					<div class="form-group">
 						<label for="remember">Remember me?
-							<input type="checkbox" name="remember" id="remember" checked="<?php echo ((Input::get('remember') == on)? "checked":"");?>"/>
+							<input type="checkbox" name="remember" id="remember" <?php echo (($remember)? "checked=\"checked\"":"");?>"/>
 						</label>
 					</div>
 					<div class="form-group">

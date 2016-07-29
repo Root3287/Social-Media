@@ -43,7 +43,7 @@ $router->add('/u/(.*)/(.*)', function($profile_user){
 });
 
 $router->add('/test',function(){
-	return false;
+	//return false;
 	require 'pages/test.php';
 	return true;
 });

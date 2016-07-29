@@ -45,6 +45,7 @@ $data[] = $db->createTable(
 		"`confirm_hash`"=>["text",],
 		"`recover_hash`"=>["text",],
 		"`mfa`"=>["text",],
+		"`number`"=>["text"],
 		"PRIMARY KEY" => ['(`id`)',],
 	], 
 	"COLLATE='latin1_swedish_ci' ENGINE=InnoDB"

@@ -41,6 +41,11 @@ class Validation{
   								$this->addError("{$item} may not contain any spaces");
 							}
 							break;
+						case 'is_numeric':
+							if(!is_numeric($value)){
+								$this->addError("{$item} must be a number!");
+							}
+							break;
 					}
 				}
 			}
