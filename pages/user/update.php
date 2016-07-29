@@ -8,7 +8,7 @@ if(Input::exists()){
 			'name'=>array('required'=>true),
 			//'username'=>array('required'=>true,'min'=>2, 'max'=>50),
 			'email'=>array('required'=>true,),
-			'password' => [
+			'oldpassword' => [
 				'required' => true,
 			],
 			'new_password' => [
@@ -20,12 +20,13 @@ if(Input::exists()){
 		));
 	if(Token::check(Input::get('token'))){
 		if($validation->passed()){
-			if(Hash::make(Input::get('password'), $user->data()->salt) == $user->data()->password){
+			if(Hash::make(Input::get('oldpassword'), $user->data()->salt) == $user->data()->password){
 				$password = (Input::get('new_password') == null)? $user->data()->password : Hash::make(Input::get('new_password'), $user->data()->salt);
 				try{
 					$user->update(array(
 						'name'=>escape(Input::get('name')),
 						'email'=>escape(Input::get('email')),
+						'number' => escape(Input::get('number')),
 						//'username'=>escape(Input::get('username')),
 						'password'=> $password,
 				), $user->data()->id);
@@ -68,28 +69,39 @@ if(Input::exists()){
 			<div class="col-md-9">
 				<form action="" method="post">
 					<div class="form-group">
+						<label for="name">Name: </label>
 						<input type="text" name="name" value="<?php echo $user->data()->name?>" class="form-control input-md" placeholder="Name">
 					</div>
 					<fieldset disabled>
 					<div class="form-group">
+						<label for="username">Username: </label>
 						<input type="text" name="username" value="<?php echo $user->data()->username?>" class="form-control input-md" placeholder="Username">
 					</div>
 					</fieldset>
 					<div class="form-group">
+						<label for="email">Email: </label>
 						<input type="email" name="email" value="<?php echo $user->data()->email?>" class="form-control input-md" placeholder="Email">
+					</div>
+					<div class="form-group">
+						<label for="number">Phone Number:</label>
+						<input type="number" name="number" value="<?php echo $user->data()->number?>" class="form-control input-md" placeholder="Phone Number">
+						<span class="help-block">This number would be used for multi-step verification! Please use in the format of xxxxxxxxxx not (xxx)xxx-xxxx.</span>
 					</div>
 					<div class="form-group">
 						<div class="row">
 							<div class="col-md-6">
+								<label for="password">New Password:</label>
 								<input type="password" name="new_password" value="" class="form-control input-md" placeholder="new password">
 							</div>
 							<div class="col-md-6">
+								<label for="cnewPass">Confirm New Password:</label>
 								<input type="password" name="confirm_new_password" value="" class="form-control input-md" placeholder="confirm password">
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
-						<input type="password" name="password" value="" class="form-control input-md" placeholder="password">
+						<label for="oldPass">Old Password:</label>
+						<input type="password" name="oldpassword" value="" class="form-control input-md" placeholder="password">
 					</div>
 					<div class="form-group">
 						<input type="reset" class="btn btn-md btn-default">

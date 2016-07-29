@@ -141,6 +141,18 @@ if($version == "1.3.0"){ // 1.3.0 -> 1.3.1
 	}
 	Setting::update('version', '1.3.1');
 }
+if($version == "1.3.1"){ // 1.3.1 -> 1.4.0
+	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `number` text");
+
+	foreach ($users as $u) {
+		$mfa = json_decode($u->mfa);
+		if(isset($mfa['type']) && isset($mfa['semail'])){
+			$mfa['type'] = "email";
+			$mfa['semail'] = "";
+			$data[] = $db->update('users', $u->id, ['mfa'=>$mfa]);
+		}
+	}
+}
 foreach ($data as $d) {
 	echo "<pre>".var_export($d, true)."</pre>";
 }

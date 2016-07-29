@@ -80,9 +80,17 @@ if(Input::exists()){
 							$mail->setFrom($GLOBALS['config']['email']['user'], $GLOBALS['config']['email']['name']);
 							$mail->From = $GLOBALS['config']['email']['user'];
 							$mail->FromName = $GLOBALS['config']['email']['name'];
-							$mail->addAddress($user2->email, escape($user2->name));
 							
-							$mail->Subject = 'Social-Media Multi-Factor Code';
+							if($mfa_array['type'] == "email"){
+								$mail->Subject = 'Social-Media Multi-Factor Code';
+								$mail->addAddress($user2->email, escape($user2->name));
+							}else if($mfa_array['type'] == "sms" && isset($mfa_array['semail'])){
+								$mail->addAddress($user2->number.'@'.$mfa_array['semail'], escape($user2->name));
+							}else{ // Fallback to the default
+								$mail->Subject = 'Social-Media Multi-Factor Code';
+								$mail->addAddress($user2->email, escape($user2->name));
+							}
+							
 							$html = file_get_contents('assets/email/emailMFA.html');
 							$content = "This is one of your multi-factor authication code!";
 							$html = str_replace(['[Name]','[Content]','[Code]'], [$user2->username ,$content, $mfa_code], $html);
@@ -163,7 +171,7 @@ if(Input::exists()){
 					</div>
 					<div class="form-group">
 						<label for="remember">Remember me?
-							<input type="checkbox" name="remember" id="remember"/>
+							<input type="checkbox" name="remember" id="remember" checked="checked" />
 						</label>
 					</div>
 					<div class="row">
