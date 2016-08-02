@@ -9,6 +9,49 @@ if(!$post || $original_post->active==0){
 
 $user2 = new User($original_post->user_id);
 $token = Token::generate();
+
+$db = DB::getInstance();
+$mentioned = $db->get('mensions', ['post_hash', '=', $original_post->hash]);
+
+
+//Public
+if($original_post->privacy == 0){
+
+}
+//following
+else if($original_post->privacy == 1){
+	if($user->isLoggedIn()){
+		if(!$user->isFollowing($user2->data()->id) || $user->data()->id == $user2->data()->id || $mentioned->count() && $user->data()->id == $mentioned->first()->user_id){
+			Redirect::to(404);
+		}
+	}else{
+		Redirect::to(404);
+	}
+}
+//follwer
+else if($original_post->privacy == 2){
+	Redirect::to(404);
+}
+//friend
+else if($original_post->privacy == 3){
+	if($user->isLoggedIn()){
+		if(!$user->isFriends($user2->data()->id) || $user->data()->id != $user2->data()->id || $mentioned->count() && $user->data()->id == $mentioned->first()->user_id){
+			Redirect::to(404);
+		}
+	}else{
+		Redirect::to(404);
+	}
+}
+//private
+else if($original_post->privacy == 4){
+	if($user->isLoggedIn()){
+		if($user->data()->id != $user2->data()->id || $user->data()->id != $user2->data()->id || $mentioned->count() && $user->data()->id == $mentioned->first()->user_id){
+			Redirect::to(404);
+		}
+	}else{
+		Redirect::to(404);
+	}
+}
 ?>
 <!DOCTYPE HTML>
 <html>

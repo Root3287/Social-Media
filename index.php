@@ -37,11 +37,15 @@ $router->add('/register', function(){
 	require 'pages/register.php';
 	return true;
 });
-$router->add('/u/(.*)/(.*)', function($profile_user){
-	require 'pages/profile.php';
+$router->add('/u/(.*)/about/(.*)', function($profile_user){
+	return false;
+	require 'pages/profile/about-profile.php';
 	return true;
 });
-
+$router->add('/u/(.*)/(.*)', function($profile_user){
+	require 'pages/profile/profile.php';
+	return true;
+});
 $router->add('/test',function(){
 	//return false;
 	require 'pages/test.php';
@@ -220,6 +224,10 @@ $router->add('/user/mfa/', function(){
 	require 'pages/user/mfa.php';
 	return true;
 });
+$router->add('/user/privacy/', function(){
+	require 'pages/user/privacy.php';
+	return true;
+});
 /*
 Errors
  */
@@ -349,8 +357,16 @@ $router->add('/action/status(.*)', function(){
 				],
 			]);
 			if($validate->passed()){
+				$privacy = 0;
+				//if the user does not selected it in the timeline; then we can use their settings...
+				//other wise we use the one selected in the timeline.
+				if(Input::get('privacy') == null){
+					$privacy = json_decode($user->data()->privacy_settings, true)['display_post'];
+				}else{
+					$privacy = Input::get('privacy');
+				}
 				try{
-					$post->create(escape(Input::get('post_status')),$user->data()->id);
+					$post->create(escape(Input::get('post_status')),$user->data()->id, $privacy);
 					$user->update([
 						'score'=> $user->data()->score+1,
 					]);
@@ -360,6 +376,8 @@ $router->add('/action/status(.*)', function(){
 					echo(json_encode(['success'=>false],JSON_PRETTY_PRINT));
 				}
 			}
+		}else{
+			echo json_encode(['success'=>false, 'message'=>'Token invalid']);
 		}
 	}else{
 		echo(json_encode(['success'=>false],JSON_PRETTY_PRINT));
@@ -379,6 +397,15 @@ $router->add('/action/spic', function(){
 				],
 			]);
 			if($validate->passed()){
+				$privacy = 0;
+				//if the user does not selected it in the timeline; then we can use their settings...
+				//other wise we use the one selected in the timeline.
+				if(Input::get('privacy') == null){
+					$privacy = json_decode($user->data()->privacy_settings, true)['display_post'];
+				}else{
+					$privacy = Input::get('privacy');
+				}
+				
 				if(Setting::get('uploadcare-multiple') == "true"){
 					$link = Input::get('picture_link');
 					$link = explode('/', $link);
@@ -398,7 +425,8 @@ $router->add('/action/spic', function(){
 						$db->insert("posts", [
 							"content"=>$content, 
 							"user_id"=>$user->data()->id, 
-							"hash"=>$hash,'time'=>date('Y-m-d H:i:s')
+							"hash"=>$hash,'time'=>date('Y-m-d H:i:s'),
+							"privacy"=>$privacy,
 						]);
 						$user->update([
 							'score'=> $user->data()->score+1,
@@ -413,7 +441,8 @@ $router->add('/action/spic', function(){
 						$db->insert("posts", [
 							"content"=>"<img class='img-responsive' src='".Input::get('picture_link')."' alt='".Input::get('picture_link')."'><br>", 
 							"user_id"=>$user->data()->id, 
-							"hash"=>$hash,'time'=>date('Y-m-d H:i:s')
+							"hash"=>$hash,'time'=>date('Y-m-d H:i:s'),
+							"privacy" => $privacy,
 						]);
 						$user->update([
 							'score'=> $user->data()->score+1,

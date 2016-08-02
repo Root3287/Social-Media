@@ -141,15 +141,51 @@ if($version == "1.3.0"){ // 1.3.0 -> 1.3.1
 	}
 	Setting::update('version', '1.3.1');
 }
+
+$prefix = "";
+if(isset($GLOBALS['config']['mysql']['prefix'])){
+	$prefix = Config::get('mysql/prefix');
+}else{
+	$prefix = "";
+}
+
 if($version == "1.3.1"){ // 1.3.1 -> 1.4.0
 	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `number` text");
+	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `bio` longtext");
+	$data[] = $db->query("ALTER TABLE `sm_posts` ADD `privacy` INT  NOT NULL  DEFAULT '0'  AFTER `active`");
+
+	$users = $db->get('users', ['1','=','1'])->results();
+	$posts = $db->get('posts', ['1','=','1'])->results();
 
 	foreach ($users as $u) {
-		$mfa = json_decode($u->mfa);
-		if(isset($mfa['type']) && isset($mfa['semail'])){
-			$mfa['type'] = "email";
+		$mfa = json_decode($u->mfa, true);
+		$ps = json_decode($u->privacy_settings, true);
+		if(!isset($mfa['type']) && !isset($mfa['semail'])){
+			$mfa['type'] = "";
 			$mfa['semail'] = "";
-			$data[] = $db->update('users', $u->id, ['mfa'=>$mfa]);
+
+			$data[] = $db->update('users', $u->id, [
+				'mfa'=> json_encode($mfa)
+			]);
+		}
+		if(!isset($ps)){
+			$ps = [
+				'name' 			=> 0,
+				'age' 			=> 0,
+				'dob'			=> 0,
+				'email'			=> 0,
+				'number'		=> 0,
+				'location' 		=> 0,
+				'display_post' 	=> 0,
+			];
+
+			$data[] = $db->update['users', $u->id, ['privacy_settings'=>$ps]];
+		}
+	}
+
+	foreach ($posts as $p) {
+		if(isset($p->privacy) || $p->privacy == null){
+			$data[] = $db->update('posts', $p->id, ['privacy','=','0']);
 		}
 	}
 }

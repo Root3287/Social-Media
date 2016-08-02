@@ -11,7 +11,7 @@ class Post{
 	 * @param  Int    $user    The User's ID
 	 * @return [type]          [description]
 	 */
-	public function create($message, $user){
+	public function create($message, $user, $privacy = 0){
 		$count = 0;
 		$success = false;
 		while($count <= 10 && !$success){
@@ -29,6 +29,7 @@ class Post{
 				'content'=> phrase($message,$hash),
 				'hash'=>$hash,
 				'time'=>date('Y-m-d H:i:s'),
+				'privacy'=>$privacy,
 			])){
 				throw new Exception('Error making post',0);
 		}
@@ -62,6 +63,8 @@ class Post{
 				'content'=>$userPost->content,
 				'hash'=>$userPost->hash,
 				'date'=>$userPost->time,
+				'active'=> $userPost->active,
+				'privacy' => $userPost->privacy,
 			];
 		}
 		foreach ($postInMensions as $mensions) { // Get Mensioned
@@ -72,6 +75,8 @@ class Post{
 				'content'=>$mensionTable->content,
 				'hash'=>$mensionTable->hash,
 				'date'=>$mensionTable->time,
+				'active'=>$mensionTable->active,
+				'privacy'=>$mensionTable->privacy,
 			];
 		}
 		usort($return, "date_compare");
@@ -93,6 +98,7 @@ class Post{
 				'hash'=>$userPost->hash, 
 				'date'=>$userPost->time,
 				'active'=> $userPost->active,
+				'privacy' => $userPost->privacy,
 			];
 		}
 		//get the list of followings
@@ -109,6 +115,7 @@ class Post{
 					'hash'=>$followingPost->hash,
 					'date'=>$followingPost->time,
 					'active' => $followingPost->active,
+					'privacy' => $followingPost->privacy,
 				];
 			}
 		}

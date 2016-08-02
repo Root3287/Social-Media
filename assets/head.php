@@ -8,6 +8,8 @@
 		<meta name="keywords" content="Social-Media, Beta">
 		<meta charset="UTF-8">
 		<link rel="stylesheet" href="/assets/css/<?php echo Setting::get('bootstrap-theme');?>.css">
+		<link rel="stylesheet" href="/assets/css/bootstrap-switch.min.css">
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="/assets/js/jquery.js"></script>
 		<script src="/assets/js/bootstrap.js"></script>
+		<script src="/assets/js/bootstrap-switch.min.js"></script>

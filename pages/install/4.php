@@ -45,7 +45,9 @@ $data[] = $db->createTable(
 		"`confirm_hash`"=>["text",],
 		"`recover_hash`"=>["text",],
 		"`mfa`"=>["text",],
+		"`bio`"=>["longtext"],
 		"`number`"=>["text"],
+		"`privacy_settings`"=>["text"],
 		"PRIMARY KEY" => ['(`id`)',],
 	], 
 	"COLLATE='latin1_swedish_ci' ENGINE=InnoDB"
@@ -94,6 +96,7 @@ $data[] = $db->createTable(
 		"`hash`"=>["TEXT","NOT NULL",],
 		"`time`"=>["DATETIME","DEFAULT NULL",],
 		"`active`"=>["int(11)","DEFAULT '1'",],
+		"`privacy`"=>["int(11)","DEFAULT '0'",],
 		"PRIMARY KEY" => ['(`id`)',],
 	], 
 	"COLLATE='latin1_swedish_ci' ENGINE=InnoDB"
