@@ -55,6 +55,7 @@ class Post{
 		if(!is_numeric($user)){break;}
 		$userPosts = $this->getPostByUser($user)->results();
 		$postInMensions = $this->_db->get('mensions', ['user_id', '=', $user])->results();
+		$repost = $this->_db->get('repost', ['user', '=', $user])->results();
 		$return = [];
 		foreach ($userPosts as $userPost) {//Get User post
 			$return[] = [
@@ -79,6 +80,7 @@ class Post{
 				'privacy'=>$mensionTable->privacy,
 			];
 		}
+
 		usort($return, "date_compare");
 		return $return;
 	}

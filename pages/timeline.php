@@ -67,7 +67,7 @@ if(!$user->isLoggedIn()){
 								<select class="form-control input-sm" name="privacy" id="">
 									<option value="0" <?php if($ps->display_post == 0):?>selected<?php endif;?>>Public</option>
 									<option value="1" <?php if($ps->display_post == 1):?>selected<?php endif;?>>Followers</option>
-									<option value="2" <?php if($ps->display_post == 2):?>selected<?php endif;?>>Followers and Following</option>
+									<!--<option value="2" <?php //if($ps->display_post == 2):?>selected<?php //endif;?>>Followers and Following</option>-->
 									<option value="3" <?php if($ps->display_post == 3):?>selected<?php endif;?>>Friends</option>
 									<option value="4" <?php if($ps->display_post == 4):?>selected<?php endif;?>>Private</option>
 								</select>
@@ -118,294 +118,80 @@ if(!$user->isLoggedIn()){
 					<?php 
 					foreach($timelineData as $timeline):
 						$timelineUser = new User($timeline['user_id']);
-						
-						//if($timelineUser->data()->id === $user->data()->id){ //if its the owner
 
-					?>
-					
-					
-					
-					<?php
-						//}else{
 							
 							if($timeline['active'] !=0){
 							
 								$private = $timeline["privacy"];
 
-								switch ($private) {
-									
-									case "0": //Public 
-					?>
-									
-					<div class="well">
-						<div class="page-header">
-							<div class="name">
-							<h1 class="name"><?php echo "<a class=\"name\" href='/u/{$timelineUser->data()->username}/'>".$timelineUser->data()->username."</a>";?></h1> <?php if($timelineUser->data()->verified == 1){?><h4 class="name"><span class="label label-primary name"><span class="glyphicon glyphicon-ok"></span></span></h4><?php }?>
-							</div>
-						</div>
-						
-						<div class="row">
-							<p id="content" style="word-wrap:break-word";><?php echo $timeline['content'];?></p>
-						</div>
+								$picon="glyphicon glyphicon-globe"; 
+								if($private == 1){$picon="glyphicon glyphicon-eye-open";}
+								if($private == 2){}
+								if($private == 3){$picon="glyphicon glyphicon-eye-close";}
+								if($private == 4){$picon="glyphicon glyphicon-lock";}
 
-						<div class="row">
-							<form id="reply" action="" class="form-inline" method="post" autocomplete="off">
-								<div class="form-group">
-									<div class="input-group">
-										<span class="input-group-btn">
-									   		<?php if($like->hasLike($user->data()->id, $timeline['id']) <= 0){?>
-									   		<a href="" id="like" data-token="<?php echo $token;?>" data-post="<?php echo $timeline['id'];?>" class="btn btn-primary"><span class="glyphicon glyphicon-star-empty"></span> <?php echo $like->getLikesByPost($timeline['id'])->count();?></a>
-									   		<?php }else{?>
-									   		<a href="" id="dislike" data-token="<?php echo $token;?>" data-post="<?php echo $timeline['id'];?>" class="btn btn-primary"><span class="glyphicon glyphicon-star"></span> <?php echo $like->getLikesByPost($timeline['id'])->count();?></a>
-									   		<?php }?>
-									   </span>
-									   <input name="post" type="text" class="form-control">
-									   <span class="input-group-btn">
-									        <button type="submit" value="Post Comment" class="btn btn-default"><span class="glyphicon glyphicon-send"></span></button>
-									   </span>
-									   <span class="input-group-btn">
-									   		<button type="button" class="btn btn-info" data-toggle="modal" data-target="#PostModel<?php echo $timeline['id'];?>">
-												<span class="glyphicon glyphicon-list"></span>
-											</button>
-									   </span>
-									</div>
-									<div class="label label-primary"><span class="glyphicon glyphicon-globe"></span></div>
-								</div>
-								<input type="hidden" name="original_post" value="<?php echo $timeline['id'];?>"></input>
-								<input type="hidden" name="token" value="<?php echo $token;?>">
-								<input id="orignal_post" type="hidden" value="<?php echo $timeline['id'];?>">
-							</form>
-						</div>
-					</div>
+								//Check if were mentioned
+								$db = DB::getInstance();
+								$mentioned = $db->get('mensions', ['post_hash', '=', $timeline['hash']]);
+								$show_post = true;
 
-					<!-- Model for post -->
-					<div id="PostModel<?php echo $timeline['id'];?>" class="modal fade" role="dialog">
-					  <div class="modal-dialog">
-
-					    <!-- Modal content-->
-					    <div class="modal-content">
-					      <div class="modal-header">
-					        <button type="button" class="close" data-dismiss="modal">&times;</button>
-					        <h4 class="modal-title"><?php echo "<a href='/u/{$timelineUser->data()->username}/'>".$timelineUser->data()->username."</a>";?> <?php if($timelineUser->data()->verified == 1){?><span class="label label-primary name"><span class="glyphicon glyphicon-ok"></span></span><?php }?></h4>
-					        <span class="pull-right">
-					        <div class="dropdown">
-					        	<button class="btn btn-xs btn-default dropdown-toggle" type="button" id="PostMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-							    ...
-							    <span class="caret"></span>
-							  </button>
-								<ul class="dropdown-menu pull-right" aria-labelledby="PostMenu">
-							    <li><a target="_blank" href="https://twitter.com/intent/tweet?text=<?php echo getSelfURL()."/p/".$timeline['hash'];?>">Tweet</a></li>
-							    <li><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo getSelfURL()."/p/".$timeline['hash'];?>">Share on Facebook</a></li>
-							    <li><a href="/p/<?php echo $timeline['hash'];?>">Post</a></li>
-							  </ul>
-							</div>
-					        </span>
-					      </div>
-					      <div class="modal-body">
-					        <div class="row">
-					        	<div class="col-md-7"><p><?php echo $timeline['content'];?></p></div>
-					        	<div class="col-md-5">
-					      			<strong>Comments</strong><br>
-					      			<?php if($post->getComments($timeline['id'])){
-					      					foreach($post->getComments($timeline['id']) as $comment): 
-					      						$commentUser = new User($comment->user_id)?>
-					      				<div class="row">
-						      				<ul class="media-list">
-											  <li class="media">
-											    <div class="media-left">
-											      <a href="<?php echo "/u/{$timelineUser->data()->username}/";?>">
-											        <img class="media-object img-circle" src="<?php echo $commentUser->getAvatarURL('48')?>" alt="<?php echo $commentUser->data()->username;?>"> 
-											      </a>
-											    </div>
-											    <div class="media-body">
-											      <h4 class="media-heading">
-											      	<a href="<?php echo "/u/{$timelineUser->data()->username}/";?>"><?php echo $commentUser->data()->username;?> <?php if($timelineUser->data()->verified == 1){?><span class="label label-primary name"><span class="glyphicon glyphicon-ok"></span></span><?php }?>
-											      	</a>
-											      </h4>
-											      <p><?php echo $comment->content;?></p>
-											    </div>
-											  </li>
-											</ul>
-					      				</div>
-					      			<?php endforeach;}?>
-					        	</div>
-					        </div>
-					      </div>
-					      <div class="modal-footer">
-							<form id="reply" action="" class="form-inline" method="post" autocomplete="off">
-								<div class="form-group">
-									<div class="input-group">
-										<span class="input-group-btn">
-										   		<?php if($like->hasLike($user->data()->id, $timeline['id']) <= 0){?><a id="like" href="" id="like" class="btn btn-primary" data-token="<?php echo $token;?>" data-post="<?php echo $timeline['id'];?>"><span class="glyphicon glyphicon-star-empty"></span> <?php echo $like->getLikesByPost($timeline['id'])->count();?></a><?php }else{?><a href="" id="dislike" class="btn btn-primary" data-token="<?php echo $token;?>" data-post="<?php echo $timeline['id'];?>"><span class="glyphicon glyphicon-star"></span> <?php echo $like->getLikesByPost($timeline['id'])->count();?></a><?php }?>
-										   </span>
-									   <input name="post" type="text" class="form-control">
-									   <span class="input-group-btn">
-									        <button type="submit" value="Post Comment" class="btn btn-default">
-												<span class="glyphicon glyphicon-send"></span>
-											</button>
-									   </span>
-									   <span class="input-group-btn">
-									        <button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove-circle"></span></button>
-									   </span>
-									</div>
-								</div>
-								<input type="hidden" id="orignal_post" name="original_post" value="<?php echo $timeline['id'];?>"></input>
-								<input type="hidden" id="token" name="token" value="<?php echo $token;?>">
-							</form>
-					      </div>
-					    </div>
-					  </div>
-					</div>
-					
-					<?php
-										break;
-
-									case "1": // Followers
-										$db = DB::getInstance();
-										$mentioned = $db->get('mensions', ['post_hash', '=', $timeline['hash']]);
-
-										if($user->isFollowing($timelineUser->data()->id) || $user->data()->id == $timelineUser->data()->id || $mentioned->count() && $user->data()->id == $mentioned->first()->user_id){
-					?>
-					
-					<div class="well">
-						<div class="page-header">
-							<div class="name">
-							<h1 class="name"><?php echo "<a class=\"name\" href='/u/{$timelineUser->data()->username}/'>".$timelineUser->data()->username."</a>";?></h1> <?php if($timelineUser->data()->verified == 1){?><h4 class="name"><span class="label label-primary name"><span class="glyphicon glyphicon-ok"></span></span></h4><?php }?>
-							</div>
-						</div>
-						
-						<div class="row">
-							<p id="content" style="word-wrap:break-word";><?php echo $timeline['content'];?></p>
-						</div>
-
-						<div class="row">
-							<form id="reply" action="" class="form-inline" method="post" autocomplete="off">
-								<div class="form-group">
-									<div class="input-group">
-										<span class="input-group-btn">
-									   		<?php if($like->hasLike($user->data()->id, $timeline['id']) <= 0){?>
-									   		<a href="" id="like" data-token="<?php echo $token;?>" data-post="<?php echo $timeline['id'];?>" class="btn btn-primary"><span class="glyphicon glyphicon-star-empty"></span> <?php echo $like->getLikesByPost($timeline['id'])->count();?></a>
-									   		<?php }else{?>
-									   		<a href="" id="dislike" data-token="<?php echo $token;?>" data-post="<?php echo $timeline['id'];?>" class="btn btn-primary"><span class="glyphicon glyphicon-star"></span> <?php echo $like->getLikesByPost($timeline['id'])->count();?></a>
-									   		<?php }?>
-									   </span>
-									   <input name="post" type="text" class="form-control">
-									   <span class="input-group-btn">
-									        <button type="submit" value="Post Comment" class="btn btn-default"><span class="glyphicon glyphicon-send"></span></button>
-									   </span>
-									   <span class="input-group-btn">
-									   		<button type="button" class="btn btn-info" data-toggle="modal" data-target="#PostModel<?php echo $timeline['id'];?>">
-												<span class="glyphicon glyphicon-list"></span>
-											</button>
-									   </span>
-									</div>
-									<div class="label label-primary"><span class="glyphicon glyphicon-eye-open"></span></div>
-								</div>
-								<input type="hidden" name="original_post" value="<?php echo $timeline['id'];?>"></input>
-								<input type="hidden" name="token" value="<?php echo $token;?>">
-								<input id="orignal_post" type="hidden" value="<?php echo $timeline['id'];?>">
-							</form>
-						</div>
-					</div>
-
-					<!-- Model for post -->
-					<div id="PostModel<?php echo $timeline['id'];?>" class="modal fade" role="dialog">
-					  <div class="modal-dialog">
-
-					    <!-- Modal content-->
-					    <div class="modal-content">
-					      <div class="modal-header">
-					        <button type="button" class="close" data-dismiss="modal">&times;</button>
-					        <h4 class="modal-title"><?php echo "<a href='/u/{$timelineUser->data()->username}/'>".$timelineUser->data()->username."</a>";?> <?php if($timelineUser->data()->verified == 1){?><span class="label label-primary name"><span class="glyphicon glyphicon-ok"></span></span><?php }?></h4>
-					        <span class="pull-right">
-					        <div class="dropdown">
-					        	<button class="btn btn-xs btn-default dropdown-toggle" type="button" id="PostMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-							    ...
-							    <span class="caret"></span>
-							  </button>
-								<ul class="dropdown-menu pull-right" aria-labelledby="PostMenu">
-							    <li><a target="_blank" href="https://twitter.com/intent/tweet?text=<?php echo getSelfURL()."/p/".$timeline['hash'];?>">Tweet</a></li>
-							    <li><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo getSelfURL()."/p/".$timeline['hash'];?>">Share on Facebook</a></li>
-							    <li><a href="/p/<?php echo $timeline['hash'];?>">Post</a></li>
-							  </ul>
-							</div>
-					        </span>
-					      </div>
-					      <div class="modal-body">
-					        <div class="row">
-					        	<div class="col-md-7"><p><?php echo $timeline['content'];?></p></div>
-					        	<div class="col-md-5">
-					      			<strong>Comments</strong><br>
-					      			<?php if($post->getComments($timeline['id'])){
-					      					foreach($post->getComments($timeline['id']) as $comment): 
-					      						$commentUser = new User($comment->user_id)?>
-					      				<div class="row">
-						      				<ul class="media-list">
-											  <li class="media">
-											    <div class="media-left">
-											      <a href="<?php echo "/u/{$timelineUser->data()->username}/";?>">
-											        <img class="media-object img-circle" src="<?php echo $commentUser->getAvatarURL('48')?>" alt="<?php echo $commentUser->data()->username;?>"> 
-											      </a>
-											    </div>
-											    <div class="media-body">
-											      <h4 class="media-heading">
-											      	<a href="<?php echo "/u/{$timelineUser->data()->username}/";?>"><?php echo $commentUser->data()->username;?> <?php if($timelineUser->data()->verified == 1){?><span class="label label-primary name"><span class="glyphicon glyphicon-ok"></span></span><?php }?>
-											      	</a>
-											      </h4>
-											      <p><?php echo $comment->content;?></p>
-											    </div>
-											  </li>
-											</ul>
-					      				</div>
-					      			<?php endforeach;}?>
-					        	</div>
-					        </div>
-					      </div>
-					      <div class="modal-footer">
-							<form id="reply" action="" class="form-inline" method="post" autocomplete="off">
-								<div class="form-group">
-									<div class="input-group">
-										<span class="input-group-btn">
-										   		<?php if($like->hasLike($user->data()->id, $timeline['id']) <= 0){?><a id="like" href="" id="like" class="btn btn-primary" data-token="<?php echo $token;?>" data-post="<?php echo $timeline['id'];?>"><span class="glyphicon glyphicon-star-empty"></span> <?php echo $like->getLikesByPost($timeline['id'])->count();?></a><?php }else{?><a href="" id="dislike" class="btn btn-primary" data-token="<?php echo $token;?>" data-post="<?php echo $timeline['id'];?>"><span class="glyphicon glyphicon-star"></span> <?php echo $like->getLikesByPost($timeline['id'])->count();?></a><?php }?>
-										   </span>
-									   <input name="post" type="text" class="form-control">
-									   <span class="input-group-btn">
-									        <button type="submit" value="Post Comment" class="btn btn-default">
-												<span class="glyphicon glyphicon-send"></span>
-											</button>
-									   </span>
-									   <span class="input-group-btn">
-									        <button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove-circle"></span></button>
-									   </span>
-									</div>
-								</div>
-								<input type="hidden" id="orignal_post" name="original_post" value="<?php echo $timeline['id'];?>"></input>
-								<input type="hidden" id="token" name="token" value="<?php echo $token;?>">
-							</form>
-					      </div>
-					    </div>
-					  </div>
-					</div>
-					
-					<?php
+								if($private != 0){ // if its not public;
+									if($user->data()->id != $timelineUser->data()->id){ // if we are not the owner of the file
+												
+										if($private == 4){ // if private is 4
+											if($mentioned->count() > 0){ // Check if there is any mentions
+												if($user->data()->id != $mentioned->results()[0]->user_id){ // we are not part of it
+													$show_post = false;
+												}
+											}else{
+												$show_post = false;
+											}
 										}
-										break;
+										if($private == 1 && !$user->isFollowing($timelineUser->data()->id)){ //IF the privacy is 1 and if we're not following; Dont display
+											if($mentioned->count() > 0){ // Check if there is any mentions
+												if($user->data()->id != $mentioned->results()[0]->user_id){ // we are not part of it
+													$show_post = false;
+												}
+											}else{
+												$show_post = false;
+											}
+										}
+										if($private == 2){
+											if($mentioned->count() > 0){ // Check if there is any mentions
+												if($user->data()->id != $mentioned->results()[0]->user_id){ // we are not part of it
+													$show_post = false;
+												}
+											}else{
+												$show_post = false;
+											}
+										}
+										if($private == 3 && !$user->isFriends($timelineUser->data()->id)){ //if privacy is 3 and if we're not friends; dont display
+											if($mentioned->count() > 0){ // Check if there is any mentions
+												if($user->data()->id != $mentioned->results()[0]->user_id){ // we are not part of it
+													$show_post = false;
+												}
+											}else{
+												$show_post = false;
+											}
+										}
+									}// Display the post anyway
 
-									case "2": // Followers and Following
-										break;
+								}// Display the post anyways
 
-									case "3": // Friends
-										$db = DB::getInstance();
-										$mentioned = $db->get('mensions', ['post_hash', '=', $timeline['hash']]);
-
-										if($user->isFriends($timelineUser->data()->id) || $user->data()->id == $timelineUser->data()->id || $mentioned->count() && $user->data()->id == $mentioned->first()->user_id){
-											
+								if($show_post){
 					?>
-					
 					<div class="well">
 						<div class="page-header">
 							<div class="name">
-							<h1 class="name"><?php echo "<a class=\"name\" href='/u/{$timelineUser->data()->username}/'>".$timelineUser->data()->username."</a>";?></h1> <?php if($timelineUser->data()->verified == 1){?><h4 class="name"><span class="label label-primary name"><span class="glyphicon glyphicon-ok"></span></span></h4><?php }?>
+								<h1 class="name">
+									<?php echo "<a class=\"name\" href='/u/{$timelineUser->data()->username}/'>".$timelineUser->data()->username."</a>";?>
+								</h1> 
+								<?php if($timelineUser->data()->verified == 1){?>
+									<h4 class="name"><span class="label label-primary name"><span class="glyphicon glyphicon-ok"></span></span></h4>
+								<?php }?>
+								<span class="pull-right">
+									<?php $postTimeAgo = new TimeAgo(); echo $postTimeAgo->inWords($timeline['date']);?>
+								</span>
 							</div>
 						</div>
 						
@@ -434,7 +220,7 @@ if(!$user->isLoggedIn()){
 											</button>
 									   </span>
 									</div>
-									<div class="label label-primary"><span class="glyphicon glyphicon-eye-close"></span></div>
+									<div class="label label-primary"><span class="<?php echo $picon; ?>"></span></div>
 								</div>
 								<input type="hidden" name="original_post" value="<?php echo $timeline['id'];?>"></input>
 								<input type="hidden" name="token" value="<?php echo $token;?>">
@@ -451,19 +237,26 @@ if(!$user->isLoggedIn()){
 					    <div class="modal-content">
 					      <div class="modal-header">
 					        <button type="button" class="close" data-dismiss="modal">&times;</button>
-					        <h4 class="modal-title"><?php echo "<a href='/u/{$timelineUser->data()->username}/'>".$timelineUser->data()->username."</a>";?> <?php if($timelineUser->data()->verified == 1){?><span class="label label-primary name"><span class="glyphicon glyphicon-ok"></span></span><?php }?></h4>
+					        <h4 class="modal-title">
+					        	<?php echo "<a href='/u/{$timelineUser->data()->username}/'>".$timelineUser->data()->username."</a>";?> 
+					        	<?php if($timelineUser->data()->verified == 1){?>
+					        		<span class="label label-primary name"><span class="glyphicon glyphicon-ok"></span></span>
+					        	<?php }?>
+					        	&bull;
+					        	<?php $postTimeAgo = new TimeAgo(); echo $postTimeAgo->inWords($timeline['date']);?>
+					        </h4>
 					        <span class="pull-right">
-					        <div class="dropdown">
-					        	<button class="btn btn-xs btn-default dropdown-toggle" type="button" id="PostMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-							    ...
-							    <span class="caret"></span>
-							  </button>
-								<ul class="dropdown-menu pull-right" aria-labelledby="PostMenu">
-							    <li><a target="_blank" href="https://twitter.com/intent/tweet?text=<?php echo getSelfURL()."/p/".$timeline['hash'];?>">Tweet</a></li>
-							    <li><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo getSelfURL()."/p/".$timeline['hash'];?>">Share on Facebook</a></li>
-							    <li><a href="/p/<?php echo $timeline['hash'];?>">Post</a></li>
-							  </ul>
-							</div>
+						        <div class="dropdown">
+						        	<button class="btn btn-xs btn-default dropdown-toggle" type="button" id="PostMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+								    ...
+								    <span class="caret"></span>
+								  </button>
+									<ul class="dropdown-menu pull-right" aria-labelledby="PostMenu">
+								    <li><a target="_blank" href="https://twitter.com/intent/tweet?text=<?php echo getSelfURL()."/p/".$timeline['hash'];?>">Tweet</a></li>
+								    <li><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo getSelfURL()."/p/".$timeline['hash'];?>">Share on Facebook</a></li>
+								    <li><a href="/p/<?php echo $timeline['hash'];?>">Post</a></li>
+								  </ul>
+								</div>
 					        </span>
 					      </div>
 					      <div class="modal-body">
@@ -521,146 +314,7 @@ if(!$user->isLoggedIn()){
 					    </div>
 					  </div>
 					</div>
-					
 					<?php
-										}
-										break;
-
-									case "4": // Private
-										$db = DB::getInstance();
-										$mentioned = $db->get('mensions', ['post_hash', '=', $timeline['hash']]);
-										
-										if($user->data()->id == $timelineUser->data()->id || $mentioned->count() && $user->data()->id == $mentioned->first()->user_id){
-					?>
-					
-					<div class="well">
-						<div class="page-header">
-							<div class="name">
-							<h1 class="name"><?php echo "<a class=\"name\" href='/u/{$timelineUser->data()->username}/'>".$timelineUser->data()->username."</a>";?></h1> <?php if($timelineUser->data()->verified == 1){?><h4 class="name"><span class="label label-primary name"><span class="glyphicon glyphicon-ok"></span></span></h4><?php }?>
-							</div>
-						</div>
-						
-						<div class="row">
-							<p id="content" style="word-wrap:break-word";><?php echo $timeline['content'];?></p>
-						</div>
-
-						<div class="row">
-							<form id="reply" action="" class="form-inline" method="post" autocomplete="off">
-								<div class="form-group">
-									<div class="input-group">
-										<span class="input-group-btn">
-									   		<?php if($like->hasLike($user->data()->id, $timeline['id']) <= 0){?>
-									   		<a href="" id="like" data-token="<?php echo $token;?>" data-post="<?php echo $timeline['id'];?>" class="btn btn-primary"><span class="glyphicon glyphicon-star-empty"></span> <?php echo $like->getLikesByPost($timeline['id'])->count();?></a>
-									   		<?php }else{?>
-									   		<a href="" id="dislike" data-token="<?php echo $token;?>" data-post="<?php echo $timeline['id'];?>" class="btn btn-primary"><span class="glyphicon glyphicon-star"></span> <?php echo $like->getLikesByPost($timeline['id'])->count();?></a>
-									   		<?php }?>
-									   </span>
-									   <input name="post" type="text" class="form-control">
-									   <span class="input-group-btn">
-									        <button type="submit" value="Post Comment" class="btn btn-default"><span class="glyphicon glyphicon-send"></span></button>
-									   </span>
-									   <span class="input-group-btn">
-									   		<button type="button" class="btn btn-info" data-toggle="modal" data-target="#PostModel<?php echo $timeline['id'];?>">
-												<span class="glyphicon glyphicon-list"></span>
-											</button>
-									   </span>
-									</div>
-									<div class="label label-primary"><span class="glyphicon glyphicon-lock"></span></div>
-								</div>
-								<input type="hidden" name="original_post" value="<?php echo $timeline['id'];?>"></input>
-								<input type="hidden" name="token" value="<?php echo $token;?>">
-								<input id="orignal_post" type="hidden" value="<?php echo $timeline['id'];?>">
-							</form>
-						</div>
-					</div>
-
-					<!-- Model for post -->
-					<div id="PostModel<?php echo $timeline['id'];?>" class="modal fade" role="dialog">
-					  <div class="modal-dialog">
-
-					    <!-- Modal content-->
-					    <div class="modal-content">
-					      <div class="modal-header">
-					        <button type="button" class="close" data-dismiss="modal">&times;</button>
-					        <h4 class="modal-title"><?php echo "<a href='/u/{$timelineUser->data()->username}/'>".$timelineUser->data()->username."</a>";?> <?php if($timelineUser->data()->verified == 1){?><span class="label label-primary name"><span class="glyphicon glyphicon-ok"></span></span><?php }?></h4>
-					        <span class="pull-right">
-					        <div class="dropdown">
-					        	<button class="btn btn-xs btn-default dropdown-toggle" type="button" id="PostMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-							    ...
-							    <span class="caret"></span>
-							  </button>
-								<ul class="dropdown-menu pull-right" aria-labelledby="PostMenu">
-							    <li><a target="_blank" href="https://twitter.com/intent/tweet?text=<?php echo getSelfURL()."/p/".$timeline['hash'];?>">Tweet</a></li>
-							    <li><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo getSelfURL()."/p/".$timeline['hash'];?>">Share on Facebook</a></li>
-							    <li><a href="/p/<?php echo $timeline['hash'];?>">Post</a></li>
-							  </ul>
-							</div>
-					        </span>
-					      </div>
-					      <div class="modal-body">
-					        <div class="row">
-					        	<div class="col-md-7"><p><?php echo $timeline['content'];?></p></div>
-					        	<div class="col-md-5">
-					      			<strong>Comments</strong><br>
-					      			<?php if($post->getComments($timeline['id'])){
-					      					foreach($post->getComments($timeline['id']) as $comment): 
-					      						$commentUser = new User($comment->user_id)?>
-					      				<div class="row">
-						      				<ul class="media-list">
-											  <li class="media">
-											    <div class="media-left">
-											      <a href="<?php echo "/u/{$timelineUser->data()->username}/";?>">
-											        <img class="media-object img-circle" src="<?php echo $commentUser->getAvatarURL('48')?>" alt="<?php echo $commentUser->data()->username;?>"> 
-											      </a>
-											    </div>
-											    <div class="media-body">
-											      <h4 class="media-heading">
-											      	<a href="<?php echo "/u/{$timelineUser->data()->username}/";?>"><?php echo $commentUser->data()->username;?> <?php if($timelineUser->data()->verified == 1){?><span class="label label-primary name"><span class="glyphicon glyphicon-ok"></span></span><?php }?>
-											      	</a>
-											      </h4>
-											      <p><?php echo $comment->content;?></p>
-											    </div>
-											  </li>
-											</ul>
-					      				</div>
-					      			<?php endforeach;}?>
-					        	</div>
-					        </div>
-					      </div>
-					      <div class="modal-footer">
-							<form id="reply" action="" class="form-inline" method="post" autocomplete="off">
-								<div class="form-group">
-									<div class="input-group">
-										<span class="input-group-btn">
-										   		<?php if($like->hasLike($user->data()->id, $timeline['id']) <= 0){?><a id="like" href="" id="like" class="btn btn-primary" data-token="<?php echo $token;?>" data-post="<?php echo $timeline['id'];?>"><span class="glyphicon glyphicon-star-empty"></span> <?php echo $like->getLikesByPost($timeline['id'])->count();?></a><?php }else{?><a href="" id="dislike" class="btn btn-primary" data-token="<?php echo $token;?>" data-post="<?php echo $timeline['id'];?>"><span class="glyphicon glyphicon-star"></span> <?php echo $like->getLikesByPost($timeline['id'])->count();?></a><?php }?>
-										   </span>
-									   <input name="post" type="text" class="form-control">
-									   <span class="input-group-btn">
-									        <button type="submit" value="Post Comment" class="btn btn-default">
-												<span class="glyphicon glyphicon-send"></span>
-											</button>
-									   </span>
-									   <span class="input-group-btn">
-									        <button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove-circle"></span></button>
-									   </span>
-									</div>
-								</div>
-								<input type="hidden" id="orignal_post" name="original_post" value="<?php echo $timeline['id'];?>"></input>
-								<input type="hidden" id="token" name="token" value="<?php echo $token;?>">
-							</form>
-					      </div>
-					    </div>
-					  </div>
-					</div>
-					
-					<?php
-										}
-										break;
-
-									default:
-										
-										break;
-
 								}
 							}
 						//}
