@@ -1,5 +1,6 @@
 <?php
 $user = new User();
+$c = new Cache();
 ?>
 <html>
 	<head>

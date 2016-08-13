@@ -157,6 +157,10 @@ $router->add('/admin/mfa/', function(){
 	require 'pages/admin/mfa.php';
 	return true;
 });
+$router->add('/admin/cache/', function(){
+	require 'pages/admin/cache.php';
+	return true;
+});
 /*
 API
 */

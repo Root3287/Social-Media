@@ -1,5 +1,8 @@
-<?php $user = new User();?>
-<nav id="top" class="navbar navbar-default <?php if(Setting::get('inverted-nav') == 1){ echo 'navbar-inverse';}?>">
+<?php 
+$user = new User();
+$cache_settings = new Cache(['name'=>'settings', 'path'=>'cache/', 'extension'=>'.cache']);
+?>
+<nav id="top" class="navbar navbar-default <?php if($cache_settings->isCached('inverted-nav')){ if($cache_settings->retrieve('inverted-nav') == 1){echo 'navbar-inverse';} }else{ if(Setting::get('inverted-nav') == 1){ echo 'navbar-inverse';}}?>">
           <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -9,7 +12,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="/"><?php echo Setting::get('title')?> <span class="label label-danger">Alpha</span></a>
+              <a class="navbar-brand" href="/"><?php if($cache_settings->isCached('title')){echo $cache_settings->retrieve('title');}else{echo Setting::get('title');}?> <span class="label label-danger">Alpha</span></a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->

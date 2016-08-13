@@ -17,6 +17,7 @@ class PageTime{
 		self::$_stop = $time;
 	}
 	public static function time(){
+		self::stop();
 		return self::$_time = round((self::$_stop - self::$_start), 4);
 	}
 }

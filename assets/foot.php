@@ -1,5 +1,6 @@
 <footer id="bottom">
 	  <div class="container">
-	    <p class="navbar-text">Copyright &copy; Timothy Gibbons 2015, All Rights Reserved. License: MIT</p>
+	    <p class="navbar-text"><?php echo $GLOBALS['language']->get('foot-copyright');?></p>
+	    <span class="pull-right">Page loaded <?php echo PageTime::time();?></span>
 	  </div>
 </footer>
