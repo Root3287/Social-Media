@@ -1,28 +1,4 @@
 <?php
-/*
-MIT LICENSE
-Copyright © 2014 Jimmi Westerberg (http://westsworld.dk)
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the “Software”), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-*/
-function timeAgoInWords($timestring, $timezone = NULL) {
-  $timeAgo = new TimeAgo($timezone);
-  
-  return $timeAgo->inWords($timestring, "now");
-}
 /** 
  * This class can help you find out just how much time has passed between
  * two dates.
@@ -36,6 +12,10 @@ function timeAgoInWords($timestring, $timezone = NULL) {
  * @since 0.2.0 (2010/05/05)
  * @site http://github.com/jimmiw/php-time-ago
  */
+/**
+ * Modified by Timothy Gibbons
+ * Removed language support for Social-Media
+ */
 class TimeAgo {
   // defines the number of seconds per "unit"
   private $secondsPerMinute = 60;
@@ -44,14 +24,28 @@ class TimeAgo {
   private $secondsPerMonth = 2592000;
   private $secondsPerYear = 31104000;
   private $timezone;
+  // translations variables
+  private static $timeAgoStrings = [
+      'aboutOneDay' => "1 day ago",
+      'aboutOneHour' => "about 1 hour ago",
+      'aboutOneMonth' => "about 1 month ago",
+      'aboutOneYear' => "about 1 year ago",
+      'days' => "%s days ago",
+      'hours' => "%s hours ago",
+      'lessThanAMinute' => "less than a minute ago",
+      'lessThanOneHour' => "%s minutes ago",
+      'months' => "%s months ago",
+      'oneMinute' => "1 minute ago",
+      'years' => "over %s years ago"
+    ];
   
   public function __construct($timezone = NULL) {
     // if the $timezone is null, we take 'Europe/London' as the default
     // this was done, because the parent construct tossed an exception
     if($timezone == NULL) {
-      $timezone = 'Europe/London';
+      $timezone = 'Europe/Copenhagen';
     }
-    
+    // storing the current timezone
     $this->timezone = $timezone;
   }
   
@@ -68,35 +62,39 @@ class TimeAgo {
     
     // finds the time difference
     $timeDifference = $now - $past;
-    
+    // rule 1
     // less than 29secs
     if($timeDifference <= 29) {
-      $timeAgo = "less than a minute";
+      $timeAgo = $this->_translate('lessThanAMinute');
     }
+    // rule 2
     // more than 29secs and less than 1min29secss
-    else if($timeDifference > 29 && $timeDifference <= 89) {
-      $timeAgo = "1 minute";
+    else if($timeDifference >= 30 && $timeDifference <= 89) {
+      $timeAgo = $this->_translate('oneMinute');
     }
+    // rule 3
     // between 1min30secs and 44mins29secs
-    else if($timeDifference > 89 &&
+    else if($timeDifference >= 90 &&
       $timeDifference <= (($this->secondsPerMinute * 44) + 29)
     ) {
-      $minutes = floor($timeDifference / $this->secondsPerMinute);
-      $timeAgo = $minutes." minutes";
+      $minutes = round($timeDifference / $this->secondsPerMinute);
+      $timeAgo = $this->_translate('lessThanOneHour', $minutes);
     }
-    // between 44mins30secs and 1hour29mins29secs
+    // rule 4
+    // between 44mins30secs and 1hour29mins59secs
     else if(
-      $timeDifference > (($this->secondsPerMinute * 44) + 29)
+      $timeDifference >= (($this->secondsPerMinute * 44) + 30)
       &&
-      $timeDifference < (($this->secondsPerMinute * 89) + 29)
+      $timeDifference <= ($this->secondsPerHour + ($this->secondsPerMinute * 29) + 59)
     ) {
-      $timeAgo = "about 1 hour";
+      $timeAgo = $this->_translate('aboutOneHour');
     }
-    // between 1hour29mins30secs and 23hours59mins29secs
+    // rule 5
+    // between 1hour29mins59secs and 23hours59mins29secs
     else if(
-      $timeDifference > (
-        ($this->secondsPerMinute * 89) +
-        29
+      $timeDifference >= (
+        $this->secondsPerHour +
+        ($this->secondsPerMinute * 30)
       )
       &&
       $timeDifference <= (
@@ -105,15 +103,16 @@ class TimeAgo {
         29
       )
     ) {
-      $hours = floor($timeDifference / $this->secondsPerHour);
-      $timeAgo = $hours." hours";
+      $hours = round($timeDifference / $this->secondsPerHour);
+      $timeAgo = $this->_translate('hours', $hours);
     }
+    // rule 6
     // between 23hours59mins30secs and 47hours59mins29secs
     else if(
-      $timeDifference > (
+      $timeDifference >= (
         ($this->secondsPerHour * 23) +
         ($this->secondsPerMinute * 59) +
-        29
+        30
       )
       &&
       $timeDifference <= (
@@ -122,14 +121,15 @@ class TimeAgo {
         29
       )
     ) {
-      $timeAgo = "1 day";
+      $timeAgo = $this->_translate('aboutOneDay');
     }
+    // rule 7
     // between 47hours59mins30secs and 29days23hours59mins29secs
     else if(
-      $timeDifference > (
+      $timeDifference >= (
         ($this->secondsPerHour * 47) +
         ($this->secondsPerMinute * 59) +
-        29
+        30
       )
       &&
       $timeDifference <= (
@@ -139,16 +139,17 @@ class TimeAgo {
         29
       )
     ) {
-      $days = floor($timeDifference / $this->secondsPerDay);
-      $timeAgo = $days." days";
+      $days = round($timeDifference / $this->secondsPerDay);
+      $timeAgo = $this->_translate('days', $days);
     }
+    // rule 8
     // between 29days23hours59mins30secs and 59days23hours59mins29secs
     else if(
-      $timeDifference > (
+      $timeDifference >= (
         ($this->secondsPerDay * 29) +
         ($this->secondsPerHour * 23) +
         ($this->secondsPerMinute * 59) +
-        29
+        30
       )
       &&
       $timeDifference <= (
@@ -158,15 +159,16 @@ class TimeAgo {
         29
       )
     ) {
-      $timeAgo = "about 1 month";
+      $timeAgo = $this->_translate('aboutOneMonth');
     }
+    // rule 9
     // between 59days23hours59mins30secs and 1year (minus 1sec)
     else if(
-      $timeDifference > (
+      $timeDifference >= (
         ($this->secondsPerDay * 59) + 
         ($this->secondsPerHour * 23) +
         ($this->secondsPerMinute * 59) +
-        29
+        30
       )
       &&
       $timeDifference < $this->secondsPerYear
@@ -177,22 +179,23 @@ class TimeAgo {
         $months = 2;
       }
       
-      $timeAgo = $months." months";
+      $timeAgo = $this->_translate('months', $months);
     }
+    // rule 10
     // between 1year and 2years (minus 1sec)
     else if(
       $timeDifference >= $this->secondsPerYear
       &&
       $timeDifference < ($this->secondsPerYear * 2)
     ) {
-      $timeAgo = "about 1 year";
+      $timeAgo = $this->_translate('aboutOneYear');
     }
+    // rule 11
     // 2years or more
     else {
       $years = floor($timeDifference / $this->secondsPerYear);
-      $timeAgo = "over ".$years." years";
+      $timeAgo = $this->_translate('years', $years);
     }
-    
     return $timeAgo;
   }
   
@@ -271,5 +274,14 @@ class TimeAgo {
     );
     
     return $difference;
+  }
+  /**
+   * Translates the given $label, and adds the given $time.
+   * @param string $label the label to translate
+   * @param string $time the time to add to the translated text.
+   * @return string the translated label text including the time.
+   */
+  private function _translate($label, $time = '') {
+    return sprintf(self::$timeAgoStrings[$label], $time);
   }
 }

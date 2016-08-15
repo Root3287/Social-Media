@@ -152,10 +152,10 @@ if(isset($GLOBALS['config']['mysql']['prefix'])){
 if($version == "1.3.1"){ // 1.3.1 -> 1.4.0
 	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `number` text");
 	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `bio` longtext");
-	$data[] = $db->query("ALTER TABLE `sm_posts` ADD `privacy` INT  NOT NULL  DEFAULT '0'  AFTER `active`");
+	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `privacy_settings` text");
+	$data[] = $db->query("ALTER TABLE `".$prefix."posts` ADD `privacy` INT  NOT NULL  DEFAULT '0'");
 
 	$users = $db->get('users', ['1','=','1'])->results();
-	$posts = $db->get('posts', ['1','=','1'])->results();
 
 	foreach ($users as $u) {
 		$mfa = json_decode($u->mfa, true);
@@ -179,10 +179,11 @@ if($version == "1.3.1"){ // 1.3.1 -> 1.4.0
 				'display_post' 	=> 0,
 			];
 
-			$data[] = $db->update['users', $u->id, ['privacy_settings'=>$ps]];
+			$data[] = $db->update('users', $u->id, ['privacy_settings'=>json_encode($ps)]);
 		}
 	}
 
+	$posts = $db->get('posts', ['1','=','1'])->results();
 	foreach ($posts as $p) {
 		if(isset($p->privacy) || $p->privacy == null){
 			$data[] = $db->update('posts', $p->id, ['privacy','=','0']);
@@ -190,6 +191,6 @@ if($version == "1.3.1"){ // 1.3.1 -> 1.4.0
 	}
 }
 foreach ($data as $d) {
-	echo "<pre>".var_export($d, true)."</pre>";
+	echo "<pre>".escape(var_export($d, true))."</pre>";
 }
 echo "<br><br><br><a href='/admin/'>You can go back!</a>";
