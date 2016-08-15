@@ -6,18 +6,18 @@ if(Input::exists('get')){
 		if(Input::get('a')=='read'  && Input::get('val') !=null){
 			if(!$db->query('UPDATE `'.Config::get("mysql/prefix").'notification` SET `read` ='.Input::get('val').' WHERE id ='.Input::get('id'))->error()){
 				Session::flash('complete', '<div class="alert alert-success">You marked it as read!</div>');
-				Redirect::to('?page=notification');
+				Redirect::to('');
 			}else{
 				session::flash('error', '<div class="alert alert-danger">There been an error marking this as read!</div>');
-				Redirect::to('?page=notification');
+				Redirect::to('');
 			}
 		}elseif (Input::get('a')=='delete'){
 			if($db->delete('notification', array('id', '=',Input::get('id')))){
 				Session::flash('complete', '<div class="alert alert-success">You deleted a message</div>');
-				Redirect::to('?page=notification');
+				Redirect::to('');
 			}else{
 				session::flash('error', '<div class="alert alert-danger">There been an error deleting this message!</div>');
-				Redirect::to('?page=notification');
+				Redirect::to('');
 			}
 		}
 	}

@@ -9,6 +9,7 @@ $limit = (Input::get('l') !=null)? Input::get('l'):100;
 $timelineData = $pagination->getArrayData($limit, $page);
 $token = Token::generate();
 $ps = json_decode($user->data()->privacy_settings);
+$cache_settings = new Cache(['name'=>'settings', 'path'=>'cache/', 'extension'=>'.cache']);
 
 if(!$user->isLoggedIn()){
 	Redirect::to('/');
@@ -18,7 +19,6 @@ if(!$user->isLoggedIn()){
 <html>
 	<head>
 		<?php require 'assets/head.php';?>
-		<!--<script src="//cdn.ckeditor.com/4.5.6/standard/ckeditor.js"></script>-->
 		<style type="text/css">
 			.name{
 				display: inline;
@@ -45,7 +45,16 @@ if(!$user->isLoggedIn()){
 			}
 			?>
 			<div class="col-sm-6 col-md-6 col-sm-push-3">
-				<?php if(Setting::get('enable-uploadcare') == 1): ?>
+				
+				<?php if($cache_settings->isCached('enable-uploadcare') && $cache_settings->retrieve('enable-uploadcare') == 1){ ?>
+
+				<div class="row">
+					<ul class="nav nav-tabs">
+  						<li role="presentation" id="tb" class="active"><a href="">TextBox</a></li>
+ 						<li role="presentation" id="mm"><a href="">Photos</a></li>
+					</ul>
+				</div>
+				<?php }else{if(Setting::get('enable-uploadcare') == 1): ?>
 				
 				<div class="row">
 					<ul class="nav nav-tabs">
@@ -54,7 +63,7 @@ if(!$user->isLoggedIn()){
 					</ul>
 				</div>
 				
-				<?php endif;?>
+				<?php endif;}?>
 				
 				<div class="row"><!-- Posts a status -->
 					
@@ -80,8 +89,36 @@ if(!$user->isLoggedIn()){
 							</span>
 						</div>
 					</form>
-					
-					<?php if(Setting::get('enable-uploadcare')):?>
+					<?php 
+					if($cache_settings->isCached('enable-uploadcare') && $cache_settings->isCached('uploadcare-tabs') && $cache_settings->isCached('uploadcare-clearable') && $cache_settings->isCached('uploadcare-image-only') && $cache_settings->isCached('uploadcare-crop') && $cache_settings->isCached('uploadcare-multiple') && $cache_settings->isCached('uploadcare-multiple-min') && $cache_settings->isCached('uploadcare-multiple-max')){
+
+						if($cache_settings->retrieve('enable-uploadcare') == 1):?>
+						
+						<form id="media-upload" action="/timeline" method="post">
+							<br>
+							<input 
+								type="hidden" 
+								name="picture_link" 
+								role="uploadcare-uploader"
+								data-tabs="<?php echo $cache_settings->retrieve('uploadcare-tabs');?>" 
+								data-clearable="<?php echo $cache_settings->retrieve('uploadcare-clearable');?>" 
+								data-images-only="<?php echo $cache_settings->retrieve('uploadcare-image-only');?>"
+								data-crop="<?php echo $cache_settings->retrieve('uploadcare-crop');?>"
+								<?php if($cache_settings->retrieve('uploadcare-multiple') == "true") { ?>
+								data-multiple="true"
+								data-multiple-min="<?php echo $cache_settings->retrieve('uploadcare-multiple-min');?>"
+								data-multiple-max="<?php echo $cache_settings->retrieve('uploadcare-multiple-max');?>"
+								<?php }?>
+							>
+							<div class="form-group">
+								<input name="token" type="hidden" id="token" value="<?php echo $token;?>">
+								<span class="pull-right"><button id="submit" class="btn btn-primary">Post!</button></span>
+							</div>
+						</form>
+
+					<?php endif;
+
+					 }else{if(Setting::get('enable-uploadcare')):?>
 						
 						<form id="media-upload" action="/timeline" method="post">
 							<br>
@@ -105,7 +142,7 @@ if(!$user->isLoggedIn()){
 							</div>
 						</form>
 
-					<?php endif;?>
+					<?php endif;}?>
 
 					<div id="mobileBottom"></div>
 
@@ -132,53 +169,118 @@ if(!$user->isLoggedIn()){
 
 								//Check if were mentioned
 								$db = DB::getInstance();
-								$mentioned = $db->get('mensions', ['post_hash', '=', $timeline['hash']]);
-								$show_post = true;
+								$show = true;
 
-								if($private != 0){ // if its not public;
-									if($user->data()->id != $timelineUser->data()->id){ // if we are not the owner of the file
-												
-										if($private == 4){ // if private is 4
-											if($mentioned->count() > 0){ // Check if there is any mentions
-												if($user->data()->id != $mentioned->results()[0]->user_id){ // we are not part of it
-													$show_post = false;
-												}
-											}else{
-												$show_post = false;
-											}
-										}
-										if($private == 1 && !$user->isFollowing($timelineUser->data()->id)){ //IF the privacy is 1 and if we're not following; Dont display
-											if($mentioned->count() > 0){ // Check if there is any mentions
-												if($user->data()->id != $mentioned->results()[0]->user_id){ // we are not part of it
-													$show_post = false;
-												}
-											}else{
-												$show_post = false;
-											}
-										}
-										if($private == 2){
-											if($mentioned->count() > 0){ // Check if there is any mentions
-												if($user->data()->id != $mentioned->results()[0]->user_id){ // we are not part of it
-													$show_post = false;
-												}
-											}else{
-												$show_post = false;
-											}
-										}
-										if($private == 3 && !$user->isFriends($timelineUser->data()->id)){ //if privacy is 3 and if we're not friends; dont display
-											if($mentioned->count() > 0){ // Check if there is any mentions
-												if($user->data()->id != $mentioned->results()[0]->user_id){ // we are not part of it
-													$show_post = false;
-												}
-											}else{
-												$show_post = false;
-											}
-										}
-									}// Display the post anyway
+								//Public
+								if($private == 0){
 
-								}// Display the post anyways
+								}
+								//following
+								else if($private == 1){
+									if($user->isLoggedIn()){
 
-								if($show_post){
+										if(!$user->isFollowing($timelineUser->data()->id)){
+											$show = false;
+										}else{
+											$show = true;
+										}
+										
+										if(!$show){
+											if($user->data()->id == $timelineUser->data()->id){
+												$show = true;
+											}else{
+												$show = false;
+											}
+										}
+										$mentioned = $db->get('mensions', ['post_hash', '=', $timeline['hash']]);
+										
+										if(!$show){
+											if ($mentioned->count()) {
+												foreach ($mentioned->results() as $m) {
+													if($user->data()->id == $m->user_id){
+														$show = true;
+														break;
+													}else{
+														$show = false;
+													}
+												}
+											}
+										}
+									}else{
+										$show = false;
+									}
+								}
+								//follwer
+								else if($private == 2){
+									$show = false;
+								}
+								//friend
+								else if($private == 3){
+									if($user->isLoggedIn()){
+
+										if(!$user->isFriends($timelineUser->data()->id)){
+											$show = false;
+										}else{
+											$show = true;
+										}
+
+										if(!$show){
+											if($user->data()->id != $timelineUser->data()->id){
+												$show = false;
+											}else{
+												$show = true;
+											}
+										}
+
+										$mentioned = $db->get('mensions', ['post_hash', '=', $timeline['hash']]);
+										if(!$show){
+											if ($mentioned->count()) {
+												foreach ($mentioned->results() as $m) {
+													if($user->data()->id == $m->user_id){
+														$show = true;
+														break;
+													}else{
+														$show = false;
+													}
+												}
+											}
+										}
+									}else{
+										$show = false;
+									}
+								}
+								//private
+								else if($private == 4){
+									if($user->isLoggedIn()){
+										if(!$show){
+											if($user->data()->id != $timelineUser->data()->id){
+												$show = false;
+											}else{
+												$show = true;
+											}
+										}
+
+										$mentioned = $db->get('mensions', ['post_hash', '=', $timeline['hash']]);
+										
+										if(!$show){
+											if ($mentioned->count()) {
+												foreach ($mentioned->results() as $m) {
+													if($user->data()->id == $m->user_id){
+														$show = true;
+														break;
+													}else{
+														$show = false;
+													}
+												}
+											}
+										}
+
+									}else{
+										$show = false;
+									}
+								}
+
+								if($show){
 					?>
 					<div class="well">
 						<div class="page-header">
@@ -365,14 +467,22 @@ if(!$user->isLoggedIn()){
 			</div>
 		</div>
 		<?php require 'assets/foot.php';?>
-		<?php if(Setting::get('enable-uploadcare') == 1):?>
-			<script src="assets/js/timeline.js"></script>
+		<script src="assets/js/timeline.js"></script>
+		<?php if($cache_settings->isCached('enable-uploadcare')){
+			if($cache_settings->retrieve('enable-uploadcare') == 1):?>
 			<script src="https://ucarecdn.com/widget/2.9.0/uploadcare/uploadcare.full.min.js"></script>
 			<script>
 				UPLOADCARE_LOCALE = "en";
 				UPLOADCARE_LIVE = true;
 				UPLOADCARE_PUBLIC_KEY = "<?php echo Setting::get('uploadcare-public-key');?>";
 			</script>
-		<?php endif;?>
+		<?php endif;}else{if(Setting::get('enable-uploadcare') == 1):?>
+			<script src="https://ucarecdn.com/widget/2.9.0/uploadcare/uploadcare.full.min.js"></script>
+			<script>
+				UPLOADCARE_LOCALE = "en";
+				UPLOADCARE_LIVE = true;
+				UPLOADCARE_PUBLIC_KEY = "<?php echo Setting::get('uploadcare-public-key');?>";
+			</script>
+		<?php endif;}?>
 	</body>
 </html>

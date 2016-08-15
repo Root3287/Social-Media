@@ -150,16 +150,29 @@ if(isset($GLOBALS['config']['mysql']['prefix'])){
 }
 
 if($version == "1.3.1"){ // 1.3.1 -> 1.4.0
+	
+	Setting::add([
+		'name' => "language",
+		'value'=> 'en',
+	]);
+
+	$data[] = $db->update('settings', 11, ['name'=>'server-logs']);
 	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `number` text");
 	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `bio` longtext");
 	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `privacy_settings` text");
+	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `home` text");
+	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `dob` date");
+	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `gender` ENUM('m', 'f', 'o', 'na') DEAFULT 'na'");
 	$data[] = $db->query("ALTER TABLE `".$prefix."posts` ADD `privacy` INT  NOT NULL  DEFAULT '0'");
 
 	$users = $db->get('users', ['1','=','1'])->results();
 
+	//Updates All Users
 	foreach ($users as $u) {
 		$mfa = json_decode($u->mfa, true);
 		$ps = json_decode($u->privacy_settings, true);
+
+		//Set the MFA type and email
 		if(!isset($mfa['type']) && !isset($mfa['semail'])){
 			$mfa['type'] = "";
 			$mfa['semail'] = "";
@@ -168,6 +181,8 @@ if($version == "1.3.1"){ // 1.3.1 -> 1.4.0
 				'mfa'=> json_encode($mfa)
 			]);
 		}
+
+		//Set the privacy settings 
 		if(!isset($ps)){
 			$ps = [
 				'name' 			=> 0,
@@ -184,13 +199,17 @@ if($version == "1.3.1"){ // 1.3.1 -> 1.4.0
 	}
 
 	$posts = $db->get('posts', ['1','=','1'])->results();
+	// Update All Post
 	foreach ($posts as $p) {
 		if(isset($p->privacy) || $p->privacy == null){
 			$data[] = $db->update('posts', $p->id, ['privacy','=','0']);
 		}
 	}
 }
+
+//When we are done print the data out.
 foreach ($data as $d) {
 	echo "<pre>".escape(var_export($d, true))."</pre>";
 }
+
 echo "<br><br><br><a href='/admin/'>You can go back!</a>";

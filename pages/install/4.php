@@ -48,6 +48,10 @@ $data[] = $db->createTable(
 		"`bio`"=>["longtext"],
 		"`number`"=>["text"],
 		"`privacy_settings`"=>["text"],
+		"`home`"=>["text"],
+		"`dob`"=>["date"],
+		"`gender`"=>["ENUM('m','f','o','na')", "DEFAULT 'na'"],
+		"`about_me`"=>["longtext"],
 		"PRIMARY KEY" => ['(`id`)',],
 	], 
 	"COLLATE='latin1_swedish_ci' ENGINE=InnoDB"
@@ -228,7 +232,8 @@ $data[] = $db->insert('settings', ['name'=>'motd', 'value'=>'']);
 $data[] = $db->insert('settings', ['name'=>'debug', 'value'=>'Off']);
 $data[] = $db->insert('settings', ['name'=>'inverted-nav', 'value'=>'0']);
 $data[] = $db->insert('settings', ['name'=>'unique-id', 'value'=>substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0,62)]);
-$data[] = $db->insert('settings', ['name'=>'version', 'value'=>'1.3.0']);
+$data[] = $db->insert('settings', ['name'=>'version', 'value'=>'1.4.0']);
+$data[] = $db->insert('settings', ['name'=>'server-logs', 'value'=>'false']);
 $data[] = $db->insert('settings', ['name'=>'enable-recaptcha', 'value'=>'0']);
 $data[] = $db->insert('settings', ['name'=>'recaptcha-site-key', 'value'=>'']);
 $data[] = $db->insert('settings', ['name'=>'recaptcha-secret-key', 'value'=>'']);
@@ -250,6 +255,7 @@ $data[] = $db->insert('settings', ['name'=>'enable-email-confirm', 'value'=>"0"]
 $data[] = $db->insert('settings', ['name'=>'enable-email-recover-password', 'value'=>"0"]);
 $data[] = $db->insert('settings', ['name'=>'enable-mfa', 'value'=>"0"]);
 $data[] = $db->insert('settings', ['name'=>'enable-mfa-email', 'value'=>"0"]);
+$data[] = $db->insert('settings', ['name'=>'language', 'value'=>"en"]);
 
 $data[] = $db->insert('groups', ['group_name'=>'standard', 'permissions'=>'']);
 $data[] = $db->insert('groups', ['group_name'=>'administrator', 'permissions'=>'{"Admin":1}']);
