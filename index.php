@@ -183,10 +183,6 @@ $router->add('/user/',function(){
 	require 'pages/user/index.php';
 	return true;
 });
-$router->add('/user/profile/(.*)',function(){
-	require 'pages/user/profile.php';
-	return true;
-});
 $router->add('/user/notification/(.*)',function(){
 	require 'pages/user/notification.php';
 	return true;

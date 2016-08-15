@@ -11,8 +11,8 @@ $user2 = new User($original_post->user_id);
 $token = Token::generate();
 
 $db = DB::getInstance();
-$mentioned = $db->get('mensions', ['post_hash', '=', $original_post->hash]);
 
+$show = true;
 
 //Public
 if($original_post->privacy == 0){
@@ -21,36 +21,110 @@ if($original_post->privacy == 0){
 //following
 else if($original_post->privacy == 1){
 	if($user->isLoggedIn()){
-		if(!$user->isFollowing($user2->data()->id) || $user->data()->id == $user2->data()->id || $mentioned->count() && $user->data()->id == $mentioned->first()->user_id){
-			Redirect::to(404);
+
+		if(!$user->isFollowing($user2->data()->id)){
+			$show = false;
+		}else{
+			$show = true;
+		}
+		
+		if(!$show){
+			if($user->data()->id == $user2->data()->id){
+				$show = true;
+			}else{
+				$show = false;
+			}
+		}
+		$mentioned = $db->get('mensions', ['post_hash', '=', $original_post->hash]);
+		
+		if(!$show){
+			if ($mentioned->count()) {
+				foreach ($mentioned->results() as $m) {
+					if($user->data()->id == $m->user_id){
+						$show = true;
+						break;
+					}else{
+						$show = false;
+					}
+				}
+			}
 		}
 	}else{
-		Redirect::to(404);
+		$show = false;
 	}
 }
 //follwer
 else if($original_post->privacy == 2){
-	Redirect::to(404);
+	$show = false;
 }
 //friend
 else if($original_post->privacy == 3){
 	if($user->isLoggedIn()){
-		if(!$user->isFriends($user2->data()->id) || $user->data()->id != $user2->data()->id || $mentioned->count() && $user->data()->id == $mentioned->first()->user_id){
-			Redirect::to(404);
+
+		if(!$user->isFriends($user2->data()->id)){
+			$show = false;
+		}else{
+			$show = true;
+		}
+
+		if(!$show){
+			if($user->data()->id != $user2->data()->id){
+				$show = false;
+			}else{
+				$show = true;
+			}
+		}
+
+		$mentioned = $db->get('mensions', ['post_hash', '=', $original_post->hash]);
+		if(!$show){
+			if ($mentioned->count()) {
+				foreach ($mentioned->results() as $m) {
+					if($user->data()->id == $m->user_id){
+						$show = true;
+						break;
+					}else{
+						$show = false;
+					}
+				}
+			}
 		}
 	}else{
-		Redirect::to(404);
+		$show = false;
 	}
 }
 //private
 else if($original_post->privacy == 4){
 	if($user->isLoggedIn()){
-		if($user->data()->id != $user2->data()->id || $user->data()->id != $user2->data()->id || $mentioned->count() && $user->data()->id == $mentioned->first()->user_id){
-			Redirect::to(404);
+		if(!$show){
+			if($user->data()->id != $user2->data()->id){
+				$show = false;
+			}else{
+				$show = true;
+			}
 		}
+
+		$mentioned = $db->get('mensions', ['post_hash', '=', $original_post->hash]);
+		
+		if(!$show){
+			if ($mentioned->count()) {
+				foreach ($mentioned->results() as $m) {
+					if($user->data()->id == $m->user_id){
+						$show = true;
+						break;
+					}else{
+						$show = false;
+					}
+				}
+			}
+		}
+
 	}else{
-		Redirect::to(404);
+		$show = false;
 	}
+}
+
+if(!$show){
+	Redirect::to(404);
 }
 ?>
 <!DOCTYPE HTML>

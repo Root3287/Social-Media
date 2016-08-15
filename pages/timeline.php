@@ -169,53 +169,118 @@ if(!$user->isLoggedIn()){
 
 								//Check if were mentioned
 								$db = DB::getInstance();
-								$mentioned = $db->get('mensions', ['post_hash', '=', $timeline['hash']]);
-								$show_post = true;
+								$show = true;
 
-								if($private != 0){ // if its not public;
-									if($user->data()->id != $timelineUser->data()->id){ // if we are not the owner of the file
-												
-										if($private == 4){ // if private is 4
-											if($mentioned->count() > 0){ // Check if there is any mentions
-												if($user->data()->id != $mentioned->results()[0]->user_id){ // we are not part of it
-													$show_post = false;
-												}
-											}else{
-												$show_post = false;
-											}
-										}
-										if($private == 1 && !$user->isFollowing($timelineUser->data()->id)){ //IF the privacy is 1 and if we're not following; Dont display
-											if($mentioned->count() > 0){ // Check if there is any mentions
-												if($user->data()->id != $mentioned->results()[0]->user_id){ // we are not part of it
-													$show_post = false;
-												}
-											}else{
-												$show_post = false;
-											}
-										}
-										if($private == 2){
-											if($mentioned->count() > 0){ // Check if there is any mentions
-												if($user->data()->id != $mentioned->results()[0]->user_id){ // we are not part of it
-													$show_post = false;
-												}
-											}else{
-												$show_post = false;
-											}
-										}
-										if($private == 3 && !$user->isFriends($timelineUser->data()->id)){ //if privacy is 3 and if we're not friends; dont display
-											if($mentioned->count() > 0){ // Check if there is any mentions
-												if($user->data()->id != $mentioned->results()[0]->user_id){ // we are not part of it
-													$show_post = false;
-												}
-											}else{
-												$show_post = false;
-											}
-										}
-									}// Display the post anyway
+								//Public
+								if($private == 0){
 
-								}// Display the post anyways
+								}
+								//following
+								else if($private == 1){
+									if($user->isLoggedIn()){
 
-								if($show_post){
+										if(!$user->isFollowing($timelineUser->data()->id)){
+											$show = false;
+										}else{
+											$show = true;
+										}
+										
+										if(!$show){
+											if($user->data()->id == $timelineUser->data()->id){
+												$show = true;
+											}else{
+												$show = false;
+											}
+										}
+										$mentioned = $db->get('mensions', ['post_hash', '=', $timeline['hash']]);
+										
+										if(!$show){
+											if ($mentioned->count()) {
+												foreach ($mentioned->results() as $m) {
+													if($user->data()->id == $m->user_id){
+														$show = true;
+														break;
+													}else{
+														$show = false;
+													}
+												}
+											}
+										}
+									}else{
+										$show = false;
+									}
+								}
+								//follwer
+								else if($private == 2){
+									$show = false;
+								}
+								//friend
+								else if($private == 3){
+									if($user->isLoggedIn()){
+
+										if(!$user->isFriends($timelineUser->data()->id)){
+											$show = false;
+										}else{
+											$show = true;
+										}
+
+										if(!$show){
+											if($user->data()->id != $timelineUser->data()->id){
+												$show = false;
+											}else{
+												$show = true;
+											}
+										}
+
+										$mentioned = $db->get('mensions', ['post_hash', '=', $timeline['hash']]);
+										if(!$show){
+											if ($mentioned->count()) {
+												foreach ($mentioned->results() as $m) {
+													if($user->data()->id == $m->user_id){
+														$show = true;
+														break;
+													}else{
+														$show = false;
+													}
+												}
+											}
+										}
+									}else{
+										$show = false;
+									}
+								}
+								//private
+								else if($private == 4){
+									if($user->isLoggedIn()){
+										if(!$show){
+											if($user->data()->id != $timelineUser->data()->id){
+												$show = false;
+											}else{
+												$show = true;
+											}
+										}
+
+										$mentioned = $db->get('mensions', ['post_hash', '=', $timeline['hash']]);
+										
+										if(!$show){
+											if ($mentioned->count()) {
+												foreach ($mentioned->results() as $m) {
+													if($user->data()->id == $m->user_id){
+														$show = true;
+														break;
+													}else{
+														$show = false;
+													}
+												}
+											}
+										}
+
+									}else{
+										$show = false;
+									}
+								}
+
+								if($show){
 					?>
 					<div class="well">
 						<div class="page-header">
