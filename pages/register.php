@@ -96,21 +96,23 @@ if(Input::exists()){
 						$mail->Subject = 'Social-Media Register';
 						$html = file_get_contents('assets/email/confirm.html');
 						$link =  getSelfUrl()."email-confirm/{$email_hash}/";
-						$content = "This is an email confirming your email address. If you don't remember registering with us you can ignore this email.";
+
+						$content = $GLOBALS['language']->get('email-register');
+						
 						$html = str_replace(['[Content]','[Link]'], [$content, $link], $html);
 						$mail->msgHTML($html);
 						$mail->isHTML(true);
 						$mail->Body = $html;
 						if(!$mail->send()){
-							Session::flash('error', '<div class="alert alert-danger">Error sending email!</div>');
+							Session::flash('error', '<div class="alert alert-danger">'.$GLOBALS['language']->get('alert-register-email-error').'</div>');
 						}else{
-							Session::flash('complete', '<div class="alert alert-success">A email has been sent to your account!</div>');
+							Session::flash('complete', '<div class="alert alert-success">'.$GLOBALS['language']->get('alert-register-email-complete').'</div>');
 						}
 						Redirect::to('/');
 					}else{
 						if($user->login(escape(Input::get('username')), escape(Input::get('password')), false)){
 							Notification::createMessage('Welcome to the Social-Media '. $user->data()->name, $user->data()->id);
-							Session::flash('complete', '<div class="alert alert-success">You completely register and you just got logged in.</div>');
+							Session::flash('complete', '<div class="alert alert-success">'.$GLOBALS['language']->get('alert-register-complete').'</div>');
 							Redirect::to('/');
 						}
 					}
@@ -136,26 +138,26 @@ if(Input::exists()){
 				<div class="alert alert-danger"><?php foreach ($val->errors() as $error){echo $error.'<br/>';}?></div>
 			<?php endif;endif;endif;?>
 			<div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-				<h1>Register</h1>
+				<h1><?php echo $GLOABLS['language']->get('register');?></h1>
 				<form action="" method="post" autocomplete="off">
 					<div class="form-group">
-						<input name="name" value="<?php echo Input::get('name');?>" placeholder="Name" type="text" class="form-control input-lg">
+						<input name="name" value="<?php echo Input::get('name');?>" placeholder="<?php echo $GLOBALS['language']->get('name');?>" type="text" class="form-control input-lg">
 					</div>
 					<div class="form-group">
-						<input name="username" value="<?php echo Input::get('username');?>" placeholder="username" type="text" class="form-control input-lg">
+						<input name="username" value="<?php echo Input::get('username');?>" placeholder="<?php echo $GLOABLS['language']->get('username');?>" type="text" class="form-control input-lg">
 					</div>
 					<div class="form-group">
-						<input name="email" value="<?php echo Input::get('email');?>" placeholder="email" type="email" class="form-control input-lg">
+						<input name="email" value="<?php echo Input::get('email');?>" placeholder="<?php echo $GLOABLS['language']->get('email');?>" type="email" class="form-control input-lg">
 					</div>
 					<div class="row">
 						<div class="col-xs-12 col-md-6">
 							<div class="form-group">
-								<input name="password" value="<?php echo Input::get('password');?>" placeholder="Password" type="password" class="form-control input-lg">
+								<input name="password" value="<?php echo Input::get('password');?>" placeholder="<?php echo $GLOABLS['language']->get('password');?>" type="password" class="form-control input-lg">
 							</div>
 						</div>
 						<div class="col-xs-12 col-md-6">
 							<div class="form-group">
-								<input name="password_conf" placeholder="Confirm Password" type="password" class="form-control input-lg">
+								<input name="password_conf" placeholder="<?php echo $GLOBALS['language']->get('confirm_password');?>" type="password" class="form-control input-lg">
 							</div>
 						</div>
 					</div>
@@ -167,12 +169,12 @@ if(Input::exists()){
 					<div class="row">
 						<div class="col-xs-12 col-md-6">
 							<div class="form-group">
-								<a href="/login" class="btn btn-lg btn-block btn-danger">Login</a>
+								<a href="/login" class="btn btn-lg btn-block btn-danger"><?php echo $GLOBALS['language']->get('login')?></a>
 							</div>
 						</div>
 						<div class="col-xs-12 col-md-6">
 							<div class="form-group">
-								<input type="submit" class="btn btn-lg btn-block btn-primary" value="Register">
+								<input type="submit" class="btn btn-lg btn-block btn-primary" value="<?php echo $GLOBALS['language']->get('register');?>">
 								<input type="hidden" name="token" value="<?php echo Token::generate();?>"/>
 							</div>
 						</div>
@@ -181,6 +183,5 @@ if(Input::exists()){
 			</div>
 		</div>
 		<?php include 'assets/foot.php';?>
-
 	</body>
 </html>

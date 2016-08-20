@@ -161,6 +161,10 @@ $router->add('/admin/cache/', function(){
 	require 'pages/admin/cache.php';
 	return true;
 });
+$router->add('/admin/cache/delete-file/', function(){
+	require 'pages/admin/del_cache.php';
+	return true;
+});
 /*
 API
 */

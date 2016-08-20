@@ -1,6 +1,6 @@
 <?php
 $user = new User();
-$c = new Cache();
+$c = new Cache(['name'=>'settings', 'path'=>'cache/', 'extension'=>'.cache']);
 ?>
 <html>
 	<head>
@@ -22,14 +22,12 @@ $c = new Cache();
 				if($user->isLoggedIn()){
 					
 				}else{
-					echo '<div class="alert alert-info">You need to <a class="alert-link" href="/login">login</a> or <a class="alert-link" href="/register">sign up</a> to get the full features of this page</div>';
+					echo '<div class="alert alert-info">'.$GLOBALS['language']->get('home-login-1').' <a class="alert-link" href="/login">login</a> '.$GLOBALS['language']->get('home-login-2').' <a class="alert-link" href="/register">sign up</a>'.$GLOBALS['language']->get('home-login-3').'</div>';
 				}
 			?>
 			<div class="jumbotron">
-				<h1><?php Setting::show('title')?></h1><br/>
-				<h3><?php Setting::show('motd')?></h3>
-			</div>
-			<div class="col-md-9">
+				<h1><?php if($c->isCached('title')){echo $c->retrieve('title');}else{Setting::show('title');}?></h1><br/>
+				<h3><?php if($c->isCached('motd')){echo $c->retrieve('motd');}else{Setting::show('motd');}?></h3>
 			</div>
 		</div>
 		<?php include 'assets/foot.php';?>

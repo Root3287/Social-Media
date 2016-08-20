@@ -19,7 +19,7 @@ if(!$user->isLoggedIn()){
 		<?php require 'assets/nav.php';?>
 		<div class="container">
 			<div class="col-md-6">
-				<h1>Following</h1>
+				<h1><?php echo  $GLOBALS['language']->get('followings')?></h1>
 				<?php foreach($user->getFollowing() as $following): 
 				$following_user = new User($following->following_id);
 				$following_user_online =($following_user->data()->last_online <= strtotime("-10 minutes"))? false: true;
@@ -38,9 +38,10 @@ if(!$user->isLoggedIn()){
 									$dt = new DateTime("@$last");
 									$timeAgo_words = $timeAgo->inWords($dt->format('Y/m/d H:i:s'));
 									if($following_user_online){
-										echo "<span class=\"label label-success\">Online!</span>";
+										echo "<span class='label label-success'>".$GLOBALS['language']->get('online')."</span>";
 									}else{
-										echo "<span class=\"label label-danger\">Offline! $timeAgo_words ago</span>";
+										echo "<span class=\"label label-danger\">".$GLOBALS['language']->get(
+												'offline')." $timeAgo_words ".$GLOBALS['language']->get('time-ago')."</span>";
 									}
 								?>
 							</div>
@@ -68,9 +69,10 @@ if(!$user->isLoggedIn()){
 										$dt = new DateTime("@$last");
 										$timeAgo_words = $timeAgo->inWords($dt->format('Y/m/d H:i:s'));
 										if($follower_user_online){
-											echo "<span class='label label-success'>Online!</span>";
+											echo "<span class='label label-success'>".$GLOBALS['language']->get('online')."</span>";
 										}else{
-											echo "<span class=\"label label-danger\">Offline! $timeAgo_words ago</span>";
+											echo "<span class=\"label label-danger\">".$GLOBALS['language']->get(
+												'offline')." $timeAgo_words ".$GLOBALS['language']->get('time-ago')."</span>";
 										}
 									?>
 							</div>

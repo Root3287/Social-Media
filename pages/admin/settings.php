@@ -103,6 +103,10 @@ if(Input::exists()){
 				    		<input name="debug" id="debug" type="checkbox" <?php if(Setting::get('debug') != 'Off'){echo 'checked="checked"';}?>>Debug mode (Not Recommended)
 					</div>
 					<div class="form-group">
+						<a class='btn btn-primary' href="/admin/cache/">Set Cache</a>
+						<a class='btn btn-danger' href="/admin/cache/delete-file/">Delete Cache</a>
+					</div>
+					<div class="form-group">
 						<input type="hidden" name="token" value="<?php echo Token::generate()?>">
 						<input class="btn btn-md btn-primary" type="submit" value="update">	
 					</div>

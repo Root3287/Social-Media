@@ -195,7 +195,7 @@ if(!$show){
 					</div>
 				</div>
 				<div class="row">
-					<h1>Replies</h1>
+					<h1><?php echo $GLOBALS['language']->get('comment');?></h1>
 					<?php if($post->getComments($original_post->id)){
 						foreach($post->getComments($original_post->id) as $reply){
 							$reply_user = new User($reply->user_id);?>

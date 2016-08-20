@@ -18,12 +18,21 @@ class Language{
 	 */
 	private $_languageText;
 
+	private static $_instance = null;
+
 	/**
 	 * Constructor
 	 * @param string $language Language Code
 	 */
 	public function __construct($lang = 'temp'){
 		$this->_language = $lang;
+	}
+
+	public static function getInstance($lang = 'temp'){
+		if(!isset(self::$_instance)) {
+			self::$_instance = new Language($lang);
+		}
+		return self::$_instance;
 	}
 
 	/**

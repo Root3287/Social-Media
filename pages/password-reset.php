@@ -82,8 +82,9 @@ if(Input::exists()){
 								$mail->addAddress(escape(Input::get('email')), escape($email->first()->name));
 								
 								$mail->Subject = 'Social-Media Password Reset';
+								
 								$html = file_get_contents('assets/email/confirm-pass-change.html');
-								$content = "Your password has been changed on Social-Media! If you feel like this is a mistake or you have been hacked. Then contact us as soon as possible!";
+								$content = $GLOBALS['language']->get('email-password-reset');
 								$html = str_replace(['[Name]','[Content]'], [$email->first()->name ,$content], $html);
 								
 								$mail->msgHTML($html);
@@ -91,13 +92,13 @@ if(Input::exists()){
 								$mail->Body = $html;
 
 								if(!$mail->send()){
-									Session::flash('error', '<div class="alert alert-danger">Error sending email!</div>');
+									Session::flash('error', '<div class="alert alert-danger">'.$GLOBALS['language']->get('alert-password-reset-email-error').'</div>');
 								}else{
-									Session::flash('complete', '<div class="alert alert-success">You have reset your password! A email has been sent to your account about the password change!</div>');
+									Session::flash('complete', '<div class="alert alert-success">'.$GLOBALS['language']->get('alert-password-reset-email-complete').'</div>');
 									Redirect::to('/');
 								}
 							}else{
-								Session::flash('complete', '<div class="alert alert-success">You have changed your password!</div>');
+								Session::flash('complete', '<div class="alert alert-success">'.$GLOBALS['language']->get('alert-password-reset-complete').'</div>');
 								Redirect::to('/');
 							}
 						}			
@@ -128,11 +129,11 @@ if(Input::exists()){
 			<div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
 				<form action="" method="post">
 					<div class="form-group">
-						<label for="newPass">New Password</label>
+						<label for="newPass"><?php echo $GLOBALS['language']->get('new-password');?></label>
 						<input type="password" name="newPass" id="" class="form-control">
 					</div>
 					<div class="form-group">
-						<label for="confPass">Confirm Password</label>
+						<label for="confPass"><?php echo $GLOBALS['language']->get('confirm-password');?></label>
 						<input type="password" name="confPass" id="" class="form-control">
 					</div>
 					<div class="form-group">

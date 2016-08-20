@@ -32,8 +32,8 @@ if(Input::exists()){
 					</div>
 					<div class="form-group">
 						<select class="form-control" name="table">
-						  <option <?php if(Input::get('table') == "users"):?>selected="selected"<?php endif;?> value="users">Users</option>
-						  <option <?php if(Input::get('table') == "name"):?>selected="selected"<?php endif;?> value="name">Name</option>
+						  <option <?php if(Input::get('table') == "users"):?>selected="selected"<?php endif;?> value="users"><?php echo $GLOBALS['language']->get('user');?></option>
+						  <option <?php if(Input::get('table') == "name"):?>selected="selected"<?php endif;?> value="name"><?php echo $GLOBALS['language']->get('name');?></option>
 						</select>
 					</div>
 					<div class="form-group">
@@ -43,7 +43,7 @@ if(Input::exists()){
 				</form>
 			</div>
 			<div class="row">
-				<h1>Search</h1>
+				<h1><?php echo $GLOBALS['language']->get('search');?></h1>
 				<?php
 				if(Input::exists()){
 					if($validate->passed()){

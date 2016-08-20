@@ -40,19 +40,19 @@ if(Input::exists()){
 				$mail->FromName = $GLOBALS['config']['email']['name'];
 				$mail->addAddress(escape(Input::get('email')), escape($email->first()->name));
 				
-				$mail->Subject = 'Social-Media Password Reset';
+				$mail->Subject = $GLOABLS['language']->get('email-subject-forgot');
 				$html = file_get_contents('assets/email/forgot-password.html');
 				$link =  getSelfUrl()."password-reset/?email=".escape(Input::get('email'))."&hash={$hash}";
-				$content = "This email is to reset your password for Social-Media. If you do not remember preforming this action you can delete this email.";
+				$content = $GLOABLS['language']->get('email-forgot-password');
 				$html = str_replace(['[Name]','[Content]','[Link]'], [$email->first()->username ,$content, $link], $html);
 				
 				$mail->msgHTML($html);
 				$mail->isHTML(true);
 				$mail->Body = $html;
 				if(!$mail->send()){
-					Session::flash('error', '<div class="alert alert-danger">Error sending email!</div>');
+					Session::flash('error', '<div class="alert alert-danger">'.$GLOBALS['language']->get('alert-forgot-password-email-error').'</div>');
 				}else{
-					Session::flash('complete', '<div class="alert alert-success">A email has been sent to your account!</div>');
+					Session::flash('complete', '<div class="alert alert-success">'.$GLOABLS['language']->get('alert-forgot-password-email-success').'</div>');
 				}
 				Redirect::to('/');
 			}
@@ -69,10 +69,10 @@ if(Input::exists()){
 		<?php require 'assets/nav.php';?>
 		<div class="container">
 			<div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-				<h1>Forgot Password</h1>
+				<h1><?php echo $GLOBALS['language']->get('forgot-password');?></h1>
 				<form action="" method="post" autocomplete="off">
 					<div class="form-group">
-						<label for="email">Email</label>
+						<label for="email"><?php echo $GLOABLS['language']->get('email');?></label>
 						<input type="email" name="email" placeholder="email" class="form-control">
 					</div>
 					<div class="form-group">

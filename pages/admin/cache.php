@@ -33,4 +33,5 @@ $c->store('enable-email-recover-password', Setting::get('enable-email-recover-pa
 $c->store('enable-mfa', Setting::get('enable-mfa'));
 $c->store('enable-mfa-email', Setting::get('enable-mfa-email'));
 
+Session::flash('complete', '<div class="alert alert-success">'.$GLOBALS['language']->get('alert-acp-cache-complete').'</div>');
 Redirect::to('/admin');

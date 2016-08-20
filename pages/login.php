@@ -30,7 +30,11 @@ if(Input::exists()){
 			$remember = (Input::get('remember') == 'on')? true:false;
 			$user2 = $db->get('users', ['username', '=', escape(Input::get('username'))])->first();
 			$mfa = json_decode($user2->mfa);
-			if(Setting::get('enable-mfa') == 1 && Setting::get('enable-mfa-email') == 1 && Setting::get('enable-email') == 1){
+			if(
+				Setting::get('enable-mfa') == 1 && 
+				Setting::get('enable-mfa-email') == 1 && 
+				Setting::get('enable-email') == 1
+			){
 				if($mfa->enable == 1){
 					if(Input::get('tfaEmail') !==null){
 						if(Input::get('tfaEmail') == $mfa->code){
@@ -50,7 +54,7 @@ if(Input::exists()){
 									if($user2->confirmed !=1){
 										$user2->logout();
 									}else{
-										Session::flash('complete', '<div class="alert alert-success">You have been logged in!</div>');
+										Session::flash('complete', '<div class="alert alert-success">'.$GLOBALS['language']->get('alert-login-complete').'</div>');
 										Redirect::to('/');
 									}
 								}
@@ -82,17 +86,17 @@ if(Input::exists()){
 							$mail->FromName = $GLOBALS['config']['email']['name'];
 							
 							if($mfa_array['type'] == "email"){
-								$mail->Subject = 'Social-Media Multi-Factor Code';
+								$mail->Subject = $GLOBALS['language']->get('email-subject-mfa');
 								$mail->addAddress($user2->email, escape($user2->name));
 							}else if($mfa_array['type'] == "sms" && isset($mfa_array['semail'])){
 								$mail->addAddress($user2->number.'@'.$mfa_array['semail'], escape($user2->name));
 							}else{ // Fallback to the default
-								$mail->Subject = 'Social-Media Multi-Factor Code';
+								$mail->Subject = $GLOBALS['language']->get('email-subject-mfa');
 								$mail->addAddress($user2->email, escape($user2->name));
 							}
 							
 							$html = file_get_contents('assets/email/emailMFA.html');
-							$content = "This is one of your multi-factor authication code!";
+							$content = $GLOBALS['language']->get('email-mfa-code');
 							$html = str_replace(['[Name]','[Content]','[Code]'], [$user2->username ,$content, $mfa_code], $html);
 							
 							$mail->msgHTML($html);
@@ -119,7 +123,7 @@ if(Input::exists()){
 							if($user3->data()->confirmed !=1){
 								$user3->logout();
 							}else{
-								Session::flash('complete', '<div class="alert alert-success">You have been logged in!</div>');
+								Session::flash('complete', '<div class="alert alert-success">'.$GLOBALS['language']->get('alert-login-complete').'</div>');
 								Redirect::to('/');
 							}
 						}
@@ -135,7 +139,7 @@ if(Input::exists()){
 				}else{
 					if($login){
 						if($user3->data()->confirmed == 1){
-							Session::flash('complete', '<div class="alert alert-success">You have been logged in!</div>');
+							Session::flash('complete', '<div class="alert alert-success">'.$GLOBALS['language']->get('alert-login-complete').'</div>');
 							Redirect::to('/');
 						}else{
 							$user3->logout();

@@ -13,8 +13,6 @@ require_once 'functions.php';
 
 $cache_settings = new Cache(['name'=>'settings', 'path'=>'cache/', 'extension'=>'.cache']);
 
-$GLOBALS['language'] = new Language();
-
 if(!is_dir('pages/install') && isset($GLOBALS['config'])){
 	$db = DB::getInstance();
 	
@@ -53,15 +51,11 @@ if(!is_dir('pages/install') && isset($GLOBALS['config'])){
 	unset($ip);
 
 	if($cache_settings->isCached('language')){
-		$GLOBALS['language'] = new Language($cache_settings->retrieve('language'));
+		require 'assets/lang/'.$cache_settings->retrieve('language').'.php';
+		$GLOBALS['language'] = Language::getInstance($cache_settings->retrieve('language'));
 	}else{
-		//get language
-		if(Setting::get('language') && is_file("assets/lang/".Setting::get('language').".php")){
-			require "assets/lang/".Setting::get('language').".php";
-		}else{
-			require "assets/lang/temp.php";
-		}
-		$GLOBALS['language'] = new Language(Setting::get('language'));
+		require 'assets/lang/'.Setting::get('language').'.php';
+		$GLOBALS['language'] = Language::getInstance(Setting::get('language'));
 	}
 	
 	if($user->isLoggedIn()){

@@ -19,7 +19,7 @@ $timeAgo = new TimeAgo();
 		<?php require 'assets/nav.php';?>
 		<div class="container">
 			<div class="col-md-8">
-				<h1>Friends</h1>
+				<h1><?php echo $GLOBALS['language']->get('friends');?></h1>
 				<?php
 				foreach ($user->getFriends() as $friend) {
 					if($friend->accepted == 1){
@@ -41,9 +41,10 @@ $timeAgo = new TimeAgo();
 								$dt = new DateTime("@$last");
 								$timeAgo_words = $timeAgo->inWords($dt->format('Y/m/d H:i:s'));
 								if($f_online){
-									echo "<span class=\"label label-success\">Online!</span>";
+									echo "<span class='label label-success'>".$GLOBALS['language']->get('online')."</span>";
 								}else{
-									echo "<span class=\"label label-danger\">Offline! $timeAgo_words ago</span>";
+									echo "<span class=\"label label-danger\">".$GLOBALS['language']->get(
+												'offline')." $timeAgo_words ".$GLOBALS['language']->get('time-ago')."</span>";
 								}
 							?>
 						</div>
@@ -56,7 +57,7 @@ $timeAgo = new TimeAgo();
 			</div>
 			<div class="col-md-4">
 				<div class="row">
-					<h1>Friend Request</h1>
+					<h1><?php echo $GLOBALS['language']->get('friend-request');?></h1>
 					<?php 
 						if($user->hasFriendRequest()):
 							foreach ($user->getFriendRequest() as $request):
@@ -69,19 +70,17 @@ $timeAgo = new TimeAgo();
 									<div class="media-left"><a href="?user="><img src="<?php echo $potential_friend->getAvatarURL(70);?>" alt="{user.png}" class="media-object"></a></div>
 									<div class="media-body">
 										<h3 class="media-heading"><?php echo $potential_friend->data()->name;?></h3>
-										<button id="accept" class="btn btn-sm btn-success" data-token="<?php echo $token;?>" data-user="<?php echo $potential_friend->data()->id;?>">Accept</button>
-										<button id="declined" class="btn btn-sm btn-danger" data-token="<?php echo $token;?>" data-user="<?php echo $potential_friend->data()->id;?>">Decline</button>
+										<button id="accept" class="btn btn-sm btn-success" data-token="<?php echo $token;?>" data-user="<?php echo $potential_friend->data()->id;?>"><?php echo $GLOBALS['language']->get('accept');?></button>
+										<button id="declined" class="btn btn-sm btn-danger" data-token="<?php echo $token;?>" data-user="<?php echo $potential_friend->data()->id;?>"><?php echo $GLOBALS['language']->get('decline');?></button>
 									</div>
 								<?php endif;?>
 								</div>
 							</div>
 						</div>
-					<?php endforeach;else:?>
-						You don't have any friend request at the moment.
-					<?php endif;?>
+					<?php endforeach;else: echo $GLOBALS['language']->get('no-friends-request');endif;?>
 				</div>
 				<div class="row">
-					<h1>Send Friend Request</h1>
+					<h1><?php echo $GLOBALS['language']->get('send-friends-request');?></h1>
 					<?php 
 						$sfq_count = 1;
 						$sfq_following = $user->getFollowing();
@@ -100,7 +99,7 @@ $timeAgo = new TimeAgo();
 							</div>
 							<div class="media-body">
 								<h3 class="media-heading"><?php echo $pf_user->data()->name;?></h3>
-								<button id="request" class="btn btn-sm btn-default" data-token="<?php echo $token;?>" data-button="<?php echo $sfq_count?>" data-user="<?php echo $pf_user->data()->id;?>">Send Request</button>
+								<button id="request" class="btn btn-sm btn-default" data-token="<?php echo $token;?>" data-button="<?php echo $sfq_count?>" data-user="<?php echo $pf_user->data()->id;?>"><?php echo $GLOBALS['language']->get('send-request');?></button>
 							</div>
 						</div>
 					</div>
