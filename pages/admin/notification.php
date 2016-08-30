@@ -39,12 +39,12 @@ if(Input::exists()){
 		?>
 		<h1>AdminCP</h1>
 		<ol class="breadcrumb">
-		  <li><a href="/admin">AdminCP</a></li>
-		  <li><a class="active" href="/admin/notification/">Notification</a></li>
+		  <li><a href="/admin"><?php echo $GLOBALS['language']->get('admincp')?></a></li>
+		  <li><a class="active" href="/admin/notification/"><?php echo $GLOBALS['language']->get('notification')?></a></li>
 		</ol>
 		<div class="col-md-3"><?php require 'pages/admin/sidebar.php';?></div>
 		<div class="col-md-9"><div class="row">
-			<h1>Send Mass Message</h1>
+			<h1><?php echo $GLOBALS['language']->get('mass-message')?></h1>
 		</div>
 		<div class="row">
 			<form action="/admin/notification" method="post">

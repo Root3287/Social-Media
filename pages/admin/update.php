@@ -23,10 +23,10 @@ $update->download_url = false;
 	<body>
 		<?php require 'assets/nav.php';?>
 		<div class="container">
-			<h1>AdminCP</h1>
+			<h1><?php echo $GLOBALS['language']->get('admincp')?></h1>
 			<ol class="breadcrumb">
-			  <li><a href="/admin">AdminCP</a></li>
-			  <li><a class="active" href="/admin/update/">Update</a></li>
+			  <li><a href="/admin"><?php echo $GLOBALS['language']->get('admincp')?></a></li>
+			  <li><a class="active" href="/admin/update/"><?php echo $GLOBALS['language']->get('updates-software')?></a></li>
 			</ol>
 			<div class="col-md-3"><?php require 'pages/admin/sidebar.php';?></div>
 			<div class="col-md-9">

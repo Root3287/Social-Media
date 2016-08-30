@@ -30,10 +30,10 @@ if(Input::exists()){
 				echo Session::flash('complete');
 			}
 			?>
-			<h1>AdminCP</h1>
+			<h1><?php echo $GLOBALS['language']->get('admincp')?></h1>
 			<ol class="breadcrumb">
-			  <li><a href="/admin">AdminCP</a></li>
-			  <li><a class="active" href="/admin/recaptcha/">Recaptcha</a></li>
+			  <li><a href="/admin"><?php echo $GLOBALS['language']->get('admincp')?></a></li>
+			  <li><a class="active" href="/admin/recaptcha/"><?php echo $GLOBALS['language']->get('recaptcha')?></a></li>
 			</ol>
 			<div class="col-md-3"><?php require 'sidebar.php';?></div>
 			<div class="col-md-9">

@@ -16,7 +16,7 @@ if(Input::exists()){
 			$user2 = new User();
 			$login = $user2->admlogin(escape(Input::get('username')), Input::get('password'), $remember);
 			if($login){
-				Session::flash('complete', '<div class="alert alert-success">You have been logged in!</div>');
+				Session::flash('complete', '<div class="alert alert-success">'.$GLOBALS['language']->get('alert-login-complete').'</div>');
 				Redirect::to('/admin/');
 			}
 		}else{
@@ -34,29 +34,29 @@ if(Input::exists()){
 		<?php require 'assets/nav.php';?>
 		<div class="container">
 			<div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-				<h1>AdminCP: Login</h1>
+				<h1><?php echo $GLOBALS['language']->get('admincp').": ".$GLOBALS['language']->get('login');?></h1>
 				<form action="" method="post" autocomplete="off">
 					<div class="form-group">
-						<input type="text" name="username" placeholder="Username" value="<?php echo Input::get('username')?>" class="form-control input-lg">
+						<input type="text" name="username" placeholder="<?php echo $GLOBALS['language']->get('username');?>" value="<?php echo Input::get('username')?>" class="form-control input-lg">
 					</div>
 					<div class="form-group">
-						<input type="password" name="password" placeholder="Password" class="form-control input-lg">
+						<input type="password" name="password" placeholder="<?php echo $GLOBALS['language']->get('password');?>" class="form-control input-lg">
 					</div>
 					<div class="form-group">
-						<label for="remember">Remember me?
+						<label for="remember"><?php echo $GLOBALS['language']->get('remember-me');?>
 							<input type="checkbox" name="remember" id="remember"/>
 						</label>
 					</div>
 					<div class="row">
 						<div class="col-xs-12 col-md-6">
 							<div class="form-group">
-								<a class="btn btn-lg btn-danger btn-block" href="/register">Register</a>
+								<a class="btn btn-lg btn-danger btn-block" href="/register"><?php echo $GLOBALS['language']->get('register');?></a>
 							</div>
 						</div>
 						<div class="col-xs-12 col-md-6">
 							<div class="form-group">
 								<input type="hidden" name="token" value="<?php echo Token::generate()?>"/>
-								<input class="btn btn-lg btn-primary btn-block" type="submit" value="Submit" id="Submit" name="submit"/>
+								<input class="btn btn-lg btn-primary btn-block" type="submit" value="<?php echo $GLOBALS['language']->get('login');?>" id="Submit" name="submit"/>
 							</div>
 						</div>
 					</div>

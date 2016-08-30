@@ -55,22 +55,22 @@ $cache_settings = new Cache(['name'=>'settings', 'path'=>'cache/', 'extension'=>
           </a>
           <?php if(!$user->isLoggedIn()){?>
           <ul class="dropdown-menu">
-            <li><a href="/login">Login</a></li>
-            <li><a href="/register">Register</a></li>
+            <li><a href="/login"><?php echo $GLOBALS['language']->get('login');?></a></li>
+            <li><a href="/register"><?php echo $GLOBALS['language']->get('register');?></a></li>
           </ul>
           <?php }else{?>
           <ul class="dropdown-menu">
-            <li><a href="/u/<?php echo $user->data()->username;?>/">Profile</a></li>
-            <li><a href="/user">UserCP</a></li>
+            <li><a href="/u/<?php echo $user->data()->username;?>/"><?php echo $GLOBALS['language']->get('profile');?></a></li>
+            <li><a href="/user"><?php echo $GLOBALS['language']->get('usercp');?></a></li>
             <?php 
             if($user->hasPermission("Admin")){
             ?>
-            <li><a href="/admin">AdminCP</a></li>
+            <li><a href="/admin"><?php echo $GLOBALS['language']->get('admincp');?></a></li>
             <?php 
             }
             ?>
             <li role="separator" class="divider"></li>
-            <li><a href="/logout">Logout</a></li>
+            <li><a href="/logout"><?php echo $GLOBALS['language']->get('logout');?></a></li>
           </ul>
         <?php }?>
         </li>

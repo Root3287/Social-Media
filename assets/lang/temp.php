@@ -32,7 +32,8 @@ $language->add('temp', [
 
 	//User
 	'user'				=> 'User',
-	'UserCP'			=> 'UserCP',
+	'users'				=> 'Users',
+	'usercp'			=> 'UserCP',
 	'login'				=> 'Login',
 	'register' 			=> 'Register',
 	'logout'			=> 'Logout',
@@ -46,8 +47,10 @@ $language->add('temp', [
 	'email'				=> 'Email',
 	'follow'			=> 'Follow',
 	'unfollow'			=> 'UnFollow',
+	'password-recovery'	=> 'Password Recovery',
 	
-	'multi-factor_authication' => 'Multi-Factor Authication',
+	'multi-factor_authication' 	=> 'Multi-Factor Authication',
+	'multi-factor'				=> 'Multi-Factor',
 
 	'profile' 	=> 'Profile',
 	'pokes'		=> 'Pokes',
@@ -58,13 +61,22 @@ $language->add('temp', [
 
 	//AdminCP
 	'admincp' 			=> 'AdminCP',
+	'acp-welcome'		=> 'Welcome to AdminCP. This is where you control the settings.',
 	'general' 			=> 'General',
 	'recaptcha'			=> 'Recaptcha',
 	'uploadcare' 		=> 'UploadCare',
-	'updates-software' 	=> 'Software Updates',
+	'updates-software' 	=> 'Package Updates',
+	'mass-message'		=> 'Message Everyone',
 	'settings' 			=> 'Settings',
+	'report'			=> 'Report',
 
 	'admincp-user-joined' => '',
+
+	'host'				=> 'Host',
+	'port'				=> 'Port',
+	'enable'			=> 'Enable',
+
+	'acp-save'			=> 'Save',
 
 	//UserCP
 	'joined-date'		=> 'Joined Date',
@@ -154,6 +166,8 @@ $language->add('temp', [
 	'alert-acp-cache-delete-complete'		=> 'You have deleted cached your files!',
 	'alert-forgot-password-email-error'		=> 'Error sending a email to your account!',
 	'alert-forgot-password-email-complete'	=> 'A email has been sent to your account!',
+
+	'alert-acp-save'				=> "Saved!",
 
 	//Notification: TODO
 	
