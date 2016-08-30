@@ -56,10 +56,10 @@ if(Input::exists()){
 				echo Session::flash('complete');
 			}
 			?>
-			<h1>AdminCP</h1>
+			<h1><?php echo $GLOBALS['language']->get('admincp')?></h1>
 			<ol class="breadcrumb">
-			  <li><a href="/admin">AdminCP</a></li>
-			  <li><a class="active" href="/admin/settings/">General Settings</a></li>
+			  <li><a href="/admin"><?php echo $GLOBALS['language']->get('admincp')?></a></li>
+			  <li><a class="active" href="/admin/settings/"><?php echo $GLOBALS['language']->get('general').' '.$GLOABLS['language']->get('settings');?></a></li>
 			</ol>
 			<div class="col-md-3">
 				<?php require 'pages/admin/sidebar.php';?>

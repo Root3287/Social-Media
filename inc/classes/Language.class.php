@@ -51,6 +51,6 @@ class Language{
 	 */
 	public function get($string){
 		$lang = $this->_language;
-		return $this->_languageText[$lang][$string];
+		return $this->_languageText[$lang][$string].' Hello';
 	}
 }

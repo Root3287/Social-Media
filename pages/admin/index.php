@@ -26,7 +26,7 @@ if(file_exists('pages/install/install.php')){
 			?>
 			<div class="col-md-3"><?php require 'pages/admin/sidebar.php';?></div>
 			<div class="col-md-9">
-				<div class="well"><h1>AdminCP</h1><p>Welcome to AdminCP. This is where you control the settings.</p></div>
+				<div class="well"><h1><?php echo $GLOBALS['language']->get('admincp');?></h1><p><?php echo $GLOBALS['language']->get('acp-welcome');?></p></div>
 			</div>
 		</div>
 		<?php require 'assets/foot.php';?>
