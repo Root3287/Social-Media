@@ -57,7 +57,7 @@ $timeAgo = new TimeAgo();
 			</div>
 			<div class="col-md-4">
 				<div class="row">
-					<h1><?php echo $GLOBALS['language']->get('friend-request');?></h1>
+					<h1><?php echo $GLOBALS['language']->get('friends-request');?></h1>
 					<?php 
 						if($user->hasFriendRequest()):
 							foreach ($user->getFriendRequest() as $request):
@@ -80,7 +80,7 @@ $timeAgo = new TimeAgo();
 					<?php endforeach;else: echo $GLOBALS['language']->get('no-friends-request');endif;?>
 				</div>
 				<div class="row">
-					<h1><?php echo $GLOBALS['language']->get('send-friends-request');?></h1>
+					<h1><?php echo $GLOBALS['language']->get('send-friend-request');?></h1>
 					<?php 
 						$sfq_count = 1;
 						$sfq_following = $user->getFollowing();

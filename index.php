@@ -92,6 +92,7 @@ $router->add('/email-confirm/(.*)/', function($hash){
 			Redirect::to('/');
 		}
 	}
+	Redirect::to('/');
 	return true;
 });
 /*

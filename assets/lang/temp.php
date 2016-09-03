@@ -54,6 +54,7 @@ $language->add('temp', [
 
 	'profile' 	=> 'Profile',
 	'pokes'		=> 'Pokes',
+	'poke'		=> 'Poke',
 	'people' 	=> 'People',
 
 	'notification' 	=> 'Notification',
@@ -84,6 +85,8 @@ $language->add('temp', [
 	'score'				=> 'Score',
 	'private-profile'	=> 'This is a private profile.',
 	'report-user'		=> 'Report User',
+	'usercp-your-cp'	=> 'This is your control panel.',
+	'sms'				=> 'SMS',
 
 	//Profile
 	'more-information'	=> 'More Information',
@@ -116,7 +119,7 @@ $language->add('temp', [
 	'foot-page-loaded' => 'Page loaded',
 
 	//Page Loaded
-	'page_loaded'	=> 'Page Loaded ',
+	'page_loaded'	=> 'Page Loaded',
 
 	//Help Block
 	'help-report-infringID' => 'This is the id of the user/post that you are reporting. You don\'t need to change this! If it\'s a comment on the post please tell us which one it is.',
@@ -166,6 +169,7 @@ $language->add('temp', [
 	'alert-acp-cache-delete-complete'		=> 'You have deleted cached your files!',
 	'alert-forgot-password-email-error'		=> 'Error sending a email to your account!',
 	'alert-forgot-password-email-complete'	=> 'A email has been sent to your account!',
+	'alert-forgot-password-not-ready'		=> 'Sorry, but the administrator didn\'t complete the config for email.',
 
 	'alert-acp-save'				=> "Saved!",
 

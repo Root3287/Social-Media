@@ -1,1 +1,0 @@
-Please do not manually delete cache files, go to your admin control panel to do that.

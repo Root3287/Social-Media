@@ -27,7 +27,7 @@ if(Input::exists()){
 				<form class="form-inline" method="post" action="">
 					<div class="form-group">
 						<lable for="search">
-							<input class="form-control input-md" id="search" name="search" type="text" value="<?php echo Input::get('search');?>">
+							<input class="form-control input-md" id="search" name="search" type="search" value="<?php echo Input::get('search');?>">
 						</lable>
 					</div>
 					<div class="form-group">

@@ -160,9 +160,12 @@ if($version == "1.3.1"){ // 1.3.1 -> 1.4.0
 	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `number` text");
 	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `bio` longtext");
 	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `privacy_settings` text");
-	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `home` text");
-	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `dob` date");
+	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `location` text");
+	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `dob` text");
+	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `dod` text");
 	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `gender` ENUM('m', 'f', 'o', 'na') DEAFULT 'na'");
+	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `about_me` longtext");
+	$data[] = $db->query("ALTER TABLE `".$prefix."users` ADD `banner` text");
 	$data[] = $db->query("ALTER TABLE `".$prefix."posts` ADD `privacy` INT  NOT NULL  DEFAULT '0'");
 
 	$users = $db->get('users', ['1','=','1'])->results();

@@ -17,8 +17,9 @@ $error = false;
 		Writeable Install <?php if(is_writable('install.php')): echo $error_message; $error = true; else: echo $success_message; endif;?>
 	</li>
 	<li>
-		Writeable Init <?php if(is_writable('inc/init.php')):echo $error_message;  $error = true; else: echo $success_message;endif;?>
+		Writeable Init <?php if(is_writable('/inc/init.php')):echo $error_message;  $error = true; else: echo $success_message;endif;?>
 		</li>
-	<li>Writeable Config <?php if(is_writable('inc/config.php')): echo $error_message; $error = true; else: echo $success_message; endif;?></li>
+	<li>Writeable Config <?php if(is_writable('/inc/config.php')): echo $error_message; $error = true; else: echo $success_message; endif;?></li>
+	<li>Writeable Cache <?php if(is_writable('/cache')): echo $error_message; $error = true; else: echo $success_message; endif;?></li>
 </ul>
 <a href="/install?step=3" class="btn btn-default <?php if($error): echo "disabled"; endif;?>">Next</a>

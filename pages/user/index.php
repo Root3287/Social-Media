@@ -9,8 +9,8 @@
 			<div class="col-md-3"><?php require 'pages/user/sidebar.php';?></div>
 			<div class="col-md-9">
 				<div class="well">
-					<h1>UserCP</h1>
-					<p>This is your user control panel.</p>
+					<h1><?php echo $GLOBALS['language']->get('usercp');?></h1>
+					<p><?php echo $GLOBALS['language']->get('usercp-your-cp');?></p>
 				</div>
 			</div>
 		</div>

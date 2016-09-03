@@ -4,6 +4,7 @@ if($user->isLoggedIn()){
 	Redirect::to('/');
 }
 if(Setting::get('enable-email') != 1 && Setting::get('enable-email-recover-password') != 1){
+	Session::flash('error', "<div class='alert alert-danger'>".$GLOBALS['language']->get('alert-forgot-password-not-ready')."</div>");
 	Redirect::to('/');
 }
 if(Input::exists()){

@@ -22,7 +22,7 @@ $c = new Cache(['name'=>'settings', 'path'=>'cache/', 'extension'=>'.cache']);
 				if($user->isLoggedIn()){
 					
 				}else{
-					echo '<div class="alert alert-info">'.$GLOBALS['language']->get('home-login-1').' <a class="alert-link" href="/login">login</a> '.$GLOBALS['language']->get('home-login-2').' <a class="alert-link" href="/register">sign up</a>'.$GLOBALS['language']->get('home-login-3').'</div>';
+					echo '<div class="alert alert-info">'.$GLOBALS['language']->get('home-login-1').' <a class="alert-link" href="/login">login</a> '.$GLOBALS['language']->get('home-login-2').' <a class="alert-link" href="/register">sign up</a> '.$GLOBALS['language']->get('home-login-3').'</div>';
 				}
 			?>
 			<div class="jumbotron">

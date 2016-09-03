@@ -11,9 +11,9 @@ if($user->isAdmLoggedIn()){
 $need_update = false;
 $update = json_decode($api->getUpdate());
 
-$update->update = true;
-$update->new_version = "1.4.0";
-$update->download_url = false;
+//$update->update = true;
+//$update->new_version = "1.4.0";
+//$update->download_url = false;
 ?>
 <!DOCTYPE html>
 <html lang="en">

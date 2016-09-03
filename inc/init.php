@@ -50,13 +50,20 @@ if(!is_dir('pages/install') && isset($GLOBALS['config'])){
 	}
 	unset($ip);
 
+	require 'assets/lang/temp.php';
+	$file = "temp";
 	if($cache_settings->isCached('language')){
-		require 'assets/lang/'.$cache_settings->retrieve('language').'.php';
-		$GLOBALS['language'] = Language::getInstance($cache_settings->retrieve('language'));
+		if(is_file('assets/lang/'.$cache_settings->retrieve('language').'.php')){
+			include 'assets/lang/'.$cache_settings->retrieve('language').'.php';
+			$file = $cache_settings->retrieve('language');
+		}
 	}else{
-		require 'assets/lang/'.Setting::get('language').'.php';
-		$GLOBALS['language'] = Language::getInstance(Setting::get('language'));
+		if(is_file('assets/lang/'.Setting::get('language').'.php')){
+			include 'assets/lang/'.Setting::get('language').'.php';
+			$file = Setting::get('language');
+		}
 	}
+	$GLOBALS['language'] = Language::getInstance($file);
 	
 	if($user->isLoggedIn()){
 

@@ -29,6 +29,11 @@ if(!$user->isLoggedIn() && $user2->data()->private == 1){
 		.name{
 			display: inline;
 		}
+		<?php if($user->data()->banner){?>
+		.jumbotron{
+			background-image: url(<?php echo $user->data()->banner;?>);
+		}
+		<?php }?>
 		</style>
 		<script src="/assets/js/follow.js"></script>
 		<script src="/assets/js/unfollow.js"></script>

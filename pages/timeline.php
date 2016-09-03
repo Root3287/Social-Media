@@ -69,7 +69,7 @@ if(!$user->isLoggedIn()){
 					
 					<form id="status" action="/timeline" method="post">
 						<div class="form-group">
-							<textarea style="resize: none;" class="form-control" name="post_status" id="post_status" rows="10" placeholder="<?php echo $GLOBALS['language']->get('textbox_placeholder');?>"></textarea>
+							<textarea style="resize: vertical;" class="form-control" name="post_status" id="post_status" rows="10" placeholder="<?php echo $GLOBALS['language']->get('textbox_placeholder');?>"></textarea>
 						</div>
 						<div class="col-md-3">
 							<div class="form-group">
@@ -351,14 +351,14 @@ if(!$user->isLoggedIn()){
 		<script src="assets/js/timeline.js"></script>
 		<?php if($cache_settings->isCached('enable-uploadcare')){
 			if($cache_settings->retrieve('enable-uploadcare') == 1):?>
-			<script src="https://ucarecdn.com/widget/2.9.0/uploadcare/uploadcare.full.min.js"></script>
+			<script charset="utf-8" src="https://ucarecdn.com/widget/2.10.0/uploadcare/uploadcare.full.min.js"></script>
 			<script>
 				UPLOADCARE_LOCALE = "en";
 				UPLOADCARE_LIVE = true;
 				UPLOADCARE_PUBLIC_KEY = "<?php echo Setting::get('uploadcare-public-key');?>";
 			</script>
 		<?php endif;}else{if(Setting::get('enable-uploadcare') == 1):?>
-			<script src="https://ucarecdn.com/widget/2.9.0/uploadcare/uploadcare.full.min.js"></script>
+			<script charset="utf-8" src="https://ucarecdn.com/widget/2.10.0/uploadcare/uploadcare.full.min.js"></script>
 			<script>
 				UPLOADCARE_LOCALE = "en";
 				UPLOADCARE_LIVE = true;

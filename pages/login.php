@@ -168,26 +168,29 @@ if(Input::exists()){
 				<h1>Login</h1>
 				<form action="" method="post" autocomplete="off">
 					<div class="form-group">
-						<input type="text" name="username" placeholder="Username" value="<?php echo Input::get('username')?>" class="form-control input-lg">
+						<input type="text" name="username" placeholder="<?php echo $GLOBALS['language']->get('username');?>" value="<?php echo Input::get('username')?>" class="form-control input-lg">
 					</div>
 					<div class="form-group">
-						<input type="password" name="password" placeholder="Password" class="form-control input-lg">
+						<input type="password" name="password" placeholder="<?php echo $GLOBALS['language']->get('password');?>" class="form-control input-lg">
 					</div>
 					<div class="form-group">
-						<label for="remember">Remember me?
+						<label for="remember"><?php echo $GLOBALS['language']->get('remember-me');?>
 							<input type="checkbox" name="remember" id="remember" checked="checked" />
 						</label>
+						<span class="pull-right">
+							<a href="/forgot-password/" class="btn btn-xs btn-default"><?php echo $GLOBALS['language']->get('forgot-password');?></a>
+						</span>
 					</div>
 					<div class="row">
 						<div class="col-xs-12 col-md-6">
 							<div class="form-group">
-								<a class="btn btn-lg btn-danger btn-block" href="../register">Register</a>
+								<a class="btn btn-lg btn-danger btn-block" href="../register"><?php echo $GLOBALS['language']->get('register');?></a>
 							</div>
 						</div>
 						<div class="col-xs-12 col-md-6">
 							<div class="form-group">
 								<input type="hidden" name="token" value="<?php echo Token::generate()?>"/>
-								<input class="btn btn-lg btn-primary btn-block" type="submit" value="Submit" id="Submit" name="submit"/>
+								<input class="btn btn-lg btn-primary btn-block" type="submit" value="<?php echo $GLOBALS['language']->get('login');?>" id="Submit" name="submit"/>
 							</div>
 						</div>
 					</div>
