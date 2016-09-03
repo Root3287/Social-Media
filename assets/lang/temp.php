@@ -115,7 +115,7 @@ $language->add('temp', [
 	'search' => 'Search',
 
 	// Footers
-	'foot-copyright' => 'Copyright &copy; Timothy Gibbons 2015, All Rights Reserved. License: MIT',
+	'foot-copyright' => 'Copyright &copy; Timothy Gibbons 2015, All Rights Reserved. License: Apache 2.0',
 	'foot-page-loaded' => 'Page loaded',
 
 	//Page Loaded
