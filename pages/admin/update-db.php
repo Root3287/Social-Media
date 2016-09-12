@@ -208,6 +208,14 @@ if($version == "1.3.1"){ // 1.3.1 -> 1.4.0
 			$data[] = $db->update('posts', $p->id, ['privacy','=','0']);
 		}
 	}
+
+	Setting::update('version', '1.4.0');
+}else if($version == "1.4.0"){ // 1.4.0 -> 1.4.1
+	Setting::update([
+		'name' => 'language',
+		'value' => 'temp',
+	]);
+	Setting::update('version', '1.4.1');
 }
 
 //When we are done print the data out.
