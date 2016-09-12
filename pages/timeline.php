@@ -250,13 +250,13 @@ if(!$user->isLoggedIn()){
 							//private
 							else if($private == 4){
 								if($user->isLoggedIn()){
-									if(!$show){
-										if($user->data()->id != $timelineUser->data()->id){
+									//if(!$show){
+										if($user->data()->id !== $timelineUser->data()->id){
 											$show = false;
 										}else{
 											$show = true;
 										}
-									}
+									//}
 
 									$mentioned = $db->get('mensions', ['post_hash', '=', $timeline['hash']]);
 									

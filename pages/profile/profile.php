@@ -29,9 +29,10 @@ if(!$user->isLoggedIn() && $user2->data()->private == 1){
 		.name{
 			display: inline;
 		}
-		<?php if($user->data()->banner){?>
+		<?php if($user2->data()->banner){?>
 		.jumbotron{
-			background-image: url(<?php echo $user->data()->banner;?>);
+			background-image: url(<?php echo $user2->data()->banner;?>);
+			background-size: cover;
 		}
 		<?php }?>
 		</style>
@@ -103,7 +104,7 @@ if(!$user->isLoggedIn() && $user2->data()->private == 1){
 							<?php endif;?>
 						</div>
 					</div>
-					<?php if($user->data()->id !== $user2->data()->id):?>
+					<?php if($user->isLoggedIn() && $user->data()->id !== $user2->data()->id):?>
 					<div class="panel panel-primary">
 						<div class="panel-heading"><?php echo $GLOBALS['language']->get('function');?></div>
 						<div class="panel-body">
@@ -115,7 +116,7 @@ if(!$user->isLoggedIn() && $user2->data()->private == 1){
 				</div>
 				<div class="col-md-9">
 					<h1><?php echo $GLOBALS['language']->get('timeline');?></h1>
-					<?php if($user->data()->id == $user2->data()->id){?>
+					<?php if($user->isLoggedIn() && $user->data()->id == $user2->data()->id){?>
 					<div class="row">
 						<form id="status" action="" method="post">
 							<div class="form-group">
@@ -235,6 +236,7 @@ if(!$user->isLoggedIn() && $user2->data()->private == 1){
 								</div>
 
 							<div class="row">
+								<?php if($user->isLoggedIn()){?>
 								<form id="reply" action="" class="form-inline" method="post" autocomplete="off">
 									<div class="form-group">
 										<div class="input-group">
@@ -256,6 +258,7 @@ if(!$user->isLoggedIn() && $user2->data()->private == 1){
 									<input type="hidden" name="token" value="<?php echo $token;?>">
 									<input id="orignal_post" type="hidden" value="<?php echo $uPost['id'];?>">
 								</form>
+								<?php }?>
 							</div>
 
 							<!-- Model for post -->

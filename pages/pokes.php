@@ -46,7 +46,7 @@ $token = Token::generate();
 						<div class="media-left"><a href="?user="><img src="<?php echo $user->getAvatarURL(64);?>" alt="" class="media-object"></a></div>
 						<div class="media-body">
 							<h4 class="media-heading"><?php echo $user2->data()->name;?></h4>
-							<p class="media-heading"><?php echo $GLOABLS['language']->get('pokes-p1').' '.$pokes->getCount($user->data()->id,$user2->data()->id).' '.$GLOABLS['language']->get('pokes-p2');?><a class="btn btn-sm btn-primary" href="?token=<?php echo $token;?>&user2=<?php echo $user2->data()->id?>"><?php echo $GLOABLS['language']->get('pokes');?></a></p>
+							<p class="media-heading"><?php echo $GLOBALS['language']->get('pokes-p1').' '.$pokes->getCount($user->data()->id,$user2->data()->id).' '.$GLOBALS['language']->get('pokes-p2');?><a class="btn btn-sm btn-primary" href="?token=<?php echo $token;?>&user2=<?php echo $user2->data()->id?>"><?php echo $GLOBALS['language']->get('pokes');?></a></p>
 						</div>
 					</div>
 				</div>
