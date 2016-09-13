@@ -216,6 +216,8 @@ if($version == "1.3.1"){ // 1.3.1 -> 1.4.0
 		'value' => 'temp',
 	]);
 	Setting::update('version', '1.4.1');
+}else if($version == "1.4.1"){
+	Setting::update('version', '1.4.2');
 }
 
 //When we are done print the data out.

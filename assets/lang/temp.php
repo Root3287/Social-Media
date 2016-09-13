@@ -15,6 +15,7 @@ $language->add('temp', [
 	//Posting and reply
 	'post' 		=> 'Post',
 	'comments' 	=> 'Comments',
+	'comment'	=> 'Comment',
 	'reply' 	=> 'Reply!',
 
 	//Privacy
