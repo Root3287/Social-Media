@@ -90,7 +90,7 @@ if(!$user->isLoggedIn() && $user2->data()->private == 1){
 								<?php echo count($user2->getFollowers());?>
 								<h4><u><?php echo $GLOBALS['language']->get('followings');?></u></h4>
 								<?php echo count($user2->getFollowing());?>
-							<?php if($user2->data()->private == 0 || $user->isFriends($user2->data()->id)):?>
+							<?php if($user2->data()->private == 0 || $user->isFriends($user2->data()->id) || $user->data()->id == $user2->data()->id):?>
 								<h4><u><?php echo $GLOBALS['language']->get('email');?></u></h4>
 								<p><?php echo $user2->data()->email?></p>
 								<h4><u><?php echo $GLOBALS['language']->get('joined-date');?></u></h4>

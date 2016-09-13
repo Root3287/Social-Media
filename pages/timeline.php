@@ -295,54 +295,62 @@ if(!$user->isLoggedIn()){
 			</div>
 			
 			<div class="col-sm-3 col-md-3 col-sm-pull-6">
-				<div class="list-group">
-					<a href="/user" class="list-group-item active">
-						<img src="<?php echo $user->getAvatarURL(16);?>" alt="{userimg.png}">
-						<?php echo $user->data()->name;?>
-					</a>
-					<a href="/u/<?php echo $user->data()->username;?>/" class="list-group-item">
-						<?php echo $GLOBALS['language']->get('profile');?>
-					</a>
-					<a href="/pokes" class="list-group-item">
-						<span class="glyphicon glyphicon-hand-right"></span> 
-						<?php echo $GLOBALS['language']->get('pokes');?> 
-						<?php if($pcount = $pokes->getPendingPokesCount($user->data()->id) >=1){?>
-							<span class="badge"><?php echo $pcount;?></span>
-						<?php }?>
-					</a>
-					<a href="/user/friends/" class="list-group-item">
-						<span class="glyphicon glyphicon-heart"></span> 
-						<?php echo $GLOBALS['language']->get('friends');?> 
-						<?php if($user->hasFriendRequest()){if(count($user->getFriendRequest()) >= 1){?>
-							<span class="badge">
-								<?php echo count($user->getFriendRequest()); ?></span>
-						<?php }}?>
-					</a>
-					<a href="/user/following/" class="list-group-item">
-						<span class="glyphicon glyphicon-user"></span> 
-						<?php echo $GLOBALS['language']->get('people');?>
-					</a>
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<a href="/user" class="white-text">
+							<img src="<?php echo $user->getAvatarURL(16);?>" alt="{userimg.png}">
+							<?php echo $user->data()->name;?>
+						</a>
+					</div>
+					<div class="panel-body">
+						<a href="/u/<?php echo $user->data()->username;?>/" class="list-group-item">
+							<?php echo $GLOBALS['language']->get('profile');?>
+						</a>
+						<a href="/pokes" class="list-group-item">
+							<span class="glyphicon glyphicon-hand-right"></span> 
+							<?php echo $GLOBALS['language']->get('pokes');?> 
+							<?php if($pcount = $pokes->getPendingPokesCount($user->data()->id) >=1){?>
+								<span class="badge"><?php echo $pcount;?></span>
+							<?php }?>
+						</a>
+						<a href="/user/friends/" class="list-group-item">
+							<span class="glyphicon glyphicon-heart"></span> 
+							<?php echo $GLOBALS['language']->get('friends');?> 
+							<?php if($user->hasFriendRequest()){if(count($user->getFriendRequest()) >= 1){?>
+								<span class="badge">
+									<?php echo count($user->getFriendRequest()); ?></span>
+							<?php }}?>
+						</a>
+						<a href="/user/following/" class="list-group-item">
+							<span class="glyphicon glyphicon-user"></span> 
+							<?php echo $GLOBALS['language']->get('people');?>
+						</a>
+					</div>
 				</div>
 			</div>
 			<div class="col-sm-3 col-md-3">
-				<div class="list-group">
-					<a href="/user/friends" class="list-group-item active"><?php echo $GLOBALS['language']->get('people');?></a>
-					<?php foreach ($user->getFollowing() as $following){
-						$following_user = new User($following->following_id);
-						$following_user_online=($following_user->data()->last_online <= strtotime("-10 minutes"))? false: true;
-					?>
-						<a href="/u/<?php echo $following_user->data()->username;?>/" class="list-group-item">
-							<img src="<?php echo $following_user->getAvatarURL();?>" alt="friend_user">
-							<?php echo $following_user->data()->username;?> 
-							<?php if($following_user_online){?>
-								<span class="pull-right"><span class="label label-success"><?php echo $GLOBALS['language']->get('online');?></span></span>
-							<?php
-							}else{
-							?>
-								<span class="pull-right"><span class="label label-danger"><?php echo $GLOBALS['language']->get('offline');?></span></span>
-							<?php }?>
-						</a>
-					<?php }?>
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<a href="/user/friends" class="white-text"><?php echo $GLOBALS['language']->get('people');?></a>
+					</div>
+					<div class="panel-body">
+						<?php foreach ($user->getFollowing() as $following){
+							$following_user = new User($following->following_id);
+							$following_user_online=($following_user->data()->last_online <= strtotime("-10 minutes"))? false: true;
+						?>
+							<a href="/u/<?php echo $following_user->data()->username;?>/" class="list-group-item">
+								<img src="<?php echo $following_user->getAvatarURL();?>" alt="friend_user">
+								<?php echo $following_user->data()->username;?> 
+								<?php if($following_user_online){?>
+									<span class="pull-right"><span class="label label-success"><?php echo $GLOBALS['language']->get('online');?></span></span>
+								<?php
+								}else{
+								?>
+									<span class="pull-right"><span class="label label-danger"><?php echo $GLOBALS['language']->get('offline');?></span></span>
+								<?php }?>
+							</a>
+						<?php }?>
+					</div>
 				</div>
 				<div id="mobileTop"></div>	
 			</div>
