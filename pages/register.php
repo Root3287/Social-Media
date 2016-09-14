@@ -83,21 +83,21 @@ if(Input::exists()){
 						$mail->IsSMTP(); 
 						$mail->SMTPDebug = 0;
 						$mail->Debugoutput = 'html';
-						$mail->Host = $GLOBALS['config']['email']['host'];
-						$mail->Port = $GLOBALS['config']['email']['port'];
-						$mail->SMTPSecure = $GLOBALS['config']['email']['secure'];
-						$mail->SMTPAuth = $GLOBALS['config']['email']['smtp_auth'];
-						$mail->Username = $GLOBALS['config']['email']['user'];
-						$mail->Password = $GLOBALS['config']['email']['pass'];
-						$mail->setFrom($GLOBALS['config']['email']['user'], $GLOBALS['email']['name']);
-						$mail->From = $GLOBALS['config']['email']['user'];
-						$mail->FromName = $GLOBALS['config']['email']['name'];
+						$mail->Host = $$GLOBALS['config']['email']['host'];
+						$mail->Port = $$GLOBALS['config']['email']['port'];
+						$mail->SMTPSecure = $$GLOBALS['config']['email']['secure'];
+						$mail->SMTPAuth = $$GLOBALS['config']['email']['smtp_auth'];
+						$mail->Username = $$GLOBALS['config']['email']['user'];
+						$mail->Password = $$GLOBALS['config']['email']['pass'];
+						$mail->setFrom($$GLOBALS['config']['email']['user'], $$GLOBALS['email']['name']);
+						$mail->From = $$GLOBALS['config']['email']['user'];
+						$mail->FromName = $$GLOBALS['config']['email']['name'];
 						$mail->addAddress(htmlspecialchars(Input::get('email')), htmlspecialchars(Input::get('username')));
 						$mail->Subject = 'Social-Media Register';
 						$html = file_get_contents('assets/email/confirm.html');
 						$link =  getSelfUrl()."email-confirm/{$email_hash}/";
 
-						$content = $GLOBALS['language']->get('email-register');
+						$content = $$GLOBALS['language']->get('email-register');
 						
 						$html = str_replace(['[Content]','[Link]'], [$content, $link], $html);
 						$mail->msgHTML($html);
@@ -138,21 +138,21 @@ if(Input::exists()){
 				<div class="alert alert-danger"><?php foreach ($val->errors() as $error){echo $error.'<br/>';}?></div>
 			<?php endif;endif;endif;?>
 			<div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-				<h1><?php echo $GLOABLS['language']->get('register');?></h1>
+				<h1><?php echo $GLOBALS['language']->get('register');?></h1>
 				<form action="" method="post" autocomplete="off">
 					<div class="form-group">
 						<input name="name" value="<?php echo Input::get('name');?>" placeholder="<?php echo $GLOBALS['language']->get('name');?>" type="text" class="form-control input-lg">
 					</div>
 					<div class="form-group">
-						<input name="username" value="<?php echo Input::get('username');?>" placeholder="<?php echo $GLOABLS['language']->get('username');?>" type="text" class="form-control input-lg">
+						<input name="username" value="<?php echo Input::get('username');?>" placeholder="<?php echo $GLOBALS['language']->get('username');?>" type="text" class="form-control input-lg">
 					</div>
 					<div class="form-group">
-						<input name="email" value="<?php echo Input::get('email');?>" placeholder="<?php echo $GLOABLS['language']->get('email');?>" type="email" class="form-control input-lg">
+						<input name="email" value="<?php echo Input::get('email');?>" placeholder="<?php echo $GLOBALS['language']->get('email');?>" type="email" class="form-control input-lg">
 					</div>
 					<div class="row">
 						<div class="col-xs-12 col-md-6">
 							<div class="form-group">
-								<input name="password" value="<?php echo Input::get('password');?>" placeholder="<?php echo $GLOABLS['language']->get('password');?>" type="password" class="form-control input-lg">
+								<input name="password" value="<?php echo Input::get('password');?>" placeholder="<?php echo $GLOBALS['language']->get('password');?>" type="password" class="form-control input-lg">
 							</div>
 						</div>
 						<div class="col-xs-12 col-md-6">
