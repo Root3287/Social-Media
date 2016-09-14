@@ -74,6 +74,7 @@ if(Input::exists()){
 							'confirmed' => $email_confirmed,
 							'confirm_hash'=> $email_hash,
 							'mfa' => json_encode(['enable'=>0, 'code'=>'']),
+							'privacy_settings' => json_encode(['name'=>0,'age'=>0,'dob'=>0,'email'=>0,'email'=>0,'number'=>0,'location'=>0,"display_post"=>0]),
 					));
 
 					if($email_confirmed == 0){

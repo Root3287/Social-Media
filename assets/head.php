@@ -8,6 +8,12 @@
 		<meta name="description" content="Social-Media">
 		<meta name="keywords" content="Social-Media, Beta">
 		<meta charset="UTF-8">
+		<link rel="stylesheet" href="/assets/css/bootstrap-switch.min.css">
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="/assets/js/jquery.js"></script>
+		<script src="/assets/js/bootstrap.js"></script>
+		<script src="/assets/js/bootstrap-switch.min.js"></script>
+		<link rel="icon" href="/assets/favicon.ico">
 		<?php if($cache_settings->isCached('css')){?>
 			<?php if($cache_settings->retrieve('css') != "18"):?>
 				<link rel="stylesheet" href="/assets/css/<?php echo $cache_settings->retrieve('css');?>">
@@ -17,6 +23,8 @@
 				<link rel="stylesheet" href="/assets/css/ripples.min.css">
 				<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
   				<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  				<script src="/assets/js/material.min.js"></script>
+				<script src="/assets/js/ripples.min.js"></script>
 			<?php endif;?>
 		<?php }else{?>
 			<?php if(Setting::get('bootstrap-theme') != "18"):?>
@@ -27,6 +35,9 @@
 				<link rel="stylesheet" href="/assets/css/1.css">
 				<link rel="stylesheet" href="/assets/css/bootstrap-material-design.min.css">
 				<link rel="stylesheet" href="/assets/css/ripples.min.css">
+				<script src="/assets/js/material.min.js"></script>
+				<script src="/assets/js/ripples.min.js"></script>
+				<script>$(document).ready(function(){$.material.init();})</script>
 			<?php endif;?>
 		<?php } ?>
 		<style>
@@ -34,9 +45,3 @@
 			color: #fff;
 		}
 		</style>
-		<link rel="stylesheet" href="/assets/css/bootstrap-switch.min.css">
-		<!-- Latest compiled and minified JavaScript -->
-		<script src="/assets/js/jquery.js"></script>
-		<script src="/assets/js/bootstrap.js"></script>
-		<script src="/assets/js/bootstrap-switch.min.js"></script>
-		<link rel="icon" href="/assets/favicon.ico">

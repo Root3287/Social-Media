@@ -95,13 +95,18 @@ if(Input::exists()){
 							<option <?php if(Setting::get('bootstrap-theme') == '15'):?>selected="selected"<?php endif;?> value="15">Superhero</option>
 							<option <?php if(Setting::get('bootstrap-theme') == '16'):?>selected="selected"<?php endif;?> 	value="16">United</option>
 							<option <?php if(Setting::get('bootstrap-theme') == '17'):?>selected="selected"<?php endif;?> 	value="17">Yeti</option>
+							<option <?php if(Setting::get('bootstrap-theme') == '18'):?>selected="selected"<?php endif;?> 	value="18">Material</option>
 						</select>
 					</div>
+					<div class="form-group">
 					<div class="checkbox">
 				    		<input name="nav" id="nav" type="checkbox" <?php if(Setting::get('inverted-nav') != '0'){echo 'checked="checked"';}?>>Inverted Navigation
 					</div>
+					</div>
+					<div class="form-group">
 					<div class="checkbox">
 				    		<input name="debug" id="debug" type="checkbox" <?php if(Setting::get('debug') != 'Off'){echo 'checked="checked"';}?>>Debug mode (Not Recommended)
+					</div>
 					</div>
 					<div class="form-group">
 						<a class='btn btn-primary' href="/admin/cache/">Set Cache</a>
