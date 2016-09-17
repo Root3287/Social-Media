@@ -18,13 +18,14 @@
 			<?php if($cache_settings->retrieve('css') != "18"):?>
 				<link rel="stylesheet" href="/assets/css/<?php echo $cache_settings->retrieve('css');?>">
 			<?php else:?>
+				<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+  				<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
 				<link rel="stylesheet" href="/assets/css/1.css">
 				<link rel="stylesheet" href="/assets/css/bootstrap-material-design.min.css">
 				<link rel="stylesheet" href="/assets/css/ripples.min.css">
-				<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
-  				<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
-  				<script src="/assets/js/material.min.js"></script>
+				<script src="/assets/js/material.min.js"></script>
 				<script src="/assets/js/ripples.min.js"></script>
+				<script>$(document).ready(function(){$.material.init(); $('.btn').addClass('btn-raised');})</script>
 			<?php endif;?>
 		<?php }else{?>
 			<?php if(Setting::get('bootstrap-theme') != "18"):?>
@@ -37,7 +38,7 @@
 				<link rel="stylesheet" href="/assets/css/ripples.min.css">
 				<script src="/assets/js/material.min.js"></script>
 				<script src="/assets/js/ripples.min.js"></script>
-				<script>$(document).ready(function(){$.material.init();})</script>
+				<script>$(document).ready(function(){$.material.init();$('.btn').addClass('btn-raised');})</script>
 			<?php endif;?>
 		<?php } ?>
 		<style>
